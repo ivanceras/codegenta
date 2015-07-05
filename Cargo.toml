@@ -1,0 +1,15 @@
+[package]
+name = "codegenta"
+version = "0.0.1"
+authors = [ "Jovansonlee Cesar <ivanceras@gmail.com>" ]
+license = "MIT"
+description = "A model code generator from database table using rustorm ORM"
+readme = "README.md"
+repository = "https://github.com/ivanceras/codegenta"
+documentation = "http://ivanceras.github.io/codegenta"
+
+[lib]
+name = "codegenta"
+
+[dependencies.rustorm]
+path = "../rustorm"

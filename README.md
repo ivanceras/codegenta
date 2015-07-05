@@ -1,0 +1,97 @@
+# Codegenta
+
+Generate source code for your models which corresponds from the database tables.
+
+Codegenta complements well with rustorm to provide a more ergonomic way of manipulating data
+
+
+## Example
+
+### Terminology and tables
+* Product table holds the list of products in our example app.
+* Users is a user table (plural due to user being a reserved keyword in most databases).
+* Category - categories of products, items etc.
+* Photos - product/item listing would be much more pleasing if it has pictures.
+* Reviews - a review of users for a certain product.
+* ProductAvailability - determines office time of the seller when a certain product is availability. Anouncement of product before it is available. This is much more applicable to services.
+
+## Code to look at
+* Take a look at examples/generate_model_code.rs. This generates a source code that is comparible to what you could have written as a model code of your project.
+
+* The source code generated is located at `./gen` folder
+
+```sql
+
+
+CREATE TABLE bazaar.product
+(
+  product_id uuid NOT NULL DEFAULT uuid_generate_v4(),
+  name character varying,
+  description character varying,
+  price numeric,
+  currency_id uuid,
+  unit character varying,
+  barcode character varying,
+  owner_id uuid,
+  currency_id uuid,
+  CONSTRAINT product_pkey PRIMARY KEY (product_id),
+  CONSTRAINT product_currency_id_fkey FOREIGN KEY (currency_id)
+      REFERENCES payment.currency (currency_id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED,
+  CONSTRAINT product_user_id_fkey FOREIGN KEY (owner_id)
+      REFERENCES bazaar.users (user_id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED
+)
+
+```
+
+The generated model code
+
+```rust
+
+
+#[derive(RustcDecodable, RustcEncodable)]
+#[derive(Debug, Clone)]
+pub struct Product {
+    pub product_id:Uuid,
+    pub name:Option<String>,
+    pub description:Option<String>,
+    pub barcode:Option<String>,
+    pub currency_id:Option<Uuid>,
+    pub owner_id:Option<Uuid>,
+    pub price:Option<f64>,
+    pub unit:Option<String>,
+
+    pub owner: Option<Users>,
+    pub currency: Option<Currency>,
+    pub availability: Option<Box<ProductAvailability>>,
+    pub category: Vec<Category>,
+    pub photo: Vec<Photo>,
+    pub review: Vec<Review>,
+}
+
+```
+
+* `pub product_id:Uuid,` marked the column product as `NOT NULL` therefore it will always have value.
+
+* `pub name:Option<String>` is an option since, we did not specify that this non nullable. Same as `descrption` and etc.
+
+* `pub owner: Option<Users>,` base on the foreign key constraint, codegenta is smart enough to recognize that a product has an `owner` based on the `owner_id` which references `Users` table. Codegenta then add an optional field owner:Option<Users>, which you can then later use in you app to hold an additional info about the seller of a certain product.
+
+
+* `pub currency: Option<Currency>`, `currency_id` specifies which currency a product is using. You can put the used currency in the product in your controller code to include a more detailed information about the currency used without having make additional container structs.
+
+## More advance features
+Take a look at the table schema used in these examples provided by the project.
+
+* `pub category: Vec<Category>,` - the codegenta is also smart to recognize that product table is referred by `Category` table with a linker table product_category,
+which provides a 1:M relationship between product and category, since products can have multiple categories
+
+* `pub photo: Vec<Photo>`,
+* `pub review: Vec<Review>`,
+
+Same applies for Photo, with linker table `product_photo`
+and Review table with linker `product_review`
+
+
+* `pub availability: Option<Box<ProductAvailability>>`,  - product availability is another unique feature of codegenta that determines that ProductAvailability table is just an extension table of product and has a 1:1 relationship, since each product can only have 1 product availability.
