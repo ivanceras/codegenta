@@ -2,7 +2,11 @@
 name = "codegenta"
 version = "0.0.1"
 dependencies = [
+ "chrono 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustorm 0.0.6",
+ "time 0.1.30 (registry+https://github.com/rust-lang/crates.io-index)",
+ "uuid 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

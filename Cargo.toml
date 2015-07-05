@@ -13,3 +13,12 @@ name = "codegenta"
 
 [dependencies.rustorm]
 path = "../rustorm"
+
+[dependencies.chrono]
+version = "*"
+features = ["rustc-serialize"]
+
+[dependencies]
+rustc-serialize = "*"
+uuid = "*"
+time = "*"
