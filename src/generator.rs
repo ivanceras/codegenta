@@ -258,7 +258,7 @@ fn generate_static_column_names(table: &Table)->String{
         w.appendln("#[allow(non_upper_case_globals)]");
         w.appendln("#[allow(dead_code)]");
         w.append("pub static ");
-        w.append(&column.name);
+        w.append(&column.corrected_name());
         w.append(": &'static str = ");
         w.append(&format!("\"{}.{}\"", table.name, column.name));
         w.append(";");
@@ -287,7 +287,7 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
     w.append("{");
     for c in &table.columns{
         w.ln_tabs(3);
-        w.append(&c.name);
+        w.append(&c.corrected_name());
         w.append(": ");
         if c.not_null{
             w.append("dao.get");

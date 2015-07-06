@@ -31,7 +31,7 @@ use gen::bazaar::product_photo;
 use gen::bazaar::Photo;
 use gen::bazaar::photo;
 
-use rustorm::database::Pool;
+use rustorm::pool::Pool;
 
 
 mod gen;
