@@ -1,5 +1,5 @@
 extern crate rustorm as orm;
-extern crate rustorm_codegen as codegen;
+extern crate codegenta as codegen;
 
 use orm::platform::postgres::Postgres;
 use codegen::generator;
