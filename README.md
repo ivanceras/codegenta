@@ -1,5 +1,9 @@
 # Codegenta
 
+[![Latest Version](https://img.shields.io/crates/v/codegenta.svg)](https://crates.io/crates/codegenta)
+[![Build Status](https://api.travis-ci.org/ivanceras/codegenta.svg)](https://travis-ci.org/ivanceras/codegenta)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 Generate source code for your models which corresponds from the database tables.
 
 Codegenta complements well with rustorm to provide a more ergonomic way of manipulating data
