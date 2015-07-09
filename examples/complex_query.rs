@@ -6,7 +6,6 @@ extern crate rustc_serialize;
 use rustorm::query::Query;
 use rustorm::query::{Filter,Equality};
 use rustorm::dao::{Dao,IsDao};
-use rustorm::pool::Pool;
 use gen::bazaar::Product;
 use gen::bazaar::product;
 use gen::bazaar::Photo;
@@ -23,14 +22,13 @@ use gen::bazaar::ProductAvailability;
 use gen::bazaar::product_availability;
 
 use rustorm::table::IsTable;
-
+use rustorm::pool::ManagedPool;
 
 mod gen;
 
 fn main(){
-    let mut pool = Pool::init();
-    let url = "postgres://postgres:p0stgr3s@localhost/bazaar_v6";
-    let db = pool.get_db_with_url(&url).unwrap();
+    let mut pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1);
+    let db = pool.connect().unwrap();
     
     let mut query = Query::select_all();
     
@@ -70,6 +68,4 @@ fn main(){
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
-    
-    pool.release(db);
 }

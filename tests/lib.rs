@@ -4,18 +4,13 @@ extern crate chrono;
 extern crate rustc_serialize;
 
 
-use rustorm::db::postgres::Postgres;
-use rustorm::codegen;
-use uuid::Uuid;
-use chrono::datetime::DateTime;
-use chrono::offset::utc::UTC;
-use rustc_serialize::json;
+use rustorm::platform::postgres::Postgres;
+use rustorm::pool::ManagedPool;
 
 use rustorm::em::EntityManager;
 use rustorm::table::IsTable;
-use rustorm::dao::IsDao;
+use rustorm::dao::{IsDao,Value};
 use rustorm::query::Query;
-use rustorm::dao::Type;
 use rustorm::query::{Filter,Equality,Operand};
 use rustorm::dao::Dao;
 use gen::bazaar::Product;
@@ -31,20 +26,19 @@ use gen::bazaar::product_photo;
 use gen::bazaar::Photo;
 use gen::bazaar::photo;
 
-use rustorm::pool::Pool;
-
 
 mod gen;
 
-mod test_pool;
- 
 #[test]
 fn test_select_filter(){
     let pg = Postgres::new();
     let em = EntityManager::new(&pg);
+    let product_table = Product::table();
     let mut query = Query::new();
-    query.from(&Product::table());
-    query.enumerate_table_all_columns(&Product::table());
+    query.from(&product_table);
+    for c in &product_table.columns{
+        query.column(&c.name);
+    }
     
     query.left_join(&ProductAvailability::table(), 
         product::product_id, product_availability::product_id);
@@ -59,11 +53,11 @@ fn test_select_filter(){
     
     let frag = query.build(&pg);
     let expected = "
-SELECT product.organization_id, product.client_id, product.created, product.created_by, 
-    product.updated, product.updated_by, product.priority, product.name, product.description, 
-    product.help, product.active, product.product_id, product.parent_product_id, product.is_service, 
-    product.price, product.use_parent_price, product.unit, product.tags, product.info, 
-    product.seq_no, product.upfront_fee, product.barcode, product.owner_id, product.currency_id
+SELECT organization_id, client_id, created, created_by, 
+    updated, updated_by, priority, name, description, 
+    help, active, product_id, parent_product_id, is_service, 
+    price, use_parent_price, unit, tags, info, 
+    seq_no, upfront_fee, barcode, owner_id, currency_id
  FROM bazaar.product
     LEFT OUTER JOIN bazaar.product_availability 
         ON product.product_id = product_availability.product_id 
@@ -77,11 +71,11 @@ SELECT product.organization_id, product.client_id, product.created, product.crea
     assert!(frag.sql.trim() == expected.trim());
     assert!(frag.params.len() == 2);
     match frag.params[0]{
-        Type::String(ref x) => assert!(x == "iphone%"),
+        Value::String(ref x) => assert!(x == "iphone%"),
         _ => (),
      };
     match frag.params[1]{
-        Type::String(ref x) => assert!(x == "%Iphone%"),
+        Value::String(ref x) => assert!(x == "%Iphone%"),
         _ => (),
     };  
 }
@@ -91,9 +85,9 @@ fn test_update_query(){
     let pg = Postgres::new();
     let em = EntityManager::new(&pg);
     let mut query = Query::update();
+    query.column(product::name);
     query.from(&Product::table());
-    query.enumerate_column(product::name);
-    query.enumerate_all_table_column_as_return(&Product::table());
+    query.return_all();
     query.value(&"iphone");
     query.filter(product::name, Equality::LIKE, &"aphone");
     
@@ -103,22 +97,22 @@ fn test_update_query(){
 UPDATE bazaar.product
 SET name = $1 
     WHERE name LIKE $2 
-        AND description LIKE $3 RETURNING organization_id, client_id, created, created_by, updated, updated_by, priority, name, description, help, active, product_id, parent_product_id, is_service, price, use_parent_price, unit, tags, info, seq_no, upfront_fee, barcode, owner_id, currency_id ".to_string();
+        AND description LIKE $3 RETURNING * ".to_string();
     println!("actual:   {} [{}]", frag.sql, frag.sql.len());
     println!("expected: {} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
     
     assert!(frag.params.len() == 3);
     match frag.params[0]{
-        Type::String(ref x) => assert!(x == "iphone"),
+        Value::String(ref x) => assert!(x == "iphone"),
         _ => (),
      };
     match frag.params[1]{
-        Type::String(ref x) => assert!(x == "aphone"),
+        Value::String(ref x) => assert!(x == "aphone"),
         _ => (),
      };
     match frag.params[2]{
-        Type::String(ref x) => assert!(x == "%Iphone%"),
+        Value::String(ref x) => assert!(x == "%Iphone%"),
         _ => (),
      };
 }
@@ -139,7 +133,7 @@ fn test_query_delete_category(){
     
     assert!(frag.params.len() == 1);
     match frag.params[0]{
-        Type::String(ref x) => assert!(x == "test%"),
+        Value::String(ref x) => assert!(x == "test%"),
         _ => (),
      };
 }
@@ -150,20 +144,24 @@ fn test_query_delete_category(){
 fn test_join(){
     let pg = Postgres::new();
     let mut query = Query::new();
-    query.from(&Product::table());
-    query.enumerate_table_all_columns(&Product::table());
     
+    let product_table = Product::table();
+    let mut query = Query::new();
+    query.from(&product_table);
+    for c in &product_table.columns{
+        query.column(&c.name);
+    }
     query.left_join(&ProductAvailability::table(), 
         product::product_id, product_availability::product_id);
     
     let frag = query.build(&pg);
     
     let expected = "
-SELECT product.organization_id, product.client_id, product.created, product.created_by, 
-    product.updated, product.updated_by, product.priority, product.name, product.description, 
-    product.help, product.active, product.product_id, product.parent_product_id, product.is_service, 
-    product.price, product.use_parent_price, product.unit, product.tags, product.info, 
-    product.seq_no, product.upfront_fee, product.barcode, product.owner_id, product.currency_id
+SELECT organization_id, client_id, created, created_by, 
+    updated, updated_by, priority, name, description, 
+    help, active, product_id, parent_product_id, is_service, 
+    price, use_parent_price, unit, tags, info, 
+    seq_no, upfront_fee, barcode, owner_id, currency_id
  FROM bazaar.product
     LEFT OUTER JOIN bazaar.product_availability 
         ON product.product_id = product_availability.product_id ".to_string();
@@ -221,8 +219,13 @@ SELECT *
 fn test_multiple_filters(){
     let pg = Postgres::new();
     let mut query = Query::select();
-    query.from(&Product::table())
-        .enumerate_table_all_columns(&Photo::table())
+    
+    let product_table = Product::table();
+    let mut query = Query::new();
+    for c in &product_table.columns{
+        query.column(&c.name);
+    }
+    query.from(&product_table)
         .left_join(&ProductCategory::table(),
             product_category::product_id, product::product_id)
          .left_join(&Category::table(),
@@ -241,10 +244,11 @@ fn test_multiple_filters(){
     let frag = query.build(&pg);
     
     let expected = "
-SELECT photo.organization_id, photo.client_id, photo.created, photo.created_by, 
-    photo.updated, photo.updated_by, photo.priority, photo.name, photo.description, 
-    photo.help, photo.active, photo.photo_id, photo.url, photo.data, 
-    photo.seq_no
+SELECT organization_id, client_id, created, created_by, 
+    updated, updated_by, priority, name, description, 
+    help, active, product_id, parent_product_id, is_service, 
+    price, use_parent_price, unit, tags, info, 
+    seq_no, upfront_fee, barcode, owner_id, currency_id
  FROM bazaar.product
     LEFT OUTER JOIN bazaar.product_category 
         ON product_category.product_id = product.product_id 
@@ -268,9 +272,9 @@ SELECT photo.organization_id, photo.client_id, photo.created, photo.created_by,
 #[test]
 fn test_complex_select_all(){
     let pg = Postgres::new();
-    let mut query = Query::select();
-    query.from(&Product::table())
-        .all()
+    let mut query = Query::select_all();
+       
+       query.from(&Product::table())
         .left_join(&ProductCategory::table(),
             product_category::product_id, product::product_id)
          .left_join(&Category::table(),
@@ -313,11 +317,9 @@ SELECT *
 
 #[test]
 fn test_flex_query(){
-    let mut pool = Pool::init();
     let url = "postgres://postgres:p0stgr3s@localhost/bazaar_v6";
-    pool.reserve_connection(&url, 5);
-    println!("{} connections..", pool.total_free_connections());
-    let db = pool.get_db_with_url(&url).unwrap();
+    let mut pool = ManagedPool::init(&url, 5);
+    let db = pool.connect().unwrap();
     
     let prod: Product = Query::select_all()
             .from_table("bazaar.product")
@@ -325,5 +327,4 @@ fn test_flex_query(){
             .collect_one(db.as_ref());
 
     println!("{}  {}  {:?}", prod.product_id, prod.name.unwrap(), prod.description);
-    pool.release(db);
 }

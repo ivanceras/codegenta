@@ -11,8 +11,8 @@ documentation = "http://ivanceras.github.io/codegenta"
 [lib]
 name = "codegenta"
 
-[dependencies.rustorm]
-path = "../rustorm"
+#[dependencies.rustorm]
+#path = "../rustorm"
 
 [dependencies.chrono]
 version = "*"
@@ -22,3 +22,4 @@ features = ["rustc-serialize"]
 rustc-serialize = "*"
 uuid = "*"
 time = "*"
+rustorm ="*"

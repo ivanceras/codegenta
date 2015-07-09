@@ -72,7 +72,7 @@ impl Config{
 ///
 /// retrieve all the table definition in the database
 ///
-pub fn get_all_tables<T:DatabaseDev>(db_dev:&T)->Vec<Table>{
+pub fn get_all_tables(db_dev:&DatabaseDev)->Vec<Table>{
     let all_tables_names = db_dev.get_all_tables();
     let mut all_table_def:Vec<Table> = Vec::new();
     for (schema, table) in all_tables_names{
@@ -113,7 +113,7 @@ pub fn get_tables_in_schema<'a>(schema:&str, all_table:&'a Vec<Table>)->Vec<&'a 
 /// 2. meta
 /// mod.rs
 
-pub fn generate_all<T:DatabaseDev>(db_dev:&T, config:&Config){
+pub fn generate_all(db_dev:&DatabaseDev, config:&Config){
     let all_tables:Vec<Table> = get_all_tables(db_dev);
     for table in &all_tables{
         generate_table(db_dev, config, table, &all_tables);
@@ -124,7 +124,7 @@ pub fn generate_all<T:DatabaseDev>(db_dev:&T, config:&Config){
 
 /// the gernaration of tables should be placed on their respective directory
 /// base_mod::schema::table.rs
-fn generate_table<T:DatabaseDev>(db_dev:&T, config:&Config, table:&Table, all_tables:&Vec<Table>){
+fn generate_table(db_dev:&DatabaseDev, config:&Config, table:&Table, all_tables:&Vec<Table>){
     let mut w = Writer::new();
     let (struct_imports, imported_tables, struct_src) = table.struct_code(db_dev, all_tables);
     let (dao_imports, dao_src) = generate_dao_conversion_code(table, all_tables);
