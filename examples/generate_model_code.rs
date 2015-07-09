@@ -4,7 +4,7 @@ extern crate codegenta;
 use codegenta::generator;
 use codegenta::generator::Config;
 use rustorm::pool::ManagedPool;
-use rustorm::database::DatabaseDev;
+//use rustorm::database::DatabaseDev;
 
 /// this will generate needed model code for tests in ./examples/gen directory
 fn main(){
