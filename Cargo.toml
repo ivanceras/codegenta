@@ -6,7 +6,7 @@ license = "MIT"
 description = "A model code generator from database table using rustorm ORM"
 readme = "README.md"
 repository = "https://github.com/ivanceras/codegenta"
-documentation = "http://ivanceras.github.io/codegenta"
+documentation = "https://ivanceras.github.io/codegenta/codegenta/"
 
 [lib]
 name = "codegenta"
