@@ -12,7 +12,7 @@ documentation = "https://ivanceras.github.io/codegenta/codegenta/"
 name = "codegenta"
 
 [dependencies.rustorm]
-path = "../rustorm"
+git = "https://github.com/ivanceras/rustorm"
 
 [dependencies.chrono]
 version = "*"
