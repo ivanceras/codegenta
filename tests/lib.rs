@@ -53,11 +53,13 @@ fn test_select_filter(){
     
     let frag = query.build(&pg);
     let expected = "
-SELECT organization_id, client_id, created, created_by, 
-    updated, updated_by, priority, name, description, 
-    help, active, product_id, parent_product_id, is_service, 
-    price, use_parent_price, unit, tags, info, 
-    seq_no, upfront_fee, barcode, owner_id, currency_id
+ SELECT organization_id, client_id, created, 
+    created_by, updated, updated_by, priority, 
+    name, description, help, active, 
+    product_id, parent_product_id, is_service, price, 
+    use_parent_price, unit, tags, info, 
+    seq_no, upfront_fee, barcode, owner_id, 
+    currency_id
  FROM bazaar.product
     LEFT OUTER JOIN bazaar.product_availability 
         ON product.product_id = product_availability.product_id 
@@ -157,14 +159,16 @@ fn test_join(){
     let frag = query.build(&pg);
     
     let expected = "
-SELECT organization_id, client_id, created, created_by, 
-    updated, updated_by, priority, name, description, 
-    help, active, product_id, parent_product_id, is_service, 
-    price, use_parent_price, unit, tags, info, 
-    seq_no, upfront_fee, barcode, owner_id, currency_id
+SELECT organization_id, client_id, created, 
+    created_by, updated, updated_by, priority, 
+    name, description, help, active, 
+    product_id, parent_product_id, is_service, price, 
+    use_parent_price, unit, tags, info, 
+    seq_no, upfront_fee, barcode, owner_id, 
+    currency_id
  FROM bazaar.product
     LEFT OUTER JOIN bazaar.product_availability 
-        ON product.product_id = product_availability.product_id ".to_string();
+        ON product.product_id = product_availability.product_id".to_string();
     println!("actual:   {} [{}]", frag.sql, frag.sql.len());
     println!("expected: {} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
@@ -244,11 +248,13 @@ fn test_multiple_filters(){
     let frag = query.build(&pg);
     
     let expected = "
-SELECT organization_id, client_id, created, created_by, 
-    updated, updated_by, priority, name, description, 
-    help, active, product_id, parent_product_id, is_service, 
-    price, use_parent_price, unit, tags, info, 
-    seq_no, upfront_fee, barcode, owner_id, currency_id
+SELECT organization_id, client_id, created, 
+    created_by, updated, updated_by, priority, 
+    name, description, help, active, 
+    product_id, parent_product_id, is_service, price, 
+    use_parent_price, unit, tags, info, 
+    seq_no, upfront_fee, barcode, owner_id, 
+    currency_id
  FROM bazaar.product
     LEFT OUTER JOIN bazaar.product_category 
         ON product_category.product_id = product.product_id 

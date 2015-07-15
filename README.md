@@ -179,3 +179,8 @@ fn main(){
 
 ```
 
+
+## Roadmap
+
+* Support for the other way around?
+*    The user writes the model and create a corresponding table in the database
