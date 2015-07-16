@@ -155,9 +155,9 @@ fn generate_table(db_dev:&DatabaseDev, config:&Config, table:&Table, all_tables:
     w.ln();
     w.appendln(&dao_src);
     w.ln();
-    w.appendln(&static_columns);
-    w.ln();
     w.append(&meta_src);
+    w.ln();
+    w.appendln(&static_columns);
     
     let module_dir = config.module_dir(&table.schema);
     match fs::create_dir_all(&module_dir){
@@ -299,7 +299,7 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
         w.append("\")");
         w.comma();
     }
-    let referenced_tables = table.get_all_referenced_table(all_tables);
+    let referenced_tables = table.get_all_applicable_reference(all_tables);
     for ref_table in referenced_tables{
         let member_name = ref_table.member_name(table);
         w.ln_tabs(3);
@@ -318,6 +318,39 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
     }
     w.ln_tabs(2);
     w.append("}");
+    w.ln_tab();
+    w.append("}");
+    w.ln();
+    w.ln_tab();
+    w.append("fn to_dao(&self)->Dao{");
+    w.ln_tabs(2);
+    w.append("let mut dao = Dao::new();");
+    for c in &table.columns{
+        w.ln_tabs(2);
+        if c.not_null{
+            w.append("dao.set(\"");
+            w.append(&c.corrected_name());
+            w.append("\", &self.");
+            w.append(&c.corrected_name());
+            w.append(");");
+        }else{
+            w.append("match self.");
+            w.append(&c.corrected_name());
+            w.append("{");
+            w.ln_tabs(3);
+            w.append("Some(ref _value) => dao.set(\"");
+            w.append(&c.corrected_name());
+            w.append("\", _value),");
+            w.ln_tabs(3);
+            w.append("None => dao.set_null(\"");
+            w.append(&c.corrected_name());
+            w.append("\")");
+            w.ln_tabs(2);
+            w.append("}");
+        }
+    }
+    w.ln_tabs(2);
+    w.append("dao");
     w.ln_tab();
     w.append("}");
     w.ln();

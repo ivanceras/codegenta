@@ -4,7 +4,7 @@ version = "0.0.1"
 dependencies = [
  "chrono 0.2.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-serialize 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustorm 0.0.7 (git+https://github.com/ivanceras/rustorm)",
+ "rustorm 0.0.7",
  "time 0.1.31 (registry+https://github.com/rust-lang/crates.io-index)",
  "uuid 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -224,7 +224,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "rustorm"
 version = "0.0.7"
-source = "git+https://github.com/ivanceras/rustorm#5f5d13e59f0c2961ca7304abba445f642b6f288b"
 dependencies = [
  "chrono 0.2.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",

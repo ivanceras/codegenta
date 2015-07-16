@@ -8,12 +8,6 @@ pub trait MetaCode{
     fn meta_code(&self)->( Vec<String>, String );
 }
 
-pub trait StructCode{
-    /// the struct code/module code of the table, which can easily be used as struct of the project
-    fn struct_code<'a>(&'a self, db: &DatabaseDev, all_tables:&'a Vec<Table>)->(Vec<String>, Vec<&'a Table>, String);
-    /// auxilliary function to write the column of tables
-    fn write_column(w:&mut Writer, c:&Column);
-}
 
 impl MetaCode for Foreign{
     
@@ -186,6 +180,14 @@ impl MetaCode for Table{
 
 }
 
+
+pub trait StructCode{
+    /// the struct code/module code of the table, which can easily be used as struct of the project
+    fn struct_code<'a>(&'a self, db: &DatabaseDev, all_tables:&'a Vec<Table>)->(Vec<String>, Vec<&'a Table>, String);
+    /// auxilliary function to write the column of tables
+    fn write_column(w:&mut Writer, c:&Column);
+}
+
 impl StructCode for Table{
         /// build a source code for the struct defined by this table
     ///(imports, imported_tables, source code)
@@ -261,8 +263,7 @@ impl StructCode for Table{
                 included_columns.push(ic.name.clone());
             }
         }
-        
-        let referenced_table = self.get_all_referenced_table(all_tables);
+        let referenced_table = self.get_all_applicable_reference(all_tables);
         for ref_table in referenced_table{
             w.ln_tab();
             w.append("/// ");
@@ -315,7 +316,6 @@ impl StructCode for Table{
             }
             w.comma();
             imported_tables.push(ref_table.table);
-            
         }
         w.ln();
         w.append("}");
@@ -326,7 +326,7 @@ impl StructCode for Table{
         (imports, imported_tables, w.src)
     }
     
-       fn write_column(w:&mut Writer, c:&Column){
+    fn write_column(w:&mut Writer, c:&Column){
         if c.comment.is_some(){
             let comment = &c.comment.clone().unwrap();
             for split in comment.split("\n"){
@@ -363,7 +363,7 @@ impl StructCode for Table{
         w.tab();
         w.append("pub ");
         w.append(&c.corrected_name());
-        w.append(":");
+        w.append(": ");
         if c.not_null{
             w.append(&c.data_type);
         }else{
