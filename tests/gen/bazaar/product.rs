@@ -1,4 +1,4 @@
-//! WARNING: THIS FILE IS GENERATED, DERIVED FROM TABLE bazaar.product, DO NOT EDIT
+//! WARNING: This file is generated, derived from table bazaar.product, DO NOT EDIT
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
@@ -28,12 +28,12 @@ pub struct Product {
     /// default: uuid_generate_v4()
     /// not nullable 
     /// db data type: uuid
-    pub product_id:Uuid,
+    pub product_id: Uuid,
     /// barcode if scanning the product, conflict can happen, expect to return matching list of products using the barcode
     /// db data type: character varying
-    pub barcode:Option<String>,
+    pub barcode: Option<String>,
     /// db data type: uuid
-    pub currency_id:Option<Uuid>,
+    pub currency_id: Option<Uuid>,
     /// {color:"red",
     /// dimension:"10x20x30",
     /// dimensionUnit:"mm",
@@ -41,81 +41,81 @@ pub struct Product {
     /// weightUnit:"kg"
     /// }
     /// db data type: json
-    pub info:Option<String>,
+    pub info: Option<String>,
     /// default: false
     /// db data type: boolean
-    pub is_service:Option<bool>,
+    pub is_service: Option<bool>,
     /// Whom this product belongs, since created_by can be someone else create the product list in behalf of the owner of the product
     /// db data type: uuid
-    pub owner_id:Option<Uuid>,
+    pub owner_id: Option<Uuid>,
     /// db data type: uuid
-    pub parent_product_id:Option<Uuid>,
+    pub parent_product_id: Option<Uuid>,
     /// db data type: numeric
-    pub price:Option<f64>,
+    pub price: Option<f64>,
     /// @Sequence can be used to do alternate ordering of the values, when alphetical or time can not be used
     /// db data type: integer
-    pub seq_no:Option<i32>,
+    pub seq_no: Option<i32>,
     /// db data type: json
-    pub tags:Option<String>,
+    pub tags: Option<String>,
     /// db data type: character varying
-    pub unit:Option<String>,
+    pub unit: Option<String>,
     /// Applicable to services, usually services has an upfront fee
     /// default: 0.00
     /// db data type: numeric
-    pub upfront_fee:Option<f64>,
+    pub upfront_fee: Option<f64>,
     /// default: false
     /// db data type: boolean
-    pub use_parent_price:Option<bool>,
+    pub use_parent_price: Option<bool>,
     /// @Active
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// @Value(users.client_id) The client_id of the user creating this records
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// @Value(users.user_id)
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// @DisplayLength(100) When building a UI for this field
     /// @MaxLength(200) Do not go over 200 character on this one
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// This is @Required it has @DisplayLength(50) - 50 character in display length a @MinLength(1) and @MaxLength(100) - Do not go over 100 characters or else the system will throw a ValueTooLong exception
     /// can also be express with @Length(1-100)
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// @Value(users.user_id) , which means the value will be set with the users.user_id value
     /// 
     /// @Where(users.active=true)
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// @Value(users.user_id)
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has one
     pub owner: Option<Users>,
@@ -131,104 +131,6 @@ pub struct Product {
     pub review: Vec<Review>,
 }
 
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "product.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "product.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "product.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "product.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "product.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "product.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "product.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "product.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "product.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "product.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "product.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static product_id: &'static str = "product.product_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static parent_product_id: &'static str = "product.parent_product_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_service: &'static str = "product.is_service";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static price: &'static str = "product.price";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static use_parent_price: &'static str = "product.use_parent_price";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static unit: &'static str = "product.unit";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static tags: &'static str = "product.tags";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static info: &'static str = "product.info";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static seq_no: &'static str = "product.seq_no";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static upfront_fee: &'static str = "product.upfront_fee";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static barcode: &'static str = "product.barcode";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static owner_id: &'static str = "product.owner_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static currency_id: &'static str = "product.currency_id";
 
 
 impl IsDao for Product{
@@ -265,6 +167,95 @@ impl IsDao for Product{
             photo: vec![],
             review: vec![],
         }
+    }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        dao.set("product_id", &self.product_id);
+        match self.parent_product_id{
+            Some(ref _value) => dao.set("parent_product_id", _value),
+            None => dao.set_null("parent_product_id")
+        }
+        match self.is_service{
+            Some(ref _value) => dao.set("is_service", _value),
+            None => dao.set_null("is_service")
+        }
+        match self.price{
+            Some(ref _value) => dao.set("price", _value),
+            None => dao.set_null("price")
+        }
+        match self.use_parent_price{
+            Some(ref _value) => dao.set("use_parent_price", _value),
+            None => dao.set_null("use_parent_price")
+        }
+        match self.unit{
+            Some(ref _value) => dao.set("unit", _value),
+            None => dao.set_null("unit")
+        }
+        match self.tags{
+            Some(ref _value) => dao.set("tags", _value),
+            None => dao.set_null("tags")
+        }
+        match self.info{
+            Some(ref _value) => dao.set("info", _value),
+            None => dao.set_null("info")
+        }
+        match self.seq_no{
+            Some(ref _value) => dao.set("seq_no", _value),
+            None => dao.set_null("seq_no")
+        }
+        match self.upfront_fee{
+            Some(ref _value) => dao.set("upfront_fee", _value),
+            None => dao.set_null("upfront_fee")
+        }
+        match self.barcode{
+            Some(ref _value) => dao.set("barcode", _value),
+            None => dao.set_null("barcode")
+        }
+        match self.owner_id{
+            Some(ref _value) => dao.set("owner_id", _value),
+            None => dao.set_null("owner_id")
+        }
+        match self.currency_id{
+            Some(ref _value) => dao.set("currency_id", _value),
+            None => dao.set_null("currency_id")
+        }
+        dao
     }
 }
 
@@ -510,3 +501,100 @@ impl IsTable for Product{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "product.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "product.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "product.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "product.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "product.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "product.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "product.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "product.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "product.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "product.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "product.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static product_id: &'static str = "product.product_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static parent_product_id: &'static str = "product.parent_product_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static is_service: &'static str = "product.is_service";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static price: &'static str = "product.price";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static use_parent_price: &'static str = "product.use_parent_price";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static unit: &'static str = "product.unit";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static tags: &'static str = "product.tags";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static info: &'static str = "product.info";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static seq_no: &'static str = "product.seq_no";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static upfront_fee: &'static str = "product.upfront_fee";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static barcode: &'static str = "product.barcode";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static owner_id: &'static str = "product.owner_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static currency_id: &'static str = "product.currency_id";

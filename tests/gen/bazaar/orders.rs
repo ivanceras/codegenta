@@ -1,4 +1,4 @@
-//! WARNING: THIS FILE IS GENERATED, DERIVED FROM TABLE bazaar.orders, DO NOT EDIT
+//! WARNING: This file is generated, derived from table bazaar.orders, DO NOT EDIT
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
@@ -19,209 +19,95 @@ pub struct Orders {
     /// default: uuid_generate_v4()
     /// not nullable 
     /// db data type: uuid
-    pub order_id:Uuid,
+    pub order_id: Uuid,
     /// db data type: numeric
-    pub amount_refunded:Option<f64>,
+    pub amount_refunded: Option<f64>,
     /// db data type: numeric
-    pub amount_tendered:Option<f64>,
+    pub amount_tendered: Option<f64>,
     /// The cart from which this order was created from
     /// db data type: uuid
-    pub cart_id:Option<Uuid>,
+    pub cart_id: Option<Uuid>,
     /// default: 0.00
     /// db data type: numeric
-    pub charges_amount:Option<f64>,
+    pub charges_amount: Option<f64>,
     /// For recognization purposes, this is the name shown to the seller
     /// db data type: character varying
-    pub customer_name:Option<String>,
+    pub customer_name: Option<String>,
     /// db data type: timestamp with time zone
-    pub date_approved:Option<DateTime<UTC>>,
+    pub date_approved: Option<DateTime<UTC>>,
     /// db data type: timestamp with time zone
-    pub date_invoiced:Option<DateTime<UTC>>,
+    pub date_invoiced: Option<DateTime<UTC>>,
     /// default: now()
     /// db data type: timestamp with time zone
-    pub date_ordered:Option<DateTime<UTC>>,
+    pub date_ordered: Option<DateTime<UTC>>,
     /// db data type: numeric
-    pub grand_total_amount:Option<f64>,
+    pub grand_total_amount: Option<f64>,
     /// if the order from the buyer is approved by the seller
     /// default: false
     /// db data type: boolean
-    pub is_approved:Option<bool>,
+    pub is_approved: Option<bool>,
     /// determined whether the order has been confirmed by the person who ordered it
     /// default: false
     /// db data type: boolean
-    pub is_confirmed:Option<bool>,
+    pub is_confirmed: Option<bool>,
     /// default: false
     /// db data type: boolean
-    pub is_invoiced:Option<bool>,
+    pub is_invoiced: Option<bool>,
     /// default: true
     /// db data type: boolean
-    pub is_tax_included:Option<bool>,
+    pub is_tax_included: Option<bool>,
     /// default: false
     /// db data type: boolean
-    pub processed:Option<bool>,
+    pub processed: Option<bool>,
     /// default: false
     /// db data type: boolean
-    pub processing:Option<bool>,
+    pub processing: Option<bool>,
     /// db data type: integer
-    pub total_items:Option<i32>,
+    pub total_items: Option<i32>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has many
     pub order_line: Vec<OrderLine>,
 }
 
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "orders.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "orders.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "orders.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "orders.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "orders.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "orders.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "orders.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "orders.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "orders.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "orders.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "orders.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static order_id: &'static str = "orders.order_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static customer_name: &'static str = "orders.customer_name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static total_items: &'static str = "orders.total_items";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static grand_total_amount: &'static str = "orders.grand_total_amount";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static charges_amount: &'static str = "orders.charges_amount";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static processing: &'static str = "orders.processing";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static processed: &'static str = "orders.processed";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_confirmed: &'static str = "orders.is_confirmed";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_tax_included: &'static str = "orders.is_tax_included";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static date_ordered: &'static str = "orders.date_ordered";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_invoiced: &'static str = "orders.is_invoiced";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static date_invoiced: &'static str = "orders.date_invoiced";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_approved: &'static str = "orders.is_approved";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static date_approved: &'static str = "orders.date_approved";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static amount_tendered: &'static str = "orders.amount_tendered";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static amount_refunded: &'static str = "orders.amount_refunded";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static cart_id: &'static str = "orders.cart_id";
 
 
 impl IsDao for Orders{
@@ -257,6 +143,111 @@ impl IsDao for Orders{
             cart_id: dao.get_opt("cart_id"),
             order_line: vec![],
         }
+    }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        dao.set("order_id", &self.order_id);
+        match self.customer_name{
+            Some(ref _value) => dao.set("customer_name", _value),
+            None => dao.set_null("customer_name")
+        }
+        match self.total_items{
+            Some(ref _value) => dao.set("total_items", _value),
+            None => dao.set_null("total_items")
+        }
+        match self.grand_total_amount{
+            Some(ref _value) => dao.set("grand_total_amount", _value),
+            None => dao.set_null("grand_total_amount")
+        }
+        match self.charges_amount{
+            Some(ref _value) => dao.set("charges_amount", _value),
+            None => dao.set_null("charges_amount")
+        }
+        match self.processing{
+            Some(ref _value) => dao.set("processing", _value),
+            None => dao.set_null("processing")
+        }
+        match self.processed{
+            Some(ref _value) => dao.set("processed", _value),
+            None => dao.set_null("processed")
+        }
+        match self.is_confirmed{
+            Some(ref _value) => dao.set("is_confirmed", _value),
+            None => dao.set_null("is_confirmed")
+        }
+        match self.is_tax_included{
+            Some(ref _value) => dao.set("is_tax_included", _value),
+            None => dao.set_null("is_tax_included")
+        }
+        match self.date_ordered{
+            Some(ref _value) => dao.set("date_ordered", _value),
+            None => dao.set_null("date_ordered")
+        }
+        match self.is_invoiced{
+            Some(ref _value) => dao.set("is_invoiced", _value),
+            None => dao.set_null("is_invoiced")
+        }
+        match self.date_invoiced{
+            Some(ref _value) => dao.set("date_invoiced", _value),
+            None => dao.set_null("date_invoiced")
+        }
+        match self.is_approved{
+            Some(ref _value) => dao.set("is_approved", _value),
+            None => dao.set_null("is_approved")
+        }
+        match self.date_approved{
+            Some(ref _value) => dao.set("date_approved", _value),
+            None => dao.set_null("date_approved")
+        }
+        match self.amount_tendered{
+            Some(ref _value) => dao.set("amount_tendered", _value),
+            None => dao.set_null("amount_tendered")
+        }
+        match self.amount_refunded{
+            Some(ref _value) => dao.set("amount_refunded", _value),
+            None => dao.set_null("amount_refunded")
+        }
+        match self.cart_id{
+            Some(ref _value) => dao.set("cart_id", _value),
+            None => dao.set_null("cart_id")
+        }
+        dao
     }
 }
 
@@ -528,3 +519,116 @@ impl IsTable for Orders{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "orders.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "orders.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "orders.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "orders.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "orders.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "orders.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "orders.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "orders.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "orders.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "orders.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "orders.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static order_id: &'static str = "orders.order_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static customer_name: &'static str = "orders.customer_name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static total_items: &'static str = "orders.total_items";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static grand_total_amount: &'static str = "orders.grand_total_amount";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static charges_amount: &'static str = "orders.charges_amount";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static processing: &'static str = "orders.processing";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static processed: &'static str = "orders.processed";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static is_confirmed: &'static str = "orders.is_confirmed";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static is_tax_included: &'static str = "orders.is_tax_included";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static date_ordered: &'static str = "orders.date_ordered";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static is_invoiced: &'static str = "orders.is_invoiced";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static date_invoiced: &'static str = "orders.date_invoiced";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static is_approved: &'static str = "orders.is_approved";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static date_approved: &'static str = "orders.date_approved";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static amount_tendered: &'static str = "orders.amount_tendered";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static amount_refunded: &'static str = "orders.amount_refunded";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static cart_id: &'static str = "orders.cart_id";

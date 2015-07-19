@@ -1,11 +1,10 @@
-//! WARNING: THIS FILE IS GENERATED, DERIVED FROM TABLE bazaar.user_info, DO NOT EDIT
+//! WARNING: This file is generated, derived from table bazaar.user_info, DO NOT EDIT
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
 use uuid::Uuid;
 use gen::bazaar::Address;
 use gen::bazaar::Photo;
-use gen::bazaar::Users;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
@@ -21,129 +20,61 @@ pub struct UserInfo {
     /// primary
     /// not nullable 
     /// db data type: uuid
-    pub user_id:Uuid,
+    pub user_id: Uuid,
     /// db data type: uuid
-    pub address_id:Option<Uuid>,
+    pub address_id: Option<Uuid>,
     /// db data type: character varying
-    pub current_location:Option<String>,
+    pub current_location: Option<String>,
     /// db data type: character varying
-    pub displayname:Option<String>,
+    pub displayname: Option<String>,
     /// db data type: uuid
-    pub photo_id:Option<Uuid>,
+    pub photo_id: Option<Uuid>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
-    /// has one
-    pub user: Option<Users>,
     /// has one
     pub address: Option<Address>,
     /// has one
     pub photo: Option<Photo>,
 }
 
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "user_info.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "user_info.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "user_info.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "user_info.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "user_info.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "user_info.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "user_info.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "user_info.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "user_info.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "user_info.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "user_info.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static user_id: &'static str = "user_info.user_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static address_id: &'static str = "user_info.address_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static current_location: &'static str = "user_info.current_location";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static displayname: &'static str = "user_info.displayname";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static photo_id: &'static str = "user_info.photo_id";
 
 
 impl IsDao for UserInfo{
@@ -165,10 +96,66 @@ impl IsDao for UserInfo{
             current_location: dao.get_opt("current_location"),
             displayname: dao.get_opt("displayname"),
             photo_id: dao.get_opt("photo_id"),
-            user: None,
             address: None,
             photo: None,
         }
+    }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        dao.set("user_id", &self.user_id);
+        match self.address_id{
+            Some(ref _value) => dao.set("address_id", _value),
+            None => dao.set_null("address_id")
+        }
+        match self.current_location{
+            Some(ref _value) => dao.set("current_location", _value),
+            None => dao.set_null("current_location")
+        }
+        match self.displayname{
+            Some(ref _value) => dao.set("displayname", _value),
+            None => dao.set_null("displayname")
+        }
+        match self.photo_id{
+            Some(ref _value) => dao.set("photo_id", _value),
+            None => dao.set_null("photo_id")
+        }
+        dao
     }
 }
 
@@ -347,3 +334,68 @@ impl IsTable for UserInfo{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "user_info.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "user_info.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "user_info.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "user_info.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "user_info.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "user_info.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "user_info.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "user_info.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "user_info.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "user_info.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "user_info.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static user_id: &'static str = "user_info.user_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static address_id: &'static str = "user_info.address_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static current_location: &'static str = "user_info.current_location";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static displayname: &'static str = "user_info.displayname";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static photo_id: &'static str = "user_info.photo_id";

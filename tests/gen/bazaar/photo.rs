@@ -1,4 +1,4 @@
-//! WARNING: THIS FILE IS GENERATED, DERIVED FROM TABLE bazaar.photo, DO NOT EDIT
+//! WARNING: This file is generated, derived from table bazaar.photo, DO NOT EDIT
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
@@ -21,54 +21,54 @@ pub struct Photo {
     /// default: uuid_generate_v4()
     /// not nullable 
     /// db data type: uuid
-    pub photo_id:Uuid,
+    pub photo_id: Uuid,
     /// The base64 encoding of the image, which can be stored in the database
     /// db data type: character varying
-    pub data:Option<String>,
+    pub data: Option<String>,
     /// db data type: integer
-    pub seq_no:Option<i32>,
+    pub seq_no: Option<i32>,
     /// The online version of the photo, could be hosted in cdn somewhere else, to avoid payloads in the system. The online photo can be cached by creating a base64 encoding, then storing it in the local db
     /// db data type: character varying
-    pub url:Option<String>,
+    pub url: Option<String>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has many
     pub photo_sizes: Vec<PhotoSizes>,
@@ -78,68 +78,6 @@ pub struct Photo {
     pub product: Vec<Product>,
 }
 
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "photo.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "photo.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "photo.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "photo.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "photo.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "photo.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "photo.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "photo.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "photo.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "photo.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "photo.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static photo_id: &'static str = "photo.photo_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static url: &'static str = "photo.url";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static data: &'static str = "photo.data";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static seq_no: &'static str = "photo.seq_no";
 
 
 impl IsDao for Photo{
@@ -164,6 +102,59 @@ impl IsDao for Photo{
             user_info: vec![],
             product: vec![],
         }
+    }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        dao.set("photo_id", &self.photo_id);
+        match self.url{
+            Some(ref _value) => dao.set("url", _value),
+            None => dao.set_null("url")
+        }
+        match self.data{
+            Some(ref _value) => dao.set("data", _value),
+            None => dao.set_null("data")
+        }
+        match self.seq_no{
+            Some(ref _value) => dao.set("seq_no", _value),
+            None => dao.set_null("seq_no")
+        }
+        dao
     }
 }
 
@@ -318,3 +309,64 @@ impl IsTable for Photo{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "photo.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "photo.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "photo.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "photo.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "photo.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "photo.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "photo.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "photo.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "photo.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "photo.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "photo.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static photo_id: &'static str = "photo.photo_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static url: &'static str = "photo.url";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static data: &'static str = "photo.data";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static seq_no: &'static str = "photo.seq_no";

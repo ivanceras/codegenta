@@ -1,4 +1,4 @@
-//! WARNING: THIS FILE IS GENERATED, DERIVED FROM TABLE bazaar.organization, DO NOT EDIT
+//! WARNING: This file is generated, derived from table bazaar.organization, DO NOT EDIT
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
@@ -20,49 +20,49 @@ pub struct Organization {
     /// not nullable 
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Uuid,
+    pub organization_id: Uuid,
     /// db data type: uuid
-    pub address_id:Option<Uuid>,
+    pub address_id: Option<Uuid>,
     /// db data type: character varying
-    pub landmark:Option<String>,
+    pub landmark: Option<String>,
     /// db data type: uuid
-    pub parent_organization_id:Option<Uuid>,
+    pub parent_organization_id: Option<Uuid>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has one, self referential
     pub parent: Option<Box<Organization>>,
@@ -70,64 +70,6 @@ pub struct Organization {
     pub organization: Vec<Organization>,
 }
 
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "organization.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "organization.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "organization.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "organization.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "organization.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "organization.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "organization.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "organization.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "organization.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "organization.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "organization.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static parent_organization_id: &'static str = "organization.parent_organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static address_id: &'static str = "organization.address_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static landmark: &'static str = "organization.landmark";
 
 
 impl IsDao for Organization{
@@ -150,6 +92,55 @@ impl IsDao for Organization{
             parent: None,
             organization: vec![],
         }
+    }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        dao.set("organization_id", &self.organization_id);
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        match self.parent_organization_id{
+            Some(ref _value) => dao.set("parent_organization_id", _value),
+            None => dao.set_null("parent_organization_id")
+        }
+        match self.address_id{
+            Some(ref _value) => dao.set("address_id", _value),
+            None => dao.set_null("address_id")
+        }
+        match self.landmark{
+            Some(ref _value) => dao.set("landmark", _value),
+            None => dao.set_null("landmark")
+        }
+        dao
     }
 }
 
@@ -300,3 +291,60 @@ impl IsTable for Organization{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "organization.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "organization.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "organization.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "organization.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "organization.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "organization.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "organization.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "organization.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "organization.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "organization.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "organization.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static parent_organization_id: &'static str = "organization.parent_organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static address_id: &'static str = "organization.address_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static landmark: &'static str = "organization.landmark";
