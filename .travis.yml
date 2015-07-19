@@ -6,6 +6,7 @@ rust:
 addons:
   postgresql: 9.4
 before_script:
+- "git clone https://github.com/ivanceras/rustorm ../rustorm"
 - "./scripts/setup.sh"
 script:
 - cargo test
