@@ -21,52 +21,52 @@ pub struct ExchangeRate {
     /// default: uuid_generate_v4()
     /// not nullable 
     /// db data type: uuid
-    pub exchange_rate_id:Uuid,
+    pub exchange_rate_id: Uuid,
     /// db data type: numeric
-    pub exchange_rate:Option<f64>,
+    pub exchange_rate: Option<f64>,
     /// db data type: uuid
-    pub from_currency:Option<Uuid>,
+    pub from_currency: Option<Uuid>,
     /// db data type: uuid
-    pub to_currency:Option<Uuid>,
+    pub to_currency: Option<Uuid>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has one
     pub from: Option<Currency>,
@@ -98,69 +98,60 @@ impl IsDao for ExchangeRate{
             to: None,
         }
     }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        dao.set("exchange_rate_id", &self.exchange_rate_id);
+        match self.from_currency{
+            Some(ref _value) => dao.set("from_currency", _value),
+            None => dao.set_null("from_currency")
+        }
+        match self.exchange_rate{
+            Some(ref _value) => dao.set("exchange_rate", _value),
+            None => dao.set_null("exchange_rate")
+        }
+        match self.to_currency{
+            Some(ref _value) => dao.set("to_currency", _value),
+            None => dao.set_null("to_currency")
+        }
+        dao
+    }
 }
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "exchange_rate.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "exchange_rate.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "exchange_rate.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "exchange_rate.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "exchange_rate.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "exchange_rate.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "exchange_rate.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "exchange_rate.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "exchange_rate.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "exchange_rate.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "exchange_rate.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static exchange_rate_id: &'static str = "exchange_rate.exchange_rate_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static from_currency: &'static str = "exchange_rate.from_currency";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static exchange_rate: &'static str = "exchange_rate.exchange_rate";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static to_currency: &'static str = "exchange_rate.to_currency";
 
 impl IsTable for ExchangeRate{
 
@@ -323,3 +314,64 @@ impl IsTable for ExchangeRate{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "exchange_rate.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "exchange_rate.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "exchange_rate.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "exchange_rate.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "exchange_rate.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "exchange_rate.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "exchange_rate.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "exchange_rate.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "exchange_rate.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "exchange_rate.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "exchange_rate.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static exchange_rate_id: &'static str = "exchange_rate.exchange_rate_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static from_currency: &'static str = "exchange_rate.from_currency";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static exchange_rate: &'static str = "exchange_rate.exchange_rate";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static to_currency: &'static str = "exchange_rate.to_currency";

@@ -1,5 +1,7 @@
 # Codegenta
 
+![](https://raw.githubusercontent.com/ivanceras/codegenta/master/kutsinta.png)
+
 [![Latest Version](https://img.shields.io/crates/v/codegenta.svg)](https://crates.io/crates/codegenta)
 [![Build Status](https://api.travis-ci.org/ivanceras/codegenta.svg)](https://travis-ci.org/ivanceras/codegenta)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)

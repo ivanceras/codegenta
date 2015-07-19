@@ -19,59 +19,59 @@ pub struct PhotoSizes {
     /// primary
     /// not nullable 
     /// db data type: uuid
-    pub photo_id:Uuid,
+    pub photo_id: Uuid,
     /// primary
     /// not nullable 
     /// db data type: uuid
-    pub photo_size_id:Uuid,
+    pub photo_size_id: Uuid,
     /// The base64 encoding of this photo, optimized to this size
     /// db data type: character varying
-    pub data:Option<String>,
+    pub data: Option<String>,
     /// db data type: integer
-    pub height:Option<i32>,
+    pub height: Option<i32>,
     /// db data type: character varying
-    pub url:Option<String>,
+    pub url: Option<String>,
     /// db data type: integer
-    pub width:Option<i32>,
+    pub width: Option<i32>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has one
     pub photo: Option<Photo>,
@@ -102,77 +102,65 @@ impl IsDao for PhotoSizes{
             photo: None,
         }
     }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        match self.width{
+            Some(ref _value) => dao.set("width", _value),
+            None => dao.set_null("width")
+        }
+        match self.height{
+            Some(ref _value) => dao.set("height", _value),
+            None => dao.set_null("height")
+        }
+        match self.data{
+            Some(ref _value) => dao.set("data", _value),
+            None => dao.set_null("data")
+        }
+        match self.url{
+            Some(ref _value) => dao.set("url", _value),
+            None => dao.set_null("url")
+        }
+        dao.set("photo_id", &self.photo_id);
+        dao.set("photo_size_id", &self.photo_size_id);
+        dao
+    }
 }
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "photo_sizes.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "photo_sizes.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "photo_sizes.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "photo_sizes.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "photo_sizes.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "photo_sizes.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "photo_sizes.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "photo_sizes.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "photo_sizes.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "photo_sizes.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "photo_sizes.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static width: &'static str = "photo_sizes.width";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static height: &'static str = "photo_sizes.height";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static data: &'static str = "photo_sizes.data";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static url: &'static str = "photo_sizes.url";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static photo_id: &'static str = "photo_sizes.photo_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static photo_size_id: &'static str = "photo_sizes.photo_size_id";
 
 impl IsTable for PhotoSizes{
 
@@ -348,3 +336,72 @@ impl IsTable for PhotoSizes{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "photo_sizes.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "photo_sizes.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "photo_sizes.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "photo_sizes.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "photo_sizes.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "photo_sizes.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "photo_sizes.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "photo_sizes.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "photo_sizes.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "photo_sizes.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "photo_sizes.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static width: &'static str = "photo_sizes.width";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static height: &'static str = "photo_sizes.height";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static data: &'static str = "photo_sizes.data";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static url: &'static str = "photo_sizes.url";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static photo_id: &'static str = "photo_sizes.photo_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static photo_size_id: &'static str = "photo_sizes.photo_size_id";

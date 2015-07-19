@@ -4,7 +4,6 @@ use chrono::datetime::DateTime;
 use chrono::naive::time::NaiveTime;
 use chrono::offset::utc::UTC;
 use uuid::Uuid;
-use gen::bazaar::Product;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
@@ -20,53 +19,51 @@ pub struct ProductAvailability {
     /// primary
     /// not nullable 
     /// db data type: uuid
-    pub product_id:Uuid,
+    pub product_id: Uuid,
     /// db data type: boolean
-    pub always_available:Option<bool>,
+    pub always_available: Option<bool>,
     /// db data type: boolean
-    pub available:Option<bool>,
+    pub available: Option<bool>,
     /// {"Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"}
     /// db data type: json
-    pub available_day:Option<String>,
+    pub available_day: Option<String>,
     /// db data type: timestamp with time zone
-    pub available_from:Option<DateTime<UTC>>,
+    pub available_from: Option<DateTime<UTC>>,
     /// db data type: timestamp with time zone
-    pub available_until:Option<DateTime<UTC>>,
+    pub available_until: Option<DateTime<UTC>>,
     /// db data type: time with time zone
-    pub close_time:Option<NaiveTime>,
+    pub close_time: Option<NaiveTime>,
     /// db data type: time with time zone
-    pub open_time:Option<NaiveTime>,
+    pub open_time: Option<NaiveTime>,
     /// default: 1
     /// db data type: numeric
-    pub stocks:Option<f64>,
+    pub stocks: Option<f64>,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
-    /// has one
-    pub product: Option<Product>,
 }
 
 
@@ -90,76 +87,69 @@ impl IsDao for ProductAvailability{
             available_day: dao.get_opt("available_day"),
             open_time: dao.get_opt("open_time"),
             close_time: dao.get_opt("close_time"),
-            product: None,
         }
     }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        dao.set("product_id", &self.product_id);
+        match self.available{
+            Some(ref _value) => dao.set("available", _value),
+            None => dao.set_null("available")
+        }
+        match self.always_available{
+            Some(ref _value) => dao.set("always_available", _value),
+            None => dao.set_null("always_available")
+        }
+        match self.stocks{
+            Some(ref _value) => dao.set("stocks", _value),
+            None => dao.set_null("stocks")
+        }
+        match self.available_from{
+            Some(ref _value) => dao.set("available_from", _value),
+            None => dao.set_null("available_from")
+        }
+        match self.available_until{
+            Some(ref _value) => dao.set("available_until", _value),
+            None => dao.set_null("available_until")
+        }
+        match self.available_day{
+            Some(ref _value) => dao.set("available_day", _value),
+            None => dao.set_null("available_day")
+        }
+        match self.open_time{
+            Some(ref _value) => dao.set("open_time", _value),
+            None => dao.set_null("open_time")
+        }
+        match self.close_time{
+            Some(ref _value) => dao.set("close_time", _value),
+            None => dao.set_null("close_time")
+        }
+        dao
+    }
 }
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "product_availability.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "product_availability.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "product_availability.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "product_availability.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "product_availability.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "product_availability.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "product_availability.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static product_id: &'static str = "product_availability.product_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available: &'static str = "product_availability.available";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static always_available: &'static str = "product_availability.always_available";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static stocks: &'static str = "product_availability.stocks";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available_from: &'static str = "product_availability.available_from";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available_until: &'static str = "product_availability.available_until";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available_day: &'static str = "product_availability.available_day";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static open_time: &'static str = "product_availability.open_time";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static close_time: &'static str = "product_availability.close_time";
 
 impl IsTable for ProductAvailability{
 
@@ -326,3 +316,68 @@ impl IsTable for ProductAvailability{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "product_availability.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "product_availability.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "product_availability.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "product_availability.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "product_availability.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "product_availability.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "product_availability.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static product_id: &'static str = "product_availability.product_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static available: &'static str = "product_availability.available";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static always_available: &'static str = "product_availability.always_available";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static stocks: &'static str = "product_availability.stocks";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static available_from: &'static str = "product_availability.available_from";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static available_until: &'static str = "product_availability.available_until";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static available_day: &'static str = "product_availability.available_day";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static open_time: &'static str = "product_availability.open_time";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static close_time: &'static str = "product_availability.close_time";

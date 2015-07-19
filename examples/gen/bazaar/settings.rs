@@ -20,54 +20,54 @@ pub struct Settings {
     /// default: uuid_generate_v4()
     /// not nullable 
     /// db data type: uuid
-    pub settings_id:Uuid,
+    pub settings_id: Uuid,
     /// Use metric system as unit, if false, use english system
     /// default: true
     /// db data type: boolean
-    pub use_metric:Option<bool>,
+    pub use_metric: Option<bool>,
     /// db data type: uuid
-    pub user_id:Option<Uuid>,
+    pub user_id: Option<Uuid>,
     /// db data type: json
-    pub value:Option<String>,
+    pub value: Option<String>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has one
     pub user: Option<Users>,
@@ -96,69 +96,60 @@ impl IsDao for Settings{
             user: None,
         }
     }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        match self.user_id{
+            Some(ref _value) => dao.set("user_id", _value),
+            None => dao.set_null("user_id")
+        }
+        match self.value{
+            Some(ref _value) => dao.set("value", _value),
+            None => dao.set_null("value")
+        }
+        dao.set("settings_id", &self.settings_id);
+        match self.use_metric{
+            Some(ref _value) => dao.set("use_metric", _value),
+            None => dao.set_null("use_metric")
+        }
+        dao
+    }
 }
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "settings.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "settings.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "settings.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "settings.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "settings.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "settings.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "settings.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "settings.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "settings.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "settings.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "settings.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static user_id: &'static str = "settings.user_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static value: &'static str = "settings.value";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static settings_id: &'static str = "settings.settings_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static use_metric: &'static str = "settings.use_metric";
 
 impl IsTable for Settings{
 
@@ -316,3 +307,64 @@ impl IsTable for Settings{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "settings.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "settings.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "settings.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "settings.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "settings.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "settings.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "settings.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "settings.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "settings.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "settings.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "settings.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static user_id: &'static str = "settings.user_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static value: &'static str = "settings.value";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static settings_id: &'static str = "settings.settings_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static use_metric: &'static str = "settings.use_metric";

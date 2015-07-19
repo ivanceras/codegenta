@@ -3,8 +3,6 @@
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
 use uuid::Uuid;
-use gen::bazaar::Product;
-use gen::bazaar::Review;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
@@ -20,41 +18,37 @@ pub struct ProductReview {
     /// primary
     /// not nullable 
     /// db data type: uuid
-    pub product_id:Uuid,
+    pub product_id: Uuid,
     /// primary
     /// not nullable 
     /// db data type: uuid
-    pub review_id:Uuid,
+    pub review_id: Uuid,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
-    /// has one
-    pub product: Option<Product>,
-    /// has one
-    pub review: Option<Review>,
 }
 
 
@@ -71,49 +65,38 @@ impl IsDao for ProductReview{
             priority: dao.get_opt("priority"),
             product_id: dao.get("product_id"),
             review_id: dao.get("review_id"),
-            product: None,
-            review: None,
         }
     }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        dao.set("product_id", &self.product_id);
+        dao.set("review_id", &self.review_id);
+        dao
+    }
 }
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "product_review.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "product_review.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "product_review.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "product_review.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "product_review.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "product_review.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "product_review.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static product_id: &'static str = "product_review.product_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static review_id: &'static str = "product_review.review_id";
 
 impl IsTable for ProductReview{
 
@@ -222,3 +205,40 @@ impl IsTable for ProductReview{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "product_review.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "product_review.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "product_review.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "product_review.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "product_review.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "product_review.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "product_review.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static product_id: &'static str = "product_review.product_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static review_id: &'static str = "product_review.review_id";

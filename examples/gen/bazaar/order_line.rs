@@ -20,58 +20,58 @@ pub struct OrderLine {
     /// default: uuid_generate_v4()
     /// not nullable 
     /// db data type: uuid
-    pub order_line_id:Uuid,
+    pub order_line_id: Uuid,
     /// db data type: numeric
-    pub discount:Option<f64>,
+    pub discount: Option<f64>,
     /// db data type: numeric
-    pub freight_amt:Option<f64>,
+    pub freight_amt: Option<f64>,
     /// db data type: uuid
-    pub order_id:Option<Uuid>,
+    pub order_id: Option<Uuid>,
     /// db data type: numeric
-    pub price_momentary:Option<f64>,
+    pub price_momentary: Option<f64>,
     /// db data type: uuid
-    pub product_id:Option<Uuid>,
+    pub product_id: Option<Uuid>,
     /// db data type: numeric
-    pub qty_ordered:Option<f64>,
+    pub qty_ordered: Option<f64>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
-    pub active:bool,
+    pub active: bool,
     /// --inherited-- 
     /// db data type: uuid
-    pub client_id:Option<Uuid>,
+    pub client_id: Option<Uuid>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub created:DateTime<UTC>,
+    pub created: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub created_by:Option<Uuid>,
+    pub created_by: Option<Uuid>,
     /// --inherited-- 
     /// db data type: character varying
-    pub description:Option<String>,
+    pub description: Option<String>,
     /// --inherited-- 
     /// db data type: text
-    pub help:Option<String>,
+    pub help: Option<String>,
     /// --inherited-- 
     /// db data type: character varying
-    pub name:Option<String>,
+    pub name: Option<String>,
     /// --inherited-- 
     /// db data type: uuid
-    pub organization_id:Option<Uuid>,
+    pub organization_id: Option<Uuid>,
     /// --inherited-- 
     /// db data type: numeric
-    pub priority:Option<f64>,
+    pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
-    pub updated:DateTime<UTC>,
+    pub updated: DateTime<UTC>,
     /// --inherited-- 
     /// db data type: uuid
-    pub updated_by:Option<Uuid>,
+    pub updated_by: Option<Uuid>,
 
     /// has one
     pub order: Option<Orders>,
@@ -103,81 +103,72 @@ impl IsDao for OrderLine{
             order: None,
         }
     }
+
+    fn to_dao(&self)->Dao{
+        let mut dao = Dao::new();
+        match self.organization_id{
+            Some(ref _value) => dao.set("organization_id", _value),
+            None => dao.set_null("organization_id")
+        }
+        match self.client_id{
+            Some(ref _value) => dao.set("client_id", _value),
+            None => dao.set_null("client_id")
+        }
+        dao.set("created", &self.created);
+        match self.created_by{
+            Some(ref _value) => dao.set("created_by", _value),
+            None => dao.set_null("created_by")
+        }
+        dao.set("updated", &self.updated);
+        match self.updated_by{
+            Some(ref _value) => dao.set("updated_by", _value),
+            None => dao.set_null("updated_by")
+        }
+        match self.priority{
+            Some(ref _value) => dao.set("priority", _value),
+            None => dao.set_null("priority")
+        }
+        match self.name{
+            Some(ref _value) => dao.set("name", _value),
+            None => dao.set_null("name")
+        }
+        match self.description{
+            Some(ref _value) => dao.set("description", _value),
+            None => dao.set_null("description")
+        }
+        match self.help{
+            Some(ref _value) => dao.set("help", _value),
+            None => dao.set_null("help")
+        }
+        dao.set("active", &self.active);
+        match self.order_id{
+            Some(ref _value) => dao.set("order_id", _value),
+            None => dao.set_null("order_id")
+        }
+        match self.product_id{
+            Some(ref _value) => dao.set("product_id", _value),
+            None => dao.set_null("product_id")
+        }
+        match self.price_momentary{
+            Some(ref _value) => dao.set("price_momentary", _value),
+            None => dao.set_null("price_momentary")
+        }
+        match self.freight_amt{
+            Some(ref _value) => dao.set("freight_amt", _value),
+            None => dao.set_null("freight_amt")
+        }
+        match self.discount{
+            Some(ref _value) => dao.set("discount", _value),
+            None => dao.set_null("discount")
+        }
+        dao.set("order_line_id", &self.order_line_id);
+        match self.qty_ordered{
+            Some(ref _value) => dao.set("qty_ordered", _value),
+            None => dao.set_null("qty_ordered")
+        }
+        dao
+    }
 }
-
-// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "order_line.organization_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "order_line.client_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "order_line.created";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "order_line.created_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "order_line.updated";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "order_line.updated_by";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "order_line.priority";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "order_line.name";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "order_line.description";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "order_line.help";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "order_line.active";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static order_id: &'static str = "order_line.order_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static product_id: &'static str = "order_line.product_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static price_momentary: &'static str = "order_line.price_momentary";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static freight_amt: &'static str = "order_line.freight_amt";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static discount: &'static str = "order_line.discount";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static order_line_id: &'static str = "order_line.order_line_id";
-
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static qty_ordered: &'static str = "order_line.qty_ordered";
 
 impl IsTable for OrderLine{
 
@@ -362,3 +353,76 @@ impl IsTable for OrderLine{
         }
     }
 }
+// Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static organization_id: &'static str = "order_line.organization_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static client_id: &'static str = "order_line.client_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created: &'static str = "order_line.created";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static created_by: &'static str = "order_line.created_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated: &'static str = "order_line.updated";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static updated_by: &'static str = "order_line.updated_by";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static priority: &'static str = "order_line.priority";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name: &'static str = "order_line.name";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static description: &'static str = "order_line.description";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static help: &'static str = "order_line.help";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static active: &'static str = "order_line.active";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static order_id: &'static str = "order_line.order_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static product_id: &'static str = "order_line.product_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static price_momentary: &'static str = "order_line.price_momentary";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static freight_amt: &'static str = "order_line.freight_amt";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static discount: &'static str = "order_line.discount";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static order_line_id: &'static str = "order_line.order_line_id";
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static qty_ordered: &'static str = "order_line.qty_ordered";
