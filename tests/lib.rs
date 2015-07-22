@@ -31,8 +31,7 @@ mod gen;
 
 #[test]
 fn test_select_filter(){
-    let pg = Postgres::new();
-    let em = EntityManager::new(&pg);
+    let mut pg = Postgres::new();
     let product_table = Product::table();
     let mut query = Query::new();
     query.from(&product_table);
@@ -84,8 +83,7 @@ fn test_select_filter(){
 
 #[test]
 fn test_update_query(){
-    let pg = Postgres::new();
-    let em = EntityManager::new(&pg);
+    let mut pg = Postgres::new();
     let mut query = Query::update();
     query.column(product::name);
     query.from(&Product::table());
@@ -94,7 +92,7 @@ fn test_update_query(){
     query.filter(product::name, Equality::LIKE, &"aphone");
     
     query.add_filter(Filter::new(product::description, Equality::LIKE, &"%Iphone%"));
-    let frag = query.build(&pg);
+    let frag = query.build(&mut pg);
     let expected = "
 UPDATE bazaar.product
 SET name = $1 
@@ -325,12 +323,12 @@ SELECT *
 fn test_flex_query(){
     let url = "postgres://postgres:p0stgr3s@localhost/bazaar_v6";
     let mut pool = ManagedPool::init(&url, 5);
-    let db = pool.connect().unwrap();
+    let mut db = pool.connect().unwrap();
     
     let prod: Product = Query::select_all()
             .from_table("bazaar.product")
             .filter("name", Equality::EQ, &"GTX660 Ti videocard")
-            .collect_one(db.as_ref()).unwrap();
+            .collect_one(db.as_mut()).unwrap();
 
     println!("{}  {}  {:?}", prod.product_id, prod.name.unwrap(), prod.description);
 }

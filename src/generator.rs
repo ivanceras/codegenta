@@ -72,7 +72,7 @@ impl Config{
 ///
 /// retrieve all the table definition in the database
 ///
-pub fn get_all_tables(db_dev:&DatabaseDev)->Vec<Table>{
+pub fn get_all_tables(db_dev:&mut DatabaseDev)->Vec<Table>{
     let all_tables_names = db_dev.get_all_tables();
     let mut all_table_def:Vec<Table> = Vec::new();
     for (schema, table) in all_tables_names{
@@ -113,13 +113,28 @@ pub fn get_tables_in_schema<'a>(schema:&str, all_table:&'a Vec<Table>)->Vec<&'a 
 /// 2. meta
 /// mod.rs
 
-pub fn generate_all(db_dev:&DatabaseDev, config:&Config){
+pub fn generate_all(db_dev:&mut DatabaseDev, config:&Config){
     let all_tables:Vec<Table> = get_all_tables(db_dev);
     for table in &all_tables{
         generate_table(db_dev, config, table, &all_tables);
     }
     generate_mod_per_schema(&config, &all_tables);
     generate_mod_rs(&config, &all_tables);
+}
+
+pub fn generate_tables(db_dev:&mut DatabaseDev, only_tables:Vec<String>, config:&Config){
+    let all_tables:Vec<Table> = get_all_tables(db_dev);
+    let mut tables = vec![];
+    for table in all_tables{
+        if only_tables.contains(&table.name){
+            tables.push(table);
+        }
+    }
+    for table in &tables{
+        generate_table(db_dev, config, table, &tables);
+    }
+    generate_mod_per_schema(&config, &tables);
+    generate_mod_rs(&config, &tables);
 }
 
 /// the gernaration of tables should be placed on their respective directory

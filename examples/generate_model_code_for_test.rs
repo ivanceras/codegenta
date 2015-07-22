@@ -10,7 +10,7 @@ use rustorm::pool::ManagedPool;
 fn main(){
     
     let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6", 1);
-    let db = pool.connect().unwrap();
+    let mut db = pool.connect().unwrap();
     let config =  Config{
             base_module:Some("gen".to_string()),
             include_table_references:true,
@@ -18,6 +18,6 @@ fn main(){
             generate_table_meta:true,
             base_dir:"./tests".to_string(),
         };
-    generator::generate_all(db.as_dev(), &config);
+    generator::generate_all(db.as_dev_mut(), &config);
 }
 

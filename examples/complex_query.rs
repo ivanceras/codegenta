@@ -28,7 +28,7 @@ mod gen;
 
 fn main(){
     let mut pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1);
-    let db = pool.connect().unwrap();
+    let mut db = pool.connect().unwrap();
     
     let mut query = Query::select_all();
     
@@ -48,7 +48,7 @@ fn main(){
         .asc(product::name)
         .desc(product::created)
         ;
-    let frag = query.build(db.as_ref());
+    let frag = query.build(db.as_mut());
     
     let expected = "SELECT *
  FROM bazaar.product
