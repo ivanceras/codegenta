@@ -9,6 +9,8 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -131,6 +133,13 @@ impl IsDao for Country{
             None => dao.set_null("code")
         }
         dao
+    }
+}
+
+impl ToJson for Country{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 

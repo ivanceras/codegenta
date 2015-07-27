@@ -10,6 +10,8 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -150,6 +152,13 @@ impl IsDao for ExchangeRate{
             None => dao.set_null("to_currency")
         }
         dao
+    }
+}
+
+impl ToJson for ExchangeRate{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 

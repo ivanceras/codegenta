@@ -10,6 +10,8 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -149,6 +151,13 @@ impl IsDao for ApiKey{
             None => dao.set_null("valid_until")
         }
         dao
+    }
+}
+
+impl ToJson for ApiKey{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 

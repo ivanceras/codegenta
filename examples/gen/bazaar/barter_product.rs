@@ -1,15 +1,13 @@
-//! WARNING: This file is generated, derived from table bazaar.wishlist_line, DO NOT EDIT
+//! WARNING: This file is generated, derived from table bazaar.barter_product, DO NOT EDIT
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
 use uuid::Uuid;
-use gen::bazaar::Wishlist;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
-use rustorm::table::Foreign;
 use rustc_serialize::json::ToJson;
 use rustc_serialize::json::Json;
 
@@ -17,20 +15,17 @@ use rustc_serialize::json::Json;
 
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
-pub struct WishlistLine {
-    /// primary
-    /// not nullable 
-    /// db data type: uuid
-    pub wishlist_line_id: Uuid,
-    /// default: false
-    /// db data type: boolean
-    pub added_to_cart: Option<bool>,
+pub struct BarterProduct {
+    /// db data type: timestamp with time zone
+    pub bought: Option<DateTime<UTC>>,
     /// db data type: numeric
-    pub price_momentary: Option<f64>,
+    pub bought_price: Option<f64>,
+    /// db data type: json
+    pub condition: Option<String>,
+    /// db data type: numeric
+    pub current_worth: Option<f64>,
     /// db data type: uuid
     pub product_id: Option<Uuid>,
-    /// db data type: uuid
-    pub wishlist_id: Option<Uuid>,
     /// default: true
     /// not nullable 
     /// --inherited-- 
@@ -71,15 +66,13 @@ pub struct WishlistLine {
     /// db data type: uuid
     pub updated_by: Option<Uuid>,
 
-    /// has one
-    pub wishlist: Option<Wishlist>,
 }
 
 
 
-impl IsDao for WishlistLine{
+impl IsDao for BarterProduct{
     fn from_dao(dao:&Dao)->Self{
-        WishlistLine{
+        BarterProduct{
             organization_id: dao.get_opt("organization_id"),
             client_id: dao.get_opt("client_id"),
             created: dao.get("created"),
@@ -91,12 +84,11 @@ impl IsDao for WishlistLine{
             description: dao.get_opt("description"),
             help: dao.get_opt("help"),
             active: dao.get("active"),
-            wishlist_id: dao.get_opt("wishlist_id"),
-            price_momentary: dao.get_opt("price_momentary"),
             product_id: dao.get_opt("product_id"),
-            added_to_cart: dao.get_opt("added_to_cart"),
-            wishlist_line_id: dao.get("wishlist_line_id"),
-            wishlist: None,
+            current_worth: dao.get_opt("current_worth"),
+            bought_price: dao.get_opt("bought_price"),
+            bought: dao.get_opt("bought"),
+            condition: dao.get_opt("condition"),
         }
     }
 
@@ -137,41 +129,44 @@ impl IsDao for WishlistLine{
             None => dao.set_null("help")
         }
         dao.set("active", &self.active);
-        match self.wishlist_id{
-            Some(ref _value) => dao.set("wishlist_id", _value),
-            None => dao.set_null("wishlist_id")
-        }
-        match self.price_momentary{
-            Some(ref _value) => dao.set("price_momentary", _value),
-            None => dao.set_null("price_momentary")
-        }
         match self.product_id{
             Some(ref _value) => dao.set("product_id", _value),
             None => dao.set_null("product_id")
         }
-        match self.added_to_cart{
-            Some(ref _value) => dao.set("added_to_cart", _value),
-            None => dao.set_null("added_to_cart")
+        match self.current_worth{
+            Some(ref _value) => dao.set("current_worth", _value),
+            None => dao.set_null("current_worth")
         }
-        dao.set("wishlist_line_id", &self.wishlist_line_id);
+        match self.bought_price{
+            Some(ref _value) => dao.set("bought_price", _value),
+            None => dao.set_null("bought_price")
+        }
+        match self.bought{
+            Some(ref _value) => dao.set("bought", _value),
+            None => dao.set_null("bought")
+        }
+        match self.condition{
+            Some(ref _value) => dao.set("condition", _value),
+            None => dao.set_null("condition")
+        }
         dao
     }
 }
 
-impl ToJson for WishlistLine{
+impl ToJson for BarterProduct{
 
     fn to_json(&self)->Json{
         self.to_dao().to_json()
     }
 }
 
-impl IsTable for WishlistLine{
+impl IsTable for BarterProduct{
 
     fn table()->Table{
     
         Table{
             schema:"bazaar".to_string(),
-            name:"wishlist_line".to_string(),
+            name:"barter_product".to_string(),
             parent_table:Some("record".to_string()),
             sub_table:vec![],
             comment:None,
@@ -277,29 +272,6 @@ impl IsTable for WishlistLine{
                     foreign:None,
                 },
                 Column{
-                    name:"wishlist_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:Some(
-                        Foreign{
-                            schema:"bazaar".to_string(),
-                            table:"wishlist".to_string(),
-                            column:"wishlist_id".to_string(),
-                        }),
-                },
-                Column{
-                    name:"price_momentary".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
-                },
-                Column{
                     name:"product_id".to_string(),
                     data_type:"Uuid".to_string(),
                     db_data_type:"uuid".to_string(),
@@ -309,19 +281,37 @@ impl IsTable for WishlistLine{
                     foreign:None,
                 },
                 Column{
-                    name:"added_to_cart".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
+                    name:"current_worth".to_string(),
+                    data_type:"f64".to_string(),
+                    db_data_type:"numeric".to_string(),
                     is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("false".to_string()),
+                    default:None,
                     comment:None,
                     foreign:None,
                 },
                 Column{
-                    name:"wishlist_line_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:true, is_unique:false, not_null:true, is_inherited:false, 
+                    name:"bought_price".to_string(),
+                    data_type:"f64".to_string(),
+                    db_data_type:"numeric".to_string(),
+                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
+                    default:None,
+                    comment:None,
+                    foreign:None,
+                },
+                Column{
+                    name:"bought".to_string(),
+                    data_type:"DateTime<UTC>".to_string(),
+                    db_data_type:"timestamp with time zone".to_string(),
+                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
+                    default:None,
+                    comment:None,
+                    foreign:None,
+                },
+                Column{
+                    name:"condition".to_string(),
+                    data_type:"String".to_string(),
+                    db_data_type:"json".to_string(),
+                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
                     default:None,
                     comment:None,
                     foreign:None,
@@ -334,64 +324,64 @@ impl IsTable for WishlistLine{
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static organization_id: &'static str = "wishlist_line.organization_id";
+pub static organization_id: &'static str = "barter_product.organization_id";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static client_id: &'static str = "wishlist_line.client_id";
+pub static client_id: &'static str = "barter_product.client_id";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created: &'static str = "wishlist_line.created";
+pub static created: &'static str = "barter_product.created";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created_by: &'static str = "wishlist_line.created_by";
+pub static created_by: &'static str = "barter_product.created_by";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated: &'static str = "wishlist_line.updated";
+pub static updated: &'static str = "barter_product.updated";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated_by: &'static str = "wishlist_line.updated_by";
+pub static updated_by: &'static str = "barter_product.updated_by";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static priority: &'static str = "wishlist_line.priority";
+pub static priority: &'static str = "barter_product.priority";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static name: &'static str = "wishlist_line.name";
+pub static name: &'static str = "barter_product.name";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static description: &'static str = "wishlist_line.description";
+pub static description: &'static str = "barter_product.description";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static help: &'static str = "wishlist_line.help";
+pub static help: &'static str = "barter_product.help";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static active: &'static str = "wishlist_line.active";
+pub static active: &'static str = "barter_product.active";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static wishlist_id: &'static str = "wishlist_line.wishlist_id";
+pub static product_id: &'static str = "barter_product.product_id";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static price_momentary: &'static str = "wishlist_line.price_momentary";
+pub static current_worth: &'static str = "barter_product.current_worth";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static product_id: &'static str = "wishlist_line.product_id";
+pub static bought_price: &'static str = "barter_product.bought_price";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static added_to_cart: &'static str = "wishlist_line.added_to_cart";
+pub static bought: &'static str = "barter_product.bought";
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static wishlist_line_id: &'static str = "wishlist_line.wishlist_line_id";
+pub static condition: &'static str = "barter_product.condition";

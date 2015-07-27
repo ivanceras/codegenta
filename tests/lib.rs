@@ -322,13 +322,13 @@ SELECT *
 #[test]
 fn test_flex_query(){
     let url = "postgres://postgres:p0stgr3s@localhost/bazaar_v6";
-    let mut pool = ManagedPool::init(&url, 5);
-    let mut db = pool.connect().unwrap();
+    let pool = ManagedPool::init(&url, 5);
+    let db = pool.connect().unwrap();
     
     let prod: Product = Query::select_all()
             .from_table("bazaar.product")
             .filter("name", Equality::EQ, &"GTX660 Ti videocard")
-            .collect_one(db.as_mut()).unwrap();
+            .collect_one(db.as_ref()).unwrap();
 
     println!("{}  {}  {:?}", prod.product_id, prod.name.unwrap(), prod.description);
 }

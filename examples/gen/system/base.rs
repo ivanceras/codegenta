@@ -8,6 +8,8 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -79,6 +81,13 @@ impl IsDao for Base{
             None => dao.set_null("priority")
         }
         dao
+    }
+}
+
+impl ToJson for Base{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 

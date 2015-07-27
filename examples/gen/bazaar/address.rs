@@ -9,6 +9,8 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -149,6 +151,13 @@ impl IsDao for Address{
             None => dao.set_null("distance")
         }
         dao
+    }
+}
+
+impl ToJson for Address{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
