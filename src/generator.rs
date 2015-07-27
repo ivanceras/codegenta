@@ -72,7 +72,7 @@ impl Config{
 ///
 /// retrieve all the table definition in the database
 ///
-pub fn get_all_tables(db_dev:&mut DatabaseDev)->Vec<Table>{
+pub fn get_all_tables(db_dev:&DatabaseDev)->Vec<Table>{
     let all_tables_names = db_dev.get_all_tables();
     let mut all_table_def:Vec<Table> = Vec::new();
     for (schema, table) in all_tables_names{
@@ -108,26 +108,25 @@ pub fn get_tables_in_schema<'a>(schema:&str, all_table:&'a Vec<Table>)->Vec<&'a 
     tables
 }
 /// this is the default config generation
-/// FIXME need to compartmentalize each
-/// 1. structs
-/// 2. meta
-/// mod.rs
 
-pub fn generate_all(db_dev:&mut DatabaseDev, config:&Config){
-    let all_tables:Vec<Table> = get_all_tables(db_dev);
-    for table in &all_tables{
-        generate_table(db_dev, config, table, &all_tables);
-    }
-    generate_mod_per_schema(&config, &all_tables);
-    generate_mod_rs(&config, &all_tables);
+pub fn generate_all(db_dev:&DatabaseDev, config:&Config){
+    generate_tables(db_dev, vec![], config)
 }
 
-pub fn generate_tables(db_dev:&mut DatabaseDev, only_tables:Vec<String>, config:&Config){
+/// if only_tables is empty vec, then generate_all
+pub fn generate_tables(db_dev:&DatabaseDev, only_tables:Vec<String>, config:&Config){
     let all_tables:Vec<Table> = get_all_tables(db_dev);
     let mut tables = vec![];
-    for table in all_tables{
-        if only_tables.contains(&table.name){
+    if only_tables.is_empty(){
+        for table in all_tables{
             tables.push(table);
+        }
+    }
+    else{
+        for table in all_tables{
+            if only_tables.contains(&table.name){
+                tables.push(table);
+            }
         }
     }
     for table in &tables{
@@ -135,6 +134,8 @@ pub fn generate_tables(db_dev:&mut DatabaseDev, only_tables:Vec<String>, config:
     }
     generate_mod_per_schema(&config, &tables);
     generate_mod_rs(&config, &tables);
+    generate_mod_table_names(&config, &tables);
+    generate_mod_column_names(&config, &tables);
 }
 
 /// the gernaration of tables should be placed on their respective directory
@@ -144,6 +145,7 @@ fn generate_table(db_dev:&DatabaseDev, config:&Config, table:&Table, all_tables:
     let (struct_imports, imported_tables, struct_src) = table.struct_code(db_dev, all_tables);
     let (dao_imports, dao_src) = generate_dao_conversion_code(table, all_tables);
     let (meta_imports, meta_src) = generate_meta_code(table);
+    let (json_imports, json_src) = generate_to_json_code(table);
     let static_columns = generate_static_column_names(table);
     let warning = format!(" WARNING: This file is generated, derived from table {}, DO NOT EDIT", table.complete_name());
     w.inner_doc_comment(&warning);
@@ -164,11 +166,16 @@ fn generate_table(db_dev:&DatabaseDev, config:&Config, table:&Table, all_tables:
     for i in meta_imports{
         w.appendln(&format!("use {};",i));
     }
+    for i in json_imports{
+        w.appendln(&format!("use {};",i));
+    }
     w.ln();
     w.ln();
     w.appendln(&struct_src);
     w.ln();
     w.appendln(&dao_src);
+    w.ln();
+    w.appendln(&json_src);
     w.ln();
     w.append(&meta_src);
     w.ln();
@@ -192,43 +199,80 @@ fn generate_mod_per_schema(config:&Config, all_tables:&Vec<Table>){
          let module_dir = config.module_dir(&schema);
          let tables = get_tables_in_schema(&schema, all_tables);
          for table in &tables{
-            w.append(&format!("pub mod {};",table.name));
-            w.ln();
+            w.appendln(&format!("pub mod {};",table.name));
          }
          for table in &tables{
             //re-export structs
-            w.append(&format!("pub use self::{}::{};", table.name, table.struct_name()));
-            w.ln();
+            w.appendln(&format!("pub use self::{}::{};", table.name, table.struct_name()));
          }
          let mod_file = format!("{}/mod.rs", module_dir);
          save_to_file(&mod_file, &w.src);
     }
 }
 
+/// listing of all table names in the system
+fn generate_mod_table_names(config:&Config, all_tables:&Vec<Table>){
+    let mut unique_table = vec![];
+    for table in all_tables{
+        unique_table.push(table.name.to_string());
+    }
+    unique_table.sort_by(|a, b| a.cmp(b));
+    unique_table.dedup();
+    
+    let mut w = Writer::new();
+    for table_name in unique_table{
+        w.ln();
+        w.appendln("#[allow(non_upper_case_globals)]");
+        w.appendln(&format!("pub const {}: &'static str = \"{}\";",table_name, table_name));
+    }
+    let module_dir = config.module_base_dir();
+    let mod_file = format!("{}/table.rs", module_dir);
+    save_to_file(&mod_file, &w.src);
+}
+
+/// listing of all column names in the system
+fn generate_mod_column_names(config:&Config, all_tables:&Vec<Table>){
+    let mut unique_columns = vec![];
+    for table in all_tables{
+        for column in &table.columns{
+            unique_columns.push((column.corrected_name(), column.name.to_string()));
+        }
+    }
+    unique_columns.sort_by(|a, b| a.cmp(b));
+    unique_columns.dedup();
+    
+    let mut w = Writer::new();
+    for (corrected_name, column_name) in unique_columns{
+        w.ln();
+        w.appendln("#[allow(non_upper_case_globals)]");
+        w.appendln(&format!("pub const {}: &'static str = \"{}\";",corrected_name, column_name));
+    }
+    let module_dir = config.module_base_dir();
+    let mod_file = format!("{}/column.rs", module_dir);
+    save_to_file(&mod_file, &w.src);
+}
+
 
 fn generate_mod_rs(config:&Config, all_tables:&Vec<Table>){
-    let mut mod_src = Writer::new();
+    let mut w = Writer::new();
     let schemas = get_schemas(&all_tables);
     for schema in &schemas{
-        mod_src.append("pub mod ");
-        mod_src.append(schema);
-        mod_src.append(";");
-        mod_src.ln();
+        w.append("pub mod ");
+        w.append(schema);
+        w.appendln(";");
     }
-    mod_src.append("use rustorm::table::Table;");
-    mod_src.ln();
-    mod_src.append("use rustorm::table::IsTable;");
-    mod_src.ln();
-    mod_src.ln();
+    w.appendln("pub mod table;");
+    w.appendln("pub mod column;");
+    w.appendln("use rustorm::table::Table;");
+    w.appendln("use rustorm::table::IsTable;");
     for table in all_tables{
         let table_mod = format!("use {};", config.table_module(table));
-        mod_src.append(&table_mod);
-        mod_src.ln();
+        w.appendln(&table_mod);
     }
     let mod_file = format!("{}/mod.rs",config.module_base_dir());
     let all_table_fn = &generate_fn_get_all_tables(&all_tables);
-    mod_src.append(all_table_fn);
-    save_to_file(&mod_file, &mod_src.src);
+    w.append(all_table_fn);
+    save_to_file(&mod_file, &w.src);
 
 }
 
@@ -263,6 +307,29 @@ fn generate_meta_code(table: &Table)->(Vec<String>, String){
     (imports, w.src)
 }
 
+fn generate_to_json_code(table: &Table)->(Vec<String>, String){
+    let mut w = Writer::new();
+    let mut imports = Vec::new();
+    imports.push("rustc_serialize::json::ToJson".to_string());
+    imports.push("rustc_serialize::json::Json".to_string());
+    
+    w.append("impl ToJson for ");
+    w.append(&table.struct_name());
+    w.append("{");
+    w.ln();
+    w.ln();
+    w.tab();
+    w.append("fn to_json(&self)->Json{");
+    w.ln();
+    w.tabs(2);
+    w.append("self.to_dao().to_json()");
+    w.ln();
+    w.tab();
+    w.append("}");
+    w.ln();
+    w.append("}");
+    (imports, w.src)
+}
 
 fn generate_static_column_names(table: &Table)->String{
     let mut w = Writer::new();
