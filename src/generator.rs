@@ -148,7 +148,7 @@ pub fn generate_tables(db_dev:&DatabaseDev, only_tables:Vec<String>, config:&Con
 fn generate_table(db_dev:&DatabaseDev, config:&Config, table:&Table, all_tables:&Vec<Table>){
     let mut w = Writer::new();
     let (struct_imports, imported_tables, struct_src) = table.struct_code(db_dev, all_tables);
-    let (dao_imports, dao_src) = generate_dao_conversion_code(table, all_tables);
+    let (dao_imports, dao_src) = generate_dao_conversion_code(config, table, all_tables);
     let (meta_imports, meta_src) = generate_meta_code(table);
     let (json_imports, json_src) = generate_to_json_code(table);
     let static_columns = generate_static_column_names(table);
@@ -373,11 +373,14 @@ fn generate_static_column_names(table: &Table)->String{
 /// example: product_name, value will be copied to name
 /// test if product_name is not a column, split with `_`, then check if first splinter is the tablename, then the check if the 2nd splinter if 
 /// a column of this table, then set that column with the value of the original name 
-fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<String>, String){
+fn generate_dao_conversion_code(config:&Config, table: &Table, all_tables:&Vec<Table>)->(Vec<String>, String){
     let mut w = Writer::new();
     let mut imports = Vec::new();
     imports.push("rustorm::dao::Dao".to_string());
     imports.push("rustorm::dao::IsDao".to_string());
+    imports.push(format!("{}::schema",config.base_module.as_ref().unwrap()));
+    imports.push(format!("{}::table",config.base_module.as_ref().unwrap()));
+    imports.push(format!("{}::column",config.base_module.as_ref().unwrap()));
     
     w.ln();
     w.append("impl IsDao for ");
@@ -390,6 +393,7 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
     w.append("{");
     for c in &table.columns{
         w.ln_tabs(3);
+        let column_name = format!("column::{}", &c.corrected_name());
         w.append(&c.corrected_name());
         w.append(": ");
         if c.not_null{
@@ -397,9 +401,9 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
         }else{
             w.append("dao.get_opt");
         }
-        w.append("(\"");
-        w.append(&c.name);
-        w.append("\")");
+        w.append("(");
+        w.append(&column_name);
+        w.append(")");
         w.comma();
     }
     let referenced_tables = table.get_all_applicable_reference(all_tables);
@@ -430,10 +434,11 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
     w.append("let mut dao = Dao::new();");
     for c in &table.columns{
         w.ln_tabs(2);
+            let column_name = format!("column::{}", &c.corrected_name());
         if c.not_null{
-            w.append("dao.set(\"");
-            w.append(&c.corrected_name());
-            w.append("\", &self.");
+            w.append("dao.set(");
+            w.append(&column_name);
+            w.append(", &self.");
             w.append(&c.corrected_name());
             w.append(");");
         }else{
@@ -441,13 +446,13 @@ fn generate_dao_conversion_code(table: &Table, all_tables:&Vec<Table>)->(Vec<Str
             w.append(&c.corrected_name());
             w.append("{");
             w.ln_tabs(3);
-            w.append("Some(ref _value) => dao.set(\"");
-            w.append(&c.corrected_name());
-            w.append("\", _value),");
+            w.append("Some(ref _value) => dao.set(");
+            w.append(&column_name);
+            w.append(", _value),");
             w.ln_tabs(3);
-            w.append("None => dao.set_null(\"");
-            w.append(&c.corrected_name());
-            w.append("\")");
+            w.append("None => dao.set_null(");
+            w.append(&column_name);
+            w.append(")");
             w.ln_tabs(2);
             w.append("}");
         }

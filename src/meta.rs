@@ -48,25 +48,25 @@ impl MetaCode for Column{
         w.append("Column{");
         w.ln();
         w.tabs(5);
-        w.append("name:");
-        w.append(&format!("\"{}\".to_string(),",self.name));
+        w.append("name: ");
+        w.append(&format!("column::{}.to_string(),",self.corrected_name()));
         w.ln();
         w.tabs(5);
-        w.append("data_type:");
+        w.append("data_type: ");
         w.append(&format!("\"{}\".to_string(),",self.data_type));
         w.ln();
         w.tabs(5);
-        w.append("db_data_type:");
+        w.append("db_data_type: ");
         w.append(&format!("\"{}\".to_string(),",self.db_data_type));
         w.ln();
         w.tabs(5);
-        w.append("is_primary:");
+        w.append("is_primary: ");
         w.append(&format!("{}, ",self.is_primary));
-        w.append("is_unique:");
+        w.append("is_unique: ");
         w.append(&format!("{}, ",self.is_unique));
-        w.append("not_null:");
+        w.append("not_null: ");
         w.append(&format!("{}, ",self.not_null));
-        w.append("is_inherited:");
+        w.append("is_inherited: ");
         w.append(&format!("{}, ",self.is_inherited));
         w.ln();
         w.tabs(5);
@@ -86,7 +86,7 @@ impl MetaCode for Column{
         }
         w.ln();
         w.tabs(5);
-        w.append("foreign:");
+        w.append("foreign: ");
         if self.foreign.is_some(){
             let (foreign_imports, foreign_src) = self.foreign.as_ref().unwrap().meta_code();
             for imp in foreign_imports{
@@ -118,28 +118,28 @@ impl MetaCode for Table{
         w.append("Table{");
         w.ln();
         w.tabs(3);
-        w.append("schema:");
-        w.append(&format!("\"{}\".to_string(),", self.schema));
+        w.append("schema: ");
+        w.append(&format!("schema::{}.to_string(),", self.schema));
         w.ln();
         w.tabs(3);
-        w.append("name:");
-        w.append(&format!("\"{}\".to_string(),", self.name));
+        w.append("name: ");
+        w.append(&format!("table::{}.to_string(),", self.name));
         w.ln();
         w.tabs(3);
-        w.append("parent_table:");
+        w.append("parent_table: ");
         if self.parent_table.is_some(){
-            w.append(&format!("Some(\"{}\".to_string()),", &self.parent_table.clone().unwrap()));
+            w.append(&format!("Some(table::{}.to_string()),", &self.parent_table.clone().unwrap()));
         }else{
             w.append("None,");
         }
         w.ln();
         w.tabs(3);
-        w.append("sub_table:");
+        w.append("sub_table: ");
         if !self.sub_table.is_empty(){
             let sub_table = self.sub_table.clone();
             w.append("vec![");
             for s in sub_table{
-                w.append(&format!("\"{}\".to_string(),",s));
+                w.append(&format!("table::{}.to_string(),",s));
             }
             w.append("],");
         }else{
@@ -147,8 +147,9 @@ impl MetaCode for Table{
         }
         w.ln();
         w.tabs(3);
-        w.append("comment:");
+        w.append("comment: ");
         if self.comment.is_some(){
+            // TODO: use r# for raw formatting
             w.append(&format!("Some(\"{}\".to_string()),", &self.comment.clone().unwrap().replace("\"","\\\"").replace("\n", "\\n")));
         }else{
             w.append("None,");
