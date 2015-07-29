@@ -60,7 +60,7 @@ fn test_select_filter(){
           seq_no, upfront_fee, barcode, owner_id, 
           currency_id
      FROM bazaar.product
-          LEFT OUTER JOIN bazaar.product_availability 
+          LEFT JOIN bazaar.product_availability 
           ON product.product_id = product_availability.product_id 
     WHERE product.name LIKE $1 
       AND product.description LIKE $2 
@@ -166,7 +166,7 @@ fn test_join(){
           seq_no, upfront_fee, barcode, owner_id, 
           currency_id
      FROM bazaar.product
-          LEFT OUTER JOIN bazaar.product_availability 
+          LEFT JOIN bazaar.product_availability 
           ON product.product_id = product_availability.product_id".to_string();
     println!("actual:   {} [{}]", frag.sql, frag.sql.len());
     println!("expected: {} [{}]", expected, expected.len());
@@ -200,13 +200,13 @@ fn test_complex(){
     let expected = "
 SELECT *
      FROM bazaar.product
-          LEFT OUTER JOIN bazaar.product_category 
+          LEFT JOIN bazaar.product_category 
           ON product_category.product_id = product.product_id 
-          LEFT OUTER JOIN bazaar.category 
+          LEFT JOIN bazaar.category 
           ON category.category_id = product_category.category_id 
-          LEFT OUTER JOIN bazaar.product_photo 
+          LEFT JOIN bazaar.product_photo 
           ON product.product_id = product_photo.product_id 
-          LEFT OUTER JOIN bazaar.photo 
+          LEFT JOIN bazaar.photo 
           ON product_photo.photo_id = photo.photo_id 
     WHERE ( product.name = $1 AND category.name = $2  )
  GROUP BY category.name 
@@ -255,13 +255,13 @@ SELECT organization_id, client_id, created,
           seq_no, upfront_fee, barcode, owner_id, 
           currency_id
      FROM bazaar.product
-          LEFT OUTER JOIN bazaar.product_category 
+          LEFT JOIN bazaar.product_category 
           ON product_category.product_id = product.product_id 
-          LEFT OUTER JOIN bazaar.category 
+          LEFT JOIN bazaar.category 
           ON category.category_id = product_category.category_id 
-          LEFT OUTER JOIN bazaar.product_photo 
+          LEFT JOIN bazaar.product_photo 
           ON product.product_id = product_photo.product_id 
-          LEFT OUTER JOIN bazaar.photo 
+          LEFT JOIN bazaar.photo 
           ON product_photo.photo_id = photo.photo_id 
     WHERE product.name = $1 
       AND category.name = $2 
@@ -300,13 +300,13 @@ fn test_complex_select_all(){
     let expected = "
 SELECT *
      FROM bazaar.product
-          LEFT OUTER JOIN bazaar.product_category 
+          LEFT JOIN bazaar.product_category 
           ON product_category.product_id = product.product_id 
-          LEFT OUTER JOIN bazaar.category 
+          LEFT JOIN bazaar.category 
           ON category.category_id = product_category.category_id 
-          LEFT OUTER JOIN bazaar.product_photo 
+          LEFT JOIN bazaar.product_photo 
           ON product.product_id = product_photo.product_id 
-          LEFT OUTER JOIN bazaar.photo 
+          LEFT JOIN bazaar.photo 
           ON product_photo.photo_id = photo.photo_id 
     WHERE product.name = $1 
       AND category.name = $2 

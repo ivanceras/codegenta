@@ -70,13 +70,13 @@ SELECT product.organization_id AS product_organization_id, product.client_id AS 
     photo.help AS photo_help, photo.active AS photo_active, photo.photo_id AS photo_photo_id, photo.url, 
     photo.data, photo.seq_no AS photo_seq_no
  FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_category 
+    LEFT JOIN bazaar.product_category 
         ON product_category.product_id = product.product_id 
-    LEFT OUTER JOIN bazaar.category 
+    LEFT JOIN bazaar.category 
         ON category.category_id = product_category.category_id 
-    LEFT OUTER JOIN bazaar.product_photo 
+    LEFT JOIN bazaar.product_photo 
         ON product.product_id = product_photo.product_id 
-    LEFT OUTER JOIN bazaar.photo 
+    LEFT JOIN bazaar.photo 
         ON product_photo.photo_id = photo.photo_id 
     WHERE product.name = $1 
         AND category.name = $2 
