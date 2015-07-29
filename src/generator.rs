@@ -25,6 +25,9 @@ pub struct Config{
 
     /// base directory for the generated content
     pub base_dir: String,
+    
+    /// whether to include generating views
+    pub include_views: bool,
 }
 
 impl Config{
@@ -36,6 +39,7 @@ impl Config{
             use_condensed_name:true,
             generate_table_meta:true,
             base_dir:"./src".to_string(),
+            include_views: true,
         }
     }
     
@@ -75,9 +79,9 @@ impl Config{
 pub fn get_all_tables(db_dev:&DatabaseDev)->Vec<Table>{
     let all_tables_names = db_dev.get_all_tables();
     let mut all_table_def:Vec<Table> = Vec::new();
-    for (schema, table) in all_tables_names{
+    for (schema, table, is_view) in all_tables_names{
         println!("Extracted {}.{}", schema,table);
-        let meta = db_dev.get_table_metadata(&schema, &table);
+        let meta = db_dev.get_table_metadata(&schema, &table, is_view);
         all_table_def.push(meta);
     }
     all_table_def
@@ -136,6 +140,7 @@ pub fn generate_tables(db_dev:&DatabaseDev, only_tables:Vec<String>, config:&Con
     generate_mod_rs(&config, &tables);
     generate_mod_table_names(&config, &tables);
     generate_mod_column_names(&config, &tables);
+    generate_mod_schema_names(&config, &tables);
 }
 
 /// the gernaration of tables should be placed on their respective directory
@@ -210,6 +215,19 @@ fn generate_mod_per_schema(config:&Config, all_tables:&Vec<Table>){
     }
 }
 
+/// listing down schemas in the database
+fn generate_mod_schema_names(config:&Config, all_tables:&Vec<Table>){
+    let schemas = get_schemas(all_tables);
+    let mut w = Writer::new();
+    for schema in schemas{
+        w.ln();
+        w.appendln("#[allow(non_upper_case_globals)]");
+        w.appendln(&format!("pub const {}: &'static str = \"{}\";",schema, schema));
+    }
+    let module_dir = config.module_base_dir();
+    let mod_file = format!("{}/schema.rs", module_dir);
+    save_to_file(&mod_file, &w.src);
+}
 /// listing of all table names in the system
 fn generate_mod_table_names(config:&Config, all_tables:&Vec<Table>){
     let mut unique_table = vec![];
@@ -261,8 +279,11 @@ fn generate_mod_rs(config:&Config, all_tables:&Vec<Table>){
         w.append(schema);
         w.appendln(";");
     }
+    w.ln();
+    w.appendln("pub mod schema;");
     w.appendln("pub mod table;");
     w.appendln("pub mod column;");
+    w.ln();
     w.appendln("use rustorm::table::Table;");
     w.appendln("use rustorm::table::IsTable;");
     for table in all_tables{

@@ -17,6 +17,7 @@ fn main(){
             use_condensed_name:true,
             generate_table_meta:true,
             base_dir:"./examples".to_string(),
+            include_views: true,
         };
     generator::generate_all(db.as_dev(), &config);
 }

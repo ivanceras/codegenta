@@ -171,6 +171,9 @@ impl MetaCode for Table{
         w.tabs(3);
         w.append("],");
         w.ln();
+        w.tabs(3);
+        w.append(&format!("is_view: {}",self.is_view));
+        w.ln();
         w.tabs(2);
         w.append("}");
         imports.sort_by(|a, b| a.cmp(&b));
@@ -214,8 +217,7 @@ impl StructCode for Table{
         if self.comment.is_some(){
             w.append("///");
             w.ln();
-            w.append("/// ");
-            w.append(&self.comment.clone().unwrap());
+            w.doc_comment(&self.comment.clone().unwrap());
             w.ln();
             w.append("///");
             w.ln();

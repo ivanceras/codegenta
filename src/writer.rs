@@ -65,13 +65,19 @@ impl Writer{
     #[inline]
     pub fn comment(&mut self, comment: &str)->&mut Self{
         self.append("//");
-        self.append(comment)
+        self.append(comment);
+        self
     }
     
     #[inline]
+    /// TODO: make escaping more formal
     pub fn doc_comment(&mut self, comment: &str)->&mut Self{
-        self.append("///");
-        self.append(comment)
+        let splinters:Vec<&str> = comment.split('\n').collect();
+        for sp in splinters{
+            self.append("/// ");
+            self.appendln(sp);
+        }
+        self
     }
     
     #[inline]
