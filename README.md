@@ -104,7 +104,7 @@ and Review table with linker `product_review`
 
 
 ## A complex query when using codegenta
-
+[link](https://github.com/ivanceras/codegenta/blob/master/examples/complex_query.rs)
 ```rust
 
 extern crate rustorm;
@@ -131,13 +131,13 @@ use gen::bazaar::ProductAvailability;
 use gen::bazaar::product_availability;
 
 use rustorm::table::IsTable;
-use rustorm::managed_pool::ManagedPool;
+use rustorm::pool::ManagedPool;
 
 mod gen;
 
 fn main(){
     let mut pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1);
-    let db = pool.connect();
+    let db = pool.connect().unwrap();
     
     let mut query = Query::select_all();
     
@@ -159,21 +159,23 @@ fn main(){
         ;
     let frag = query.build(db.as_ref());
     
-    let expected = "SELECT *
- FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_category 
-        ON product_category.product_id = product.product_id 
-    LEFT OUTER JOIN bazaar.category 
-        ON category.category_id = product_category.category_id 
-    LEFT OUTER JOIN bazaar.product_photo 
-        ON product.product_id = product_photo.product_id 
-    LEFT OUTER JOIN bazaar.photo 
-        ON product_photo.photo_id = photo.photo_id 
+    let expected = "
+SELECT *
+     FROM bazaar.product
+          LEFT OUTER JOIN bazaar.product_category 
+          ON product_category.product_id = product.product_id 
+          LEFT OUTER JOIN bazaar.category 
+          ON category.category_id = product_category.category_id 
+          LEFT OUTER JOIN bazaar.product_photo 
+          ON product.product_id = product_photo.product_id 
+          LEFT OUTER JOIN bazaar.photo 
+          ON product_photo.photo_id = photo.photo_id 
     WHERE product.name = $1 
-        AND category.name = $2 
-    GROUP BY category.name 
-    HAVING count(*) > $3 
-    ORDER BY product.name ASC, product.created DESC".to_string();
+      AND category.name = $2 
+ GROUP BY category.name 
+   HAVING count(*) > $3 
+ ORDER BY product.name ASC, product.created DESC
+    ".to_string();
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
