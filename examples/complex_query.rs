@@ -51,7 +51,7 @@ fn main(){
     let frag = query.build(db.as_ref());
     
     let expected = "
-SELECT *
+   SELECT *
      FROM bazaar.product
           LEFT OUTER JOIN bazaar.product_category 
           ON product_category.product_id = product.product_id 

@@ -160,7 +160,7 @@ fn main(){
     let frag = query.build(db.as_ref());
     
     let expected = "
-SELECT *
+   SELECT *
      FROM bazaar.product
           LEFT OUTER JOIN bazaar.product_category 
           ON product_category.product_id = product.product_id 
@@ -180,9 +180,9 @@ SELECT *
     println!("expected: {{{}}} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
 }
-
 ```
 
+Look at those pretty generated SQL's
 
 ## Roadmap
 
