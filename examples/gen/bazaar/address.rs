@@ -16,6 +16,7 @@ use rustc_serialize::json::Json;
 
 ///
 /// @Address
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -309,6 +310,7 @@ impl IsTable for Address{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

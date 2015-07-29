@@ -1,6 +1,5 @@
 pub mod address;
 pub mod api_key;
-pub mod barter_product;
 pub mod cart;
 pub mod cart_line;
 pub mod category;
@@ -26,7 +25,6 @@ pub mod wishlist;
 pub mod wishlist_line;
 pub use self::address::Address;
 pub use self::api_key::ApiKey;
-pub use self::barter_product::BarterProduct;
 pub use self::cart::Cart;
 pub use self::cart_line::CartLine;
 pub use self::category::Category;

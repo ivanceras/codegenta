@@ -14,11 +14,14 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
 ///
 /// This are @Users, will be used for @Login
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -181,6 +184,13 @@ impl IsDao for Users{
     }
 }
 
+impl ToJson for Users{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
+    }
+}
+
 impl IsTable for Users{
 
     fn table()->Table{
@@ -329,6 +339,7 @@ impl IsTable for Users{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

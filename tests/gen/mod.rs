@@ -1,9 +1,13 @@
 pub mod bazaar;
 pub mod payment;
 pub mod system;
+
+pub mod schema;
+pub mod table;
+pub mod column;
+
 use rustorm::table::Table;
 use rustorm::table::IsTable;
-
 use gen::bazaar::Address;
 use gen::bazaar::ApiKey;
 use gen::system::Base;

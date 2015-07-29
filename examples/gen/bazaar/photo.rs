@@ -315,6 +315,7 @@ impl IsTable for Photo{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

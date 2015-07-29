@@ -327,6 +327,7 @@ impl IsTable for WishlistLine{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

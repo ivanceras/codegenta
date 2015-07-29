@@ -211,6 +211,7 @@ impl IsTable for ProductReview{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

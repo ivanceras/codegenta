@@ -320,6 +320,7 @@ impl IsTable for ExchangeRate{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

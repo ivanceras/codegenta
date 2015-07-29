@@ -9,6 +9,8 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -124,6 +126,13 @@ impl IsDao for Wishlist{
         dao.set("active", &self.active);
         dao.set("wishlist_id", &self.wishlist_id);
         dao
+    }
+}
+
+impl ToJson for Wishlist{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -248,6 +257,7 @@ impl IsTable for Wishlist{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

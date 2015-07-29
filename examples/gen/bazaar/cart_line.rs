@@ -311,6 +311,7 @@ impl IsTable for CartLine{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

@@ -8,11 +8,14 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
 ///
 /// All User table should inherit from this one
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -113,6 +116,13 @@ impl IsDao for Record{
         }
         dao.set("active", &self.active);
         dao
+    }
+}
+
+impl ToJson for Record{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -228,6 +238,7 @@ impl IsTable for Record{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

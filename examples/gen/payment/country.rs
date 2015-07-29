@@ -273,6 +273,7 @@ impl IsTable for Country{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

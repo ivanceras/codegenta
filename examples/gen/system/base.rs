@@ -15,6 +15,7 @@ use rustc_serialize::json::Json;
 
 ///
 /// Base table contains the creation and modification status of a record
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -167,6 +168,7 @@ impl IsTable for Base{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

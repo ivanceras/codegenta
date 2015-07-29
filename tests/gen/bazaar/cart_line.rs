@@ -10,6 +10,8 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -146,6 +148,13 @@ impl IsDao for CartLine{
             None => dao.set_null("qty")
         }
         dao
+    }
+}
+
+impl ToJson for CartLine{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -302,6 +311,7 @@ impl IsTable for CartLine{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

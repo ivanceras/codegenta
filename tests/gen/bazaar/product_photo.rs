@@ -9,6 +9,8 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -95,6 +97,13 @@ impl IsDao for ProductPhoto{
         dao.set("product_id", &self.product_id);
         dao.set("photo_id", &self.photo_id);
         dao
+    }
+}
+
+impl ToJson for ProductPhoto{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -202,6 +211,7 @@ impl IsTable for ProductPhoto{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

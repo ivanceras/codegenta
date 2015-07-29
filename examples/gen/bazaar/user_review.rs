@@ -16,6 +16,7 @@ use rustc_serialize::json::Json;
 
 ///
 /// Reviews of the seller by the user
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -282,6 +283,7 @@ impl IsTable for UserReview{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

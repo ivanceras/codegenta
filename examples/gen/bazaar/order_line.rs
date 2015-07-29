@@ -359,6 +359,7 @@ impl IsTable for OrderLine{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

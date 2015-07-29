@@ -1,13 +1,15 @@
 pub mod bazaar;
 pub mod payment;
 pub mod system;
+
+pub mod schema;
 pub mod table;
 pub mod column;
+
 use rustorm::table::Table;
 use rustorm::table::IsTable;
 use gen::bazaar::Address;
 use gen::bazaar::ApiKey;
-use gen::bazaar::BarterProduct;
 use gen::system::Base;
 use gen::bazaar::Cart;
 use gen::bazaar::CartLine;
@@ -42,7 +44,6 @@ pub fn get_all_tables()->Vec<Table>{
     vec![
         Address::table(),
         ApiKey::table(),
-        BarterProduct::table(),
         Base::table(),
         Cart::table(),
         CartLine::table(),

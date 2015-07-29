@@ -52,19 +52,19 @@ fn test_select_filter(){
     
     let frag = query.build(&pg);
     let expected = "
- SELECT organization_id, client_id, created, 
-    created_by, updated, updated_by, priority, 
-    name, description, help, active, 
-    product_id, parent_product_id, is_service, price, 
-    use_parent_price, unit, tags, info, 
-    seq_no, upfront_fee, barcode, owner_id, 
-    currency_id
- FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_availability 
-        ON product.product_id = product_availability.product_id 
+   SELECT organization_id, client_id, created, 
+          created_by, updated, updated_by, priority, 
+          name, description, help, active, 
+          product_id, parent_product_id, is_service, price, 
+          use_parent_price, unit, tags, info, 
+          seq_no, upfront_fee, barcode, owner_id, 
+          currency_id
+     FROM bazaar.product
+          LEFT OUTER JOIN bazaar.product_availability 
+          ON product.product_id = product_availability.product_id 
     WHERE product.name LIKE $1 
-        AND product.description LIKE $2 
-    ORDER BY product.created DESC, product.product_id ASC".to_string();
+      AND product.description LIKE $2 
+ ORDER BY product.created DESC, product.product_id ASC ".to_string();
     
     println!("actual:   {} [{}]", frag.sql, frag.sql.len());
     println!("expected: {} [{}]", expected, expected.len());
@@ -94,10 +94,11 @@ fn test_update_query(){
     query.add_filter(Filter::new(product::description, Equality::LIKE, &"%Iphone%"));
     let frag = query.build(&mut pg);
     let expected = "
-UPDATE bazaar.product
-SET name = $1 
+   UPDATE bazaar.product
+      SET name = $1 
     WHERE name LIKE $2 
-        AND description LIKE $3 RETURNING * ".to_string();
+      AND description LIKE $3 
+RETURNING * ".to_string();
     println!("actual:   {} [{}]", frag.sql, frag.sql.len());
     println!("expected: {} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
@@ -157,16 +158,16 @@ fn test_join(){
     let frag = query.build(&pg);
     
     let expected = "
-SELECT organization_id, client_id, created, 
-    created_by, updated, updated_by, priority, 
-    name, description, help, active, 
-    product_id, parent_product_id, is_service, price, 
-    use_parent_price, unit, tags, info, 
-    seq_no, upfront_fee, barcode, owner_id, 
-    currency_id
- FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_availability 
-        ON product.product_id = product_availability.product_id".to_string();
+   SELECT organization_id, client_id, created, 
+          created_by, updated, updated_by, priority, 
+          name, description, help, active, 
+          product_id, parent_product_id, is_service, price, 
+          use_parent_price, unit, tags, info, 
+          seq_no, upfront_fee, barcode, owner_id, 
+          currency_id
+     FROM bazaar.product
+          LEFT OUTER JOIN bazaar.product_availability 
+          ON product.product_id = product_availability.product_id".to_string();
     println!("actual:   {} [{}]", frag.sql, frag.sql.len());
     println!("expected: {} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
@@ -198,19 +199,19 @@ fn test_complex(){
     
     let expected = "
 SELECT *
- FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_category 
-        ON product_category.product_id = product.product_id 
-    LEFT OUTER JOIN bazaar.category 
-        ON category.category_id = product_category.category_id 
-    LEFT OUTER JOIN bazaar.product_photo 
-        ON product.product_id = product_photo.product_id 
-    LEFT OUTER JOIN bazaar.photo 
-        ON product_photo.photo_id = photo.photo_id 
+     FROM bazaar.product
+          LEFT OUTER JOIN bazaar.product_category 
+          ON product_category.product_id = product.product_id 
+          LEFT OUTER JOIN bazaar.category 
+          ON category.category_id = product_category.category_id 
+          LEFT OUTER JOIN bazaar.product_photo 
+          ON product.product_id = product_photo.product_id 
+          LEFT OUTER JOIN bazaar.photo 
+          ON product_photo.photo_id = photo.photo_id 
     WHERE ( product.name = $1 AND category.name = $2  )
-    GROUP BY category.name 
-    HAVING count(*) > $3 
-    ORDER BY product.name ASC, product.created DESC".to_string();
+ GROUP BY category.name 
+   HAVING count(*) > $3 
+ ORDER BY product.name ASC, product.created DESC".to_string();
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
@@ -247,26 +248,26 @@ fn test_multiple_filters(){
     
     let expected = "
 SELECT organization_id, client_id, created, 
-    created_by, updated, updated_by, priority, 
-    name, description, help, active, 
-    product_id, parent_product_id, is_service, price, 
-    use_parent_price, unit, tags, info, 
-    seq_no, upfront_fee, barcode, owner_id, 
-    currency_id
- FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_category 
-        ON product_category.product_id = product.product_id 
-    LEFT OUTER JOIN bazaar.category 
-        ON category.category_id = product_category.category_id 
-    LEFT OUTER JOIN bazaar.product_photo 
-        ON product.product_id = product_photo.product_id 
-    LEFT OUTER JOIN bazaar.photo 
-        ON product_photo.photo_id = photo.photo_id 
+          created_by, updated, updated_by, priority, 
+          name, description, help, active, 
+          product_id, parent_product_id, is_service, price, 
+          use_parent_price, unit, tags, info, 
+          seq_no, upfront_fee, barcode, owner_id, 
+          currency_id
+     FROM bazaar.product
+          LEFT OUTER JOIN bazaar.product_category 
+          ON product_category.product_id = product.product_id 
+          LEFT OUTER JOIN bazaar.category 
+          ON category.category_id = product_category.category_id 
+          LEFT OUTER JOIN bazaar.product_photo 
+          ON product.product_id = product_photo.product_id 
+          LEFT OUTER JOIN bazaar.photo 
+          ON product_photo.photo_id = photo.photo_id 
     WHERE product.name = $1 
-        AND category.name = $2 
-    GROUP BY category.name 
-    HAVING count(*) > $3 
-    ORDER BY product.name ASC, product.created DESC".to_string();
+      AND category.name = $2 
+ GROUP BY category.name 
+   HAVING count(*) > $3 
+ ORDER BY product.name ASC, product.created DESC".to_string();
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());
@@ -298,20 +299,20 @@ fn test_complex_select_all(){
     
     let expected = "
 SELECT *
- FROM bazaar.product
-    LEFT OUTER JOIN bazaar.product_category 
-        ON product_category.product_id = product.product_id 
-    LEFT OUTER JOIN bazaar.category 
-        ON category.category_id = product_category.category_id 
-    LEFT OUTER JOIN bazaar.product_photo 
-        ON product.product_id = product_photo.product_id 
-    LEFT OUTER JOIN bazaar.photo 
-        ON product_photo.photo_id = photo.photo_id 
+     FROM bazaar.product
+          LEFT OUTER JOIN bazaar.product_category 
+          ON product_category.product_id = product.product_id 
+          LEFT OUTER JOIN bazaar.category 
+          ON category.category_id = product_category.category_id 
+          LEFT OUTER JOIN bazaar.product_photo 
+          ON product.product_id = product_photo.product_id 
+          LEFT OUTER JOIN bazaar.photo 
+          ON product_photo.photo_id = photo.photo_id 
     WHERE product.name = $1 
-        AND category.name = $2 
-    GROUP BY category.name 
-    HAVING count(*) > $3 
-    ORDER BY product.name ASC, product.created DESC".to_string();
+      AND category.name = $2 
+ GROUP BY category.name 
+   HAVING count(*) > $3 
+ ORDER BY product.name ASC, product.created DESC".to_string();
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());
     assert!(frag.sql.trim() == expected.trim());

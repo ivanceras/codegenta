@@ -320,6 +320,7 @@ impl IsTable for Currency{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

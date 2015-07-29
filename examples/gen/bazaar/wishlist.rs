@@ -257,6 +257,7 @@ impl IsTable for Wishlist{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

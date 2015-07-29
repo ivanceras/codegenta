@@ -9,6 +9,8 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -141,6 +143,13 @@ impl IsDao for Organization{
             None => dao.set_null("landmark")
         }
         dao
+    }
+}
+
+impl ToJson for Organization{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -288,6 +297,7 @@ impl IsTable for Organization{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

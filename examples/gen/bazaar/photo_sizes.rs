@@ -342,6 +342,7 @@ impl IsTable for PhotoSizes{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

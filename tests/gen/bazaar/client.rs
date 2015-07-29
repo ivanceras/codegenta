@@ -8,6 +8,8 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -113,6 +115,13 @@ impl IsDao for Client{
         }
         dao.set("active", &self.active);
         dao
+    }
+}
+
+impl ToJson for Client{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -228,6 +237,7 @@ impl IsTable for Client{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

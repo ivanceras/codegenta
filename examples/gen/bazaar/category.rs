@@ -258,6 +258,7 @@ impl IsTable for Category{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

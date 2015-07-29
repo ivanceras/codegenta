@@ -211,6 +211,7 @@ impl IsTable for ProductPhoto{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

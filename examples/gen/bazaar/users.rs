@@ -21,6 +21,7 @@ use rustc_serialize::json::Json;
 
 ///
 /// This are @Users, will be used for @Login
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -338,6 +339,7 @@ impl IsTable for Users{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

@@ -9,11 +9,14 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
 ///
 /// Reviews of the seller by the user
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -130,6 +133,13 @@ impl IsDao for UserReview{
         dao.set("user_id", &self.user_id);
         dao.set("review_id", &self.review_id);
         dao
+    }
+}
+
+impl ToJson for UserReview{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -273,6 +283,7 @@ impl IsTable for UserReview{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

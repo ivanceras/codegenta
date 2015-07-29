@@ -340,6 +340,7 @@ impl IsTable for UserInfo{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

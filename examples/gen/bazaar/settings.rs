@@ -313,6 +313,7 @@ impl IsTable for Settings{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

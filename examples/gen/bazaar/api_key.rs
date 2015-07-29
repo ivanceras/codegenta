@@ -323,6 +323,7 @@ impl IsTable for ApiKey{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

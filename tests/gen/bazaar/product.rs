@@ -15,11 +15,14 @@ use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
 use rustorm::table::Foreign;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
 ///
 /// This will be exposed as an @Api, including @Table(users, category, product_availability, photo)
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -256,6 +259,13 @@ impl IsDao for Product{
             None => dao.set_null("currency_id")
         }
         dao
+    }
+}
+
+impl ToJson for Product{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -498,6 +508,7 @@ impl IsTable for Product{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

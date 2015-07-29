@@ -22,6 +22,7 @@ use rustc_serialize::json::Json;
 
 ///
 /// This will be exposed as an @Api, including @Table(users, category, product_availability, photo)
+
 ///
 #[derive(RustcDecodable, RustcEncodable)]
 #[derive(Debug, Clone)]
@@ -507,6 +508,7 @@ impl IsTable for Product{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

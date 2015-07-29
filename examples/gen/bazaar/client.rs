@@ -237,6 +237,7 @@ impl IsTable for Client{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

@@ -11,6 +11,8 @@ use rustorm::dao::IsDao;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
+use rustc_serialize::json::ToJson;
+use rustc_serialize::json::Json;
 
 
 
@@ -155,6 +157,13 @@ impl IsDao for Photo{
             None => dao.set_null("seq_no")
         }
         dao
+    }
+}
+
+impl ToJson for Photo{
+
+    fn to_json(&self)->Json{
+        self.to_dao().to_json()
     }
 }
 
@@ -306,6 +315,7 @@ impl IsTable for Photo{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

@@ -286,6 +286,7 @@ impl IsTable for Invoice{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

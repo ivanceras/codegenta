@@ -297,6 +297,7 @@ impl IsTable for Organization{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

@@ -525,6 +525,7 @@ impl IsTable for Orders{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

@@ -257,6 +257,7 @@ impl IsTable for Cart{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

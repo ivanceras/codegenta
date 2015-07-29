@@ -211,6 +211,7 @@ impl IsTable for ProductCategory{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }

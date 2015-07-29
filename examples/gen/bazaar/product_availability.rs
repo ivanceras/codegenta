@@ -322,6 +322,7 @@ impl IsTable for ProductAvailability{
                     foreign:None,
                 },
             ],
+            is_view: false
         }
     }
 }

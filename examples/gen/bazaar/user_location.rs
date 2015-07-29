@@ -355,6 +355,7 @@ impl IsTable for UserLocation{
                         }),
                 },
             ],
+            is_view: false
         }
     }
 }
