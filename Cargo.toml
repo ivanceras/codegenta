@@ -17,8 +17,8 @@ name = "codegenta"
 #git = "https://github.com/ivanceras/rustorm"
 
 
-[dependencies.rustorm]
-path = "../rustorm"
+#[dependencies.rustorm]
+#path = "../rustorm"
 
 [dependencies.chrono]
 version = "*"
@@ -28,4 +28,4 @@ features = ["rustc-serialize"]
 rustc-serialize = "*"
 uuid = "*"
 time = "*"
-#rustorm ="*"
+rustorm ="*"
