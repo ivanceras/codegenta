@@ -281,7 +281,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "rustorm"
 version = "0.1.2"
-source = "git+https://github.com/ivanceras/rustorm.git#7b4ac672f953f1c59722d9ab6c764d1f1cf608f3"
+source = "git+https://github.com/ivanceras/rustorm.git#fc6432e059eb1127ffa5f0451df8bb7e1ac8fbd9"
 dependencies = [
  "chrono 0.2.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",

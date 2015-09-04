@@ -27,7 +27,7 @@ use rustorm::pool::ManagedPool;
 mod gen;
 
 fn main(){
-    let mut pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1);
+    let mut pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1).unwrap();
     let db = pool.connect().unwrap();
     
     let mut query = Query::enumerate_all();
