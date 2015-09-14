@@ -17,6 +17,7 @@ use rustorm::table::Table;
 use rustorm::table::Foreign;
 use rustc_serialize::json::ToJson;
 use rustc_serialize::json::Json;
+use rustorm::query::ColumnName;
 
 
 
@@ -545,6 +546,23 @@ pub static priority: &'static str = "product.priority";
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
 pub static name: &'static str = "product.name";
+
+#[derive(Debug)]
+pub struct ColumnStatic{
+    pub name: &'static str,
+    pub table: Option<&'static str>,
+}
+
+impl ColumnStatic{
+    
+    pub fn complete_name(&self)->String{
+        format!("{}.{}", self.name.to_string(), self.table.as_ref().unwrap().to_string())
+    }
+}
+
+#[allow(non_upper_case_globals)]
+#[allow(dead_code)]
+pub static name_column: ColumnStatic = ColumnStatic{name: "hello", table: Some("bazaar")};
 
 #[allow(non_upper_case_globals)]
 #[allow(dead_code)]
