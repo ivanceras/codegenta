@@ -6,9 +6,17 @@
 [![Build Status](https://api.travis-ci.org/ivanceras/codegenta.svg)](https://travis-ci.org/ivanceras/codegenta)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-Generate source code for your models which corresponds from the database tables.
+is code generation tool designed to work along side with rustorm to eagerly create Rust structs based on the database tables meta data information.
 
-Codegenta complements well with rustorm to provide a more ergonomic way of manipulating data
+
+## Why?
+There are a lot of ways to express database tables using a multitude of libraries around the ecosystem.
+Arguably the most prevalent way(without too much of overhead/learning curve) is by using database GUI tools such as PgAdmin.
+
+
+The way to do these is, you create database tables, you then create the corresponding struct in your code. This is an iterative process wherein you will add/remove/edit the table definition as you develop you application. Often times, it's easy to make inconsistencies.
+
+
 
 
 ## Example
