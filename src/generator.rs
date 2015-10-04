@@ -34,11 +34,11 @@ impl Config{
     
     pub fn default()->Self{
         Config{
-            base_module:Some("gen".to_string()),
+            base_module:Some("gen".to_owned()),
             include_table_references:true,
             use_condensed_name:true,
             generate_table_meta:true,
-            base_dir:"./src".to_string(),
+            base_dir:"./src".to_owned(),
             include_views: true,
         }
     }
@@ -232,7 +232,7 @@ fn generate_mod_schema_names(config:&Config, all_tables:&Vec<Table>){
 fn generate_mod_table_names(config:&Config, all_tables:&Vec<Table>){
     let mut unique_table = vec![];
     for table in all_tables{
-        unique_table.push(table.name.to_string());
+        unique_table.push(table.name.to_owned());
     }
     unique_table.sort_by(|a, b| a.cmp(b));
     unique_table.dedup();
@@ -253,7 +253,7 @@ fn generate_mod_column_names(config:&Config, all_tables:&Vec<Table>){
     let mut unique_columns = vec![];
     for table in all_tables{
         for column in &table.columns{
-            unique_columns.push((column.corrected_name(), column.name.to_string()));
+            unique_columns.push((column.corrected_name(), column.name.to_owned()));
         }
     }
     unique_columns.sort_by(|a, b| a.cmp(b));
@@ -302,9 +302,9 @@ fn generate_mod_rs(config:&Config, all_tables:&Vec<Table>){
 fn generate_meta_code(table: &Table)->(Vec<String>, String){
     let mut w = Writer::new();
     let mut imports = Vec::new();
-    imports.push("rustorm::table::IsTable".to_string());
-    imports.push("rustorm::table::Column".to_string());
-    imports.push("rustorm::table::Table".to_string());
+    imports.push("rustorm::table::IsTable".to_owned());
+    imports.push("rustorm::table::Column".to_owned());
+    imports.push("rustorm::table::Table".to_owned());
     
     w.append("impl IsTable for ");
     w.append(&table.struct_name());
@@ -331,8 +331,8 @@ fn generate_meta_code(table: &Table)->(Vec<String>, String){
 fn generate_to_json_code(table: &Table)->(Vec<String>, String){
     let mut w = Writer::new();
     let mut imports = Vec::new();
-    imports.push("rustc_serialize::json::ToJson".to_string());
-    imports.push("rustc_serialize::json::Json".to_string());
+    imports.push("rustc_serialize::json::ToJson".to_owned());
+    imports.push("rustc_serialize::json::Json".to_owned());
     
     w.append("impl ToJson for ");
     w.append(&table.struct_name());
@@ -376,8 +376,8 @@ fn generate_static_column_names(table: &Table)->String{
 fn generate_dao_conversion_code(config:&Config, table: &Table, all_tables:&Vec<Table>)->(Vec<String>, String){
     let mut w = Writer::new();
     let mut imports = Vec::new();
-    imports.push("rustorm::dao::Dao".to_string());
-    imports.push("rustorm::dao::IsDao".to_string());
+    imports.push("rustorm::dao::Dao".to_owned());
+    imports.push("rustorm::dao::IsDao".to_owned());
     imports.push(format!("{}::schema",config.base_module.as_ref().unwrap()));
     imports.push(format!("{}::table",config.base_module.as_ref().unwrap()));
     imports.push(format!("{}::column",config.base_module.as_ref().unwrap()));

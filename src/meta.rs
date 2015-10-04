@@ -20,19 +20,19 @@ impl MetaCode for Foreign{
         w.ln();
         w.tabs(7);
         w.append("schema:");
-        w.append(&format!("\"{}\".to_string(),",self.schema));
+        w.append(&format!("\"{}\".to_owned(),",self.schema));
         w.ln();
         w.tabs(7);
         w.append("table:");
-        w.append(&format!("\"{}\".to_string(),",self.table));
+        w.append(&format!("\"{}\".to_owned(),",self.table));
         w.ln();
         w.tabs(7);
         w.append("column:");
-        w.append(&format!("\"{}\".to_string(),",self.column));
+        w.append(&format!("\"{}\".to_owned(),",self.column));
         w.ln();
         w.tabs(6);
         w.append("}");
-        (vec!["rustorm::table::Foreign".to_string()], w.src)
+        (vec!["rustorm::table::Foreign".to_owned()], w.src)
         
     }
     
@@ -49,15 +49,15 @@ impl MetaCode for Column{
         w.ln();
         w.tabs(5);
         w.append("name: ");
-        w.append(&format!("column::{}.to_string(),",self.corrected_name()));
+        w.append(&format!("column::{}.to_owned(),",self.corrected_name()));
         w.ln();
         w.tabs(5);
         w.append("data_type: ");
-        w.append(&format!("\"{}\".to_string(),",self.data_type));
+        w.append(&format!("\"{}\".to_owned(),",self.data_type));
         w.ln();
         w.tabs(5);
         w.append("db_data_type: ");
-        w.append(&format!("\"{}\".to_string(),",self.db_data_type));
+        w.append(&format!("\"{}\".to_owned(),",self.db_data_type));
         w.ln();
         w.tabs(5);
         w.append("is_primary: ");
@@ -72,7 +72,7 @@ impl MetaCode for Column{
         w.tabs(5);
         w.append("default:");
         if self.default.is_some(){
-            w.append(&format!("Some(\"{}\".to_string()),", &self.default.clone().unwrap()));
+            w.append(&format!("Some(\"{}\".to_owned()),", &self.default.clone().unwrap()));
         }else{
             w.append("None,");
         }
@@ -80,7 +80,7 @@ impl MetaCode for Column{
         w.tabs(5);
         w.append("comment:");
         if self.comment.is_some(){
-            w.append(&format!("Some(\"{}\".to_string()),", &self.comment.clone().unwrap().replace("\"","\\\"").replace("\n", "\\n")));
+            w.append(&format!("Some(\"{}\".to_owned()),", &self.comment.clone().unwrap().replace("\"","\\\"").replace("\n", "\\n")));
         }else{
             w.append("None,");
         }
@@ -119,16 +119,16 @@ impl MetaCode for Table{
         w.ln();
         w.tabs(3);
         w.append("schema: ");
-        w.append(&format!("schema::{}.to_string(),", self.schema));
+        w.append(&format!("schema::{}.to_owned(),", self.schema));
         w.ln();
         w.tabs(3);
         w.append("name: ");
-        w.append(&format!("table::{}.to_string(),", self.name));
+        w.append(&format!("table::{}.to_owned(),", self.name));
         w.ln();
         w.tabs(3);
         w.append("parent_table: ");
         if self.parent_table.is_some(){
-            w.append(&format!("Some(table::{}.to_string()),", &self.parent_table.clone().unwrap()));
+            w.append(&format!("Some(table::{}.to_owned()),", &self.parent_table.clone().unwrap()));
         }else{
             w.append("None,");
         }
@@ -139,7 +139,7 @@ impl MetaCode for Table{
             let sub_table = self.sub_table.clone();
             w.append("vec![");
             for s in sub_table{
-                w.append(&format!("table::{}.to_string(),",s));
+                w.append(&format!("table::{}.to_owned(),",s));
             }
             w.append("],");
         }else{
@@ -150,7 +150,7 @@ impl MetaCode for Table{
         w.append("comment: ");
         if self.comment.is_some(){
             // TODO: use r# for raw formatting
-            w.append(&format!("Some(\"{}\".to_string()),", &self.comment.clone().unwrap().replace("\"","\\\"").replace("\n", "\\n")));
+            w.append(&format!("Some(\"{}\".to_owned()),", &self.comment.clone().unwrap().replace("\"","\\\"").replace("\n", "\\n")));
         }else{
             w.append("None,");
         }
