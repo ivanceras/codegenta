@@ -16,18 +16,18 @@ impl MetaCode for Foreign{
         let mut w = Writer::new();
         w.ln();
         w.tabs(6);
-        w.append("Foreign{");
+        w.append("Foreign {");
         w.ln();
         w.tabs(7);
-        w.append("schema:");
+        w.append("schema: ");
         w.append(&format!("\"{}\".to_owned(),", self.schema));
         w.ln();
         w.tabs(7);
-        w.append("table:");
+        w.append("table: ");
         w.append(&format!("\"{}\".to_owned(),", self.table));
         w.ln();
         w.tabs(7);
-        w.append("column:");
+        w.append("column: ");
         w.append(&format!("\"{}\".to_owned(),", self.column));
         w.ln();
         w.tabs(6);
@@ -45,7 +45,7 @@ impl MetaCode for Column{
         let mut w = Writer::new();
         w.ln();
         w.tabs(4);
-        w.append("Column{");
+        w.append("Column {");
         w.ln();
         w.tabs(5);
         w.append("name: ");
@@ -67,10 +67,10 @@ impl MetaCode for Column{
         w.append("not_null: ");
         w.append(&format!("{}, ", self.not_null));
         w.append("is_inherited: ");
-        w.append(&format!("{}, ", self.is_inherited));
+        w.append(&format!("{},", self.is_inherited));
         w.ln();
         w.tabs(5);
-        w.append("default:");
+        w.append("default: ");
         if self.default.is_some() {
             w.append(&format!("Some(\"{}\".to_owned()),",
                               &self.default.clone().unwrap()));
@@ -79,7 +79,7 @@ impl MetaCode for Column{
         }
         w.ln();
         w.tabs(5);
-        w.append("comment:");
+        w.append("comment: ");
         if self.comment.is_some() {
             w.append(&format!("Some(\"{}\".to_owned()),",
                               &self.comment
@@ -121,7 +121,7 @@ impl MetaCode for Table{
         let mut w = Writer::new();
         w.ln();
         w.tabs(2);
-        w.append("Table{");
+        w.append("Table {");
         w.ln();
         w.tabs(3);
         w.append("schema: ");
@@ -168,10 +168,7 @@ impl MetaCode for Table{
         }
         w.ln();
         w.tabs(3);
-        w.append("columns:");
-        w.ln();
-        w.tabs(3);
-        w.append("vec![");
+        w.append("columns: vec![");
         for c in &self.columns {
             let (column_imports, column_src) = c.meta_code();
             for imp in column_imports {
@@ -185,7 +182,7 @@ impl MetaCode for Table{
         w.append("],");
         w.ln();
         w.tabs(3);
-        w.append(&format!("is_view: {}", self.is_view));
+        w.append(&format!("is_view: {},", self.is_view));
         w.ln();
         w.tabs(2);
         w.append("}");

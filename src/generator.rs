@@ -314,13 +314,11 @@ fn generate_meta_code(table: &Table) -> (Vec<String>, String) {
 
     w.append("impl IsTable for ");
     w.append(&table.struct_name());
-    w.append("{");
+    w.append(" {");
     w.ln();
     w.ln();
     w.tab();
-    w.append("fn table()->Table{");
-    w.ln();
-    w.tab();
+    w.append("fn table() -> Table {");
     let (table_imports, table_src) = table.meta_code();
     for imp in table_imports {
         imports.push(imp);
@@ -342,11 +340,11 @@ fn generate_to_json_code(table: &Table) -> (Vec<String>, String) {
 
     w.append("impl ToJson for ");
     w.append(&table.struct_name());
-    w.append("{");
+    w.append(" {");
     w.ln();
     w.ln();
     w.tab();
-    w.append("fn to_json(&self)->Json{");
+    w.append("fn to_json(&self) -> Json {");
     w.ln();
     w.tabs(2);
     w.append("self.to_dao().to_json()");
@@ -395,12 +393,12 @@ fn generate_dao_conversion_code(config: &Config,
     w.ln();
     w.append("impl IsDao for ");
     w.append(&table.struct_name());
-    w.append("{");
+    w.append(" {");
     w.ln_tab();
-    w.append("fn from_dao(dao:&Dao)->Self{");
+    w.append("fn from_dao(dao: &Dao) -> Self {");
     w.ln_tabs(2);
     w.append(&table.struct_name());
-    w.append("{");
+    w.append(" {");
     for c in &table.columns {
         w.ln_tabs(3);
         let column_name = format!("column::{}", &c.corrected_name());
@@ -439,7 +437,7 @@ fn generate_dao_conversion_code(config: &Config,
     w.append("}");
     w.ln();
     w.ln_tab();
-    w.append("fn to_dao(&self)->Dao{");
+    w.append("fn to_dao(&self) -> Dao {");
     w.ln_tabs(2);
     w.append("let mut dao = Dao::new();");
     for c in &table.columns {
@@ -454,7 +452,7 @@ fn generate_dao_conversion_code(config: &Config,
         } else {
             w.append("match self.");
             w.append(&c.corrected_name());
-            w.append("{");
+            w.append(" {");
             w.ln_tabs(3);
             w.append("Some(ref _value) => dao.set(");
             w.append(&column_name);
@@ -480,7 +478,7 @@ fn generate_fn_get_all_tables(tables: &Vec<Table>) -> String {
     let mut w = Writer::new();
     w.ln();
     w.ln();
-    w.append("pub fn get_all_tables()->Vec<Table>{");
+    w.append("pub fn get_all_tables() -> Vec<Table> {");
     w.ln();
     w.tab();
     w.append("vec![");
