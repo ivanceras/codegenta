@@ -8,8 +8,6 @@ addons:
 before_script:
 - "git clone https://github.com/ivanceras/rustorm ../rustorm"
 - "./scripts/setup.sh"
-script:
-- cargo test
 
 after_success: |
   sudo apt-get install libcurl4-openssl-dev libelf-dev libdw-dev &&
@@ -17,3 +15,8 @@ after_success: |
   tar xzf master.tar.gz && mkdir kcov-master/build && cd kcov-master/build && cmake .. && make &&
   sudo make install && cd ../.. &&
   kcov --coveralls-id=$TRAVIS_JOB_ID --exclude-pattern=/.cargo target/kcov target/debug/codegenta-*
+
+script:
+- cargo test
+
+
