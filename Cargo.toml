@@ -13,12 +13,13 @@ keywords = ["orm", "codegen", "generator", "database"]
 name = "codegenta"
 
 
-[dependencies.rustorm]
-git = "https://github.com/ivanceras/rustorm.git"
-
-
 #[dependencies.rustorm]
-#path = "../rustorm"
+#git = "https://github.com/ivanceras/rustorm.git"
+
+
+[dependencies.rustorm]
+path = "../rustorm"
+features = ["sqlite"]
 
 [dependencies.chrono]
 version = "*"
