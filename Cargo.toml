@@ -28,4 +28,3 @@ time = "0.1.33"
 
 [dependencies.rustorm]
 version = "0.2.1"
-features = ["sqlite", "mysql"]
