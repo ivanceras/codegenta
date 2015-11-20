@@ -238,7 +238,7 @@ impl StructCode for Table{
             w.append("///");
             w.ln();
         }
-        w.append("#[derive(RustcDecodable, RustcEncodable)]");
+//        w.append("#[derive(RustcDecodable, RustcEncodable)]");
         w.ln();
         w.append("#[derive(Debug, Clone)]");
         w.ln();

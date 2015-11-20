@@ -146,17 +146,28 @@ pub fn generate_tables(db_dev: &DatabaseDev, only_tables: Vec<String>, config: &
 /// base_mod::schema::table.rs
 fn generate_table(db_dev: &DatabaseDev, config: &Config, table: &Table, all_tables: &Vec<Table>) {
     let mut w = Writer::new();
-    let (struct_imports, imported_tables, struct_src) = table.struct_code(db_dev, all_tables);
-    let (dao_imports, dao_src) = generate_dao_conversion_code(config, table, all_tables);
-    let (meta_imports, meta_src) = generate_meta_code(table);
-    let (json_imports, json_src) = generate_to_json_code(table);
+    let mut all_imports = vec![];
+    let (mut struct_imports, imported_tables, struct_src) = table.struct_code(db_dev, all_tables);
+    let (mut dao_imports, dao_src) = generate_dao_conversion_code(config, table, all_tables);
+    let (mut default_imports, default_src) = generate_impl_default_code(config, table, all_tables);
+    let (mut meta_imports, meta_src) = generate_meta_code(table);
+    let (mut json_imports, json_src) = generate_to_json_code(table);
     let static_columns = generate_static_column_names(table);
     let warning = format!(" WARNING: This file is generated, derived from table {}, DO NOT EDIT",
                           table.complete_name());
     w.inner_doc_comment(&warning);
     w.ln();
     w.ln();
-    for i in struct_imports {
+    all_imports.append(&mut struct_imports);
+    all_imports.append(&mut dao_imports);
+    all_imports.append(&mut default_imports);
+    all_imports.append(&mut meta_imports);
+    all_imports.append(&mut meta_imports);
+    all_imports.append(&mut json_imports);
+    all_imports.sort();
+    all_imports.dedup();
+    
+    for i in all_imports {
         w.appendln(&format!("use {};", i));
     }
 
@@ -165,15 +176,15 @@ fn generate_table(db_dev: &DatabaseDev, config: &Config, table: &Table, all_tabl
             w.appendln(&format!("use {};", config.table_module(it)));
         }
     }
-    for i in dao_imports {
-        w.appendln(&format!("use {};", i));
-    }
-    for i in meta_imports {
-        w.appendln(&format!("use {};", i));
-    }
-    for i in json_imports {
-        w.appendln(&format!("use {};", i));
-    }
+//    for i in dao_imports {
+//        w.appendln(&format!("use {};", i));
+//    }
+//    for i in meta_imports {
+//        w.appendln(&format!("use {};", i));
+//    }
+//    for i in json_imports {
+//        w.appendln(&format!("use {};", i));
+//    }
     w.ln();
     w.ln();
     w.appendln(&struct_src);
@@ -182,6 +193,9 @@ fn generate_table(db_dev: &DatabaseDev, config: &Config, table: &Table, all_tabl
     w.ln();
     w.appendln(&json_src);
     w.ln();
+    w.appendln(&default_src);
+    w.ln();
+    
     w.append(&meta_src);
     w.ln();
     w.appendln(&static_columns);
@@ -324,6 +338,52 @@ fn generate_meta_code(table: &Table) -> (Vec<String>, String) {
         imports.push(imp);
     }
     w.append(&table_src);
+    w.ln();
+    w.tab();
+    w.append("}");
+    w.ln();
+    w.append("}");
+    (imports, w.src)
+}
+
+fn generate_impl_default_code(config: &Config, table: &Table, all_tables: &Vec<Table>) -> (Vec<String>, String) {
+    let mut w = Writer::new();
+    let mut imports = Vec::new();
+    imports.push("rustorm::table::IsTable".to_owned());
+    imports.push("rustorm::table::Column".to_owned());
+    imports.push("rustorm::table::Table".to_owned());
+
+    w.append("impl Default for ");
+    w.append(&table.struct_name());
+    w.append(" {");
+    w.ln();
+    w.ln();
+    w.tab();
+    w.append("fn default() -> Self {");
+    w.ln_tabs(2);
+    w.append(&table.struct_name());
+    w.append("{");
+    for c in &table.columns {
+        w.ln_tabs(3);
+        w.append(&c.corrected_name());
+        w.append(": ");
+        if c.not_null && c.data_type == "DateTime<UTC>".to_owned(){
+            w.append("UTC::now()");
+        }else{
+            w.append("Default::default()");
+        }
+        w.comma();
+    }
+    let referenced_tables = table.get_all_applicable_reference(all_tables);
+    for ref_table in referenced_tables {
+        let member_name = ref_table.member_name(table);
+        w.ln_tabs(3);
+        w.append(&member_name);
+        w.append(": Default::default()");
+        w.comma();
+    }
+    w.ln_tabs(2);
+    w.append("}");
     w.ln();
     w.tab();
     w.append("}");
