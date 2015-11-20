@@ -145,10 +145,6 @@ fn test_query_delete_category(){
 fn test_join(){
     let pg = Postgres::new();
     let mut query = Query::new();
-    let ref name_column = product::name_column;
-    println!("name_column: {:?}", name_column);
-    println!("complete_name: {:?}", name_column.complete_name());
-    
     let product_table = Product::table();
     let mut query = Query::new();
     query.from(&product_table);

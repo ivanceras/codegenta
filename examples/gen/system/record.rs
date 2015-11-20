@@ -2,14 +2,17 @@
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
-use uuid::Uuid;
+use gen::column;
+use gen::schema;
+use gen::table;
+use rustc_serialize::json::Json;
+use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
-use rustorm::table::IsTable;
 use rustorm::table::Column;
+use rustorm::table::IsTable;
 use rustorm::table::Table;
-use rustc_serialize::json::ToJson;
-use rustc_serialize::json::Json;
+use uuid::Uuid;
 
 
 
@@ -17,7 +20,7 @@ use rustc_serialize::json::Json;
 /// All User table should inherit from this one
 
 ///
-#[derive(RustcDecodable, RustcEncodable)]
+
 #[derive(Debug, Clone)]
 pub struct Record {
     /// @Active
@@ -46,7 +49,7 @@ pub struct Record {
     /// db data type: uuid
     pub organization_id: Option<Uuid>,
     /// --inherited-- 
-    /// db data type: numeric
+    /// db data type: double precision
     pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
@@ -61,184 +64,201 @@ pub struct Record {
 
 
 
-impl IsDao for Record{
-    fn from_dao(dao:&Dao)->Self{
-        Record{
-            organization_id: dao.get_opt("organization_id"),
-            client_id: dao.get_opt("client_id"),
-            created: dao.get("created"),
-            created_by: dao.get_opt("created_by"),
-            updated: dao.get("updated"),
-            updated_by: dao.get_opt("updated_by"),
-            priority: dao.get_opt("priority"),
-            name: dao.get_opt("name"),
-            description: dao.get_opt("description"),
-            help: dao.get_opt("help"),
-            active: dao.get("active"),
+impl IsDao for Record {
+    fn from_dao(dao: &Dao) -> Self {
+        Record {
+            organization_id: dao.get_opt(column::organization_id),
+            client_id: dao.get_opt(column::client_id),
+            created: dao.get(column::created),
+            created_by: dao.get_opt(column::created_by),
+            updated: dao.get(column::updated),
+            updated_by: dao.get_opt(column::updated_by),
+            priority: dao.get_opt(column::priority),
+            name: dao.get_opt(column::name),
+            description: dao.get_opt(column::description),
+            help: dao.get_opt(column::help),
+            active: dao.get(column::active),
         }
     }
 
-    fn to_dao(&self)->Dao{
+    fn to_dao(&self) -> Dao {
         let mut dao = Dao::new();
-        match self.organization_id{
-            Some(ref _value) => dao.set("organization_id", _value),
-            None => dao.set_null("organization_id")
+        match self.organization_id {
+            Some(ref _value) => dao.set(column::organization_id, _value),
+            None => dao.set_null(column::organization_id)
         }
-        match self.client_id{
-            Some(ref _value) => dao.set("client_id", _value),
-            None => dao.set_null("client_id")
+        match self.client_id {
+            Some(ref _value) => dao.set(column::client_id, _value),
+            None => dao.set_null(column::client_id)
         }
-        dao.set("created", &self.created);
-        match self.created_by{
-            Some(ref _value) => dao.set("created_by", _value),
-            None => dao.set_null("created_by")
+        dao.set(column::created, &self.created);
+        match self.created_by {
+            Some(ref _value) => dao.set(column::created_by, _value),
+            None => dao.set_null(column::created_by)
         }
-        dao.set("updated", &self.updated);
-        match self.updated_by{
-            Some(ref _value) => dao.set("updated_by", _value),
-            None => dao.set_null("updated_by")
+        dao.set(column::updated, &self.updated);
+        match self.updated_by {
+            Some(ref _value) => dao.set(column::updated_by, _value),
+            None => dao.set_null(column::updated_by)
         }
-        match self.priority{
-            Some(ref _value) => dao.set("priority", _value),
-            None => dao.set_null("priority")
+        match self.priority {
+            Some(ref _value) => dao.set(column::priority, _value),
+            None => dao.set_null(column::priority)
         }
-        match self.name{
-            Some(ref _value) => dao.set("name", _value),
-            None => dao.set_null("name")
+        match self.name {
+            Some(ref _value) => dao.set(column::name, _value),
+            None => dao.set_null(column::name)
         }
-        match self.description{
-            Some(ref _value) => dao.set("description", _value),
-            None => dao.set_null("description")
+        match self.description {
+            Some(ref _value) => dao.set(column::description, _value),
+            None => dao.set_null(column::description)
         }
-        match self.help{
-            Some(ref _value) => dao.set("help", _value),
-            None => dao.set_null("help")
+        match self.help {
+            Some(ref _value) => dao.set(column::help, _value),
+            None => dao.set_null(column::help)
         }
-        dao.set("active", &self.active);
+        dao.set(column::active, &self.active);
         dao
     }
 }
 
-impl ToJson for Record{
+impl ToJson for Record {
 
-    fn to_json(&self)->Json{
+    fn to_json(&self) -> Json {
         self.to_dao().to_json()
     }
 }
 
-impl IsTable for Record{
+impl Default for Record {
 
-    fn table()->Table{
-    
-        Table{
-            schema:"system".to_string(),
-            name:"record".to_string(),
-            parent_table:Some("base".to_string()),
-            sub_table:vec!["address".to_string(),"api_key".to_string(),"cart".to_string(),"cart_line".to_string(),"category".to_string(),"client".to_string(),"invoice".to_string(),"order_line".to_string(),"orders".to_string(),"organization".to_string(),"photo".to_string(),"photo_sizes".to_string(),"product".to_string(),"review".to_string(),"settings".to_string(),"user_info".to_string(),"user_location".to_string(),"user_review".to_string(),"users".to_string(),"wishlist".to_string(),"wishlist_line".to_string(),"country".to_string(),"currency".to_string(),"exchange_rate".to_string(),],
-            comment:Some("All User table should inherit from this one".to_string()),
-            columns:
-            vec![
-                Column{
-                    name:"organization_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+    fn default() -> Self {
+        Record{
+            organization_id: Default::default(),
+            client_id: Default::default(),
+            created: UTC::now(),
+            created_by: Default::default(),
+            updated: UTC::now(),
+            updated_by: Default::default(),
+            priority: Default::default(),
+            name: Default::default(),
+            description: Default::default(),
+            help: Default::default(),
+            active: Default::default(),
+        }
+    }
+}
+
+impl IsTable for Record {
+
+    fn table() -> Table {
+        Table {
+            schema: schema::system.to_owned(),
+            name: table::record.to_owned(),
+            parent_table: Some(table::base.to_owned()),
+            sub_table: vec![table::address.to_owned(),table::api_key.to_owned(),table::cart.to_owned(),table::cart_line.to_owned(),table::category.to_owned(),table::client.to_owned(),table::invoice.to_owned(),table::order_line.to_owned(),table::orders.to_owned(),table::organization.to_owned(),table::photo.to_owned(),table::photo_sizes.to_owned(),table::product.to_owned(),table::review.to_owned(),table::settings.to_owned(),table::user_info.to_owned(),table::user_location.to_owned(),table::user_review.to_owned(),table::users.to_owned(),table::wishlist.to_owned(),table::wishlist_line.to_owned(),table::country.to_owned(),table::currency.to_owned(),table::exchange_rate.to_owned(),],
+            comment: Some("All User table should inherit from this one".to_owned()),
+            columns: vec![
+                Column {
+                    name: column::organization_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"client_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::client_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"priority".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::priority.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "double precision".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"name".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::name.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"description".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::description.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"help".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"text".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::help.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "text".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"active".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:false, 
-                    default:Some("true".to_string()),
-                    comment:Some("@Active".to_string()),
-                    foreign:None,
+                Column {
+                    name: column::active.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: false,
+                    default: Some("true".to_owned()),
+                    comment: Some("@Active".to_owned()),
+                    foreign: None,
                 },
             ],
-            is_view: false
+            is_view: false,
         }
     }
 }

@@ -9,7 +9,7 @@ use rustorm::pool::ManagedPool;
 /// this will generate needed model code for tests in ./examples/gen directory
 fn main(){
     
-    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6", 1).unwrap();
+    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v7", 1).unwrap();
     let db = pool.connect().unwrap();
     let config =  Config{
             base_module:Some("gen".to_string()),

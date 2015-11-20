@@ -2,19 +2,22 @@
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
-use uuid::Uuid;
-use gen::bazaar::OrderLine;
+use gen::column;
+use gen::schema;
+use gen::table;
+use rustc_serialize::json::Json;
+use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
-use rustorm::table::IsTable;
 use rustorm::table::Column;
+use rustorm::table::IsTable;
 use rustorm::table::Table;
-use rustc_serialize::json::ToJson;
-use rustc_serialize::json::Json;
+use uuid::Uuid;
+use gen::bazaar::OrderLine;
 
 
 
-#[derive(RustcDecodable, RustcEncodable)]
+
 #[derive(Debug, Clone)]
 pub struct Orders {
     /// primary
@@ -22,15 +25,15 @@ pub struct Orders {
     /// not nullable 
     /// db data type: uuid
     pub order_id: Uuid,
-    /// db data type: numeric
+    /// db data type: double precision
     pub amount_refunded: Option<f64>,
-    /// db data type: numeric
+    /// db data type: double precision
     pub amount_tendered: Option<f64>,
     /// The cart from which this order was created from
     /// db data type: uuid
     pub cart_id: Option<Uuid>,
     /// default: 0.00
-    /// db data type: numeric
+    /// db data type: double precision
     pub charges_amount: Option<f64>,
     /// For recognization purposes, this is the name shown to the seller
     /// db data type: character varying
@@ -42,7 +45,7 @@ pub struct Orders {
     /// default: now()
     /// db data type: timestamp with time zone
     pub date_ordered: Option<DateTime<UTC>>,
-    /// db data type: numeric
+    /// db data type: double precision
     pub grand_total_amount: Option<f64>,
     /// if the order from the buyer is approved by the seller
     /// default: false
@@ -95,7 +98,7 @@ pub struct Orders {
     /// db data type: uuid
     pub organization_id: Option<Uuid>,
     /// --inherited-- 
-    /// db data type: numeric
+    /// db data type: double precision
     pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
@@ -112,420 +115,455 @@ pub struct Orders {
 
 
 
-impl IsDao for Orders{
-    fn from_dao(dao:&Dao)->Self{
-        Orders{
-            organization_id: dao.get_opt("organization_id"),
-            client_id: dao.get_opt("client_id"),
-            created: dao.get("created"),
-            created_by: dao.get_opt("created_by"),
-            updated: dao.get("updated"),
-            updated_by: dao.get_opt("updated_by"),
-            priority: dao.get_opt("priority"),
-            name: dao.get_opt("name"),
-            description: dao.get_opt("description"),
-            help: dao.get_opt("help"),
-            active: dao.get("active"),
-            order_id: dao.get("order_id"),
-            customer_name: dao.get_opt("customer_name"),
-            total_items: dao.get_opt("total_items"),
-            grand_total_amount: dao.get_opt("grand_total_amount"),
-            charges_amount: dao.get_opt("charges_amount"),
-            processing: dao.get_opt("processing"),
-            processed: dao.get_opt("processed"),
-            is_confirmed: dao.get_opt("is_confirmed"),
-            is_tax_included: dao.get_opt("is_tax_included"),
-            date_ordered: dao.get_opt("date_ordered"),
-            is_invoiced: dao.get_opt("is_invoiced"),
-            date_invoiced: dao.get_opt("date_invoiced"),
-            is_approved: dao.get_opt("is_approved"),
-            date_approved: dao.get_opt("date_approved"),
-            amount_tendered: dao.get_opt("amount_tendered"),
-            amount_refunded: dao.get_opt("amount_refunded"),
-            cart_id: dao.get_opt("cart_id"),
+impl IsDao for Orders {
+    fn from_dao(dao: &Dao) -> Self {
+        Orders {
+            organization_id: dao.get_opt(column::organization_id),
+            client_id: dao.get_opt(column::client_id),
+            created: dao.get(column::created),
+            created_by: dao.get_opt(column::created_by),
+            updated: dao.get(column::updated),
+            updated_by: dao.get_opt(column::updated_by),
+            priority: dao.get_opt(column::priority),
+            name: dao.get_opt(column::name),
+            description: dao.get_opt(column::description),
+            help: dao.get_opt(column::help),
+            active: dao.get(column::active),
+            order_id: dao.get(column::order_id),
+            customer_name: dao.get_opt(column::customer_name),
+            total_items: dao.get_opt(column::total_items),
+            grand_total_amount: dao.get_opt(column::grand_total_amount),
+            charges_amount: dao.get_opt(column::charges_amount),
+            processing: dao.get_opt(column::processing),
+            processed: dao.get_opt(column::processed),
+            is_confirmed: dao.get_opt(column::is_confirmed),
+            is_tax_included: dao.get_opt(column::is_tax_included),
+            date_ordered: dao.get_opt(column::date_ordered),
+            is_invoiced: dao.get_opt(column::is_invoiced),
+            date_invoiced: dao.get_opt(column::date_invoiced),
+            is_approved: dao.get_opt(column::is_approved),
+            date_approved: dao.get_opt(column::date_approved),
+            amount_tendered: dao.get_opt(column::amount_tendered),
+            amount_refunded: dao.get_opt(column::amount_refunded),
+            cart_id: dao.get_opt(column::cart_id),
             order_line: vec![],
         }
     }
 
-    fn to_dao(&self)->Dao{
+    fn to_dao(&self) -> Dao {
         let mut dao = Dao::new();
-        match self.organization_id{
-            Some(ref _value) => dao.set("organization_id", _value),
-            None => dao.set_null("organization_id")
+        match self.organization_id {
+            Some(ref _value) => dao.set(column::organization_id, _value),
+            None => dao.set_null(column::organization_id)
         }
-        match self.client_id{
-            Some(ref _value) => dao.set("client_id", _value),
-            None => dao.set_null("client_id")
+        match self.client_id {
+            Some(ref _value) => dao.set(column::client_id, _value),
+            None => dao.set_null(column::client_id)
         }
-        dao.set("created", &self.created);
-        match self.created_by{
-            Some(ref _value) => dao.set("created_by", _value),
-            None => dao.set_null("created_by")
+        dao.set(column::created, &self.created);
+        match self.created_by {
+            Some(ref _value) => dao.set(column::created_by, _value),
+            None => dao.set_null(column::created_by)
         }
-        dao.set("updated", &self.updated);
-        match self.updated_by{
-            Some(ref _value) => dao.set("updated_by", _value),
-            None => dao.set_null("updated_by")
+        dao.set(column::updated, &self.updated);
+        match self.updated_by {
+            Some(ref _value) => dao.set(column::updated_by, _value),
+            None => dao.set_null(column::updated_by)
         }
-        match self.priority{
-            Some(ref _value) => dao.set("priority", _value),
-            None => dao.set_null("priority")
+        match self.priority {
+            Some(ref _value) => dao.set(column::priority, _value),
+            None => dao.set_null(column::priority)
         }
-        match self.name{
-            Some(ref _value) => dao.set("name", _value),
-            None => dao.set_null("name")
+        match self.name {
+            Some(ref _value) => dao.set(column::name, _value),
+            None => dao.set_null(column::name)
         }
-        match self.description{
-            Some(ref _value) => dao.set("description", _value),
-            None => dao.set_null("description")
+        match self.description {
+            Some(ref _value) => dao.set(column::description, _value),
+            None => dao.set_null(column::description)
         }
-        match self.help{
-            Some(ref _value) => dao.set("help", _value),
-            None => dao.set_null("help")
+        match self.help {
+            Some(ref _value) => dao.set(column::help, _value),
+            None => dao.set_null(column::help)
         }
-        dao.set("active", &self.active);
-        dao.set("order_id", &self.order_id);
-        match self.customer_name{
-            Some(ref _value) => dao.set("customer_name", _value),
-            None => dao.set_null("customer_name")
+        dao.set(column::active, &self.active);
+        dao.set(column::order_id, &self.order_id);
+        match self.customer_name {
+            Some(ref _value) => dao.set(column::customer_name, _value),
+            None => dao.set_null(column::customer_name)
         }
-        match self.total_items{
-            Some(ref _value) => dao.set("total_items", _value),
-            None => dao.set_null("total_items")
+        match self.total_items {
+            Some(ref _value) => dao.set(column::total_items, _value),
+            None => dao.set_null(column::total_items)
         }
-        match self.grand_total_amount{
-            Some(ref _value) => dao.set("grand_total_amount", _value),
-            None => dao.set_null("grand_total_amount")
+        match self.grand_total_amount {
+            Some(ref _value) => dao.set(column::grand_total_amount, _value),
+            None => dao.set_null(column::grand_total_amount)
         }
-        match self.charges_amount{
-            Some(ref _value) => dao.set("charges_amount", _value),
-            None => dao.set_null("charges_amount")
+        match self.charges_amount {
+            Some(ref _value) => dao.set(column::charges_amount, _value),
+            None => dao.set_null(column::charges_amount)
         }
-        match self.processing{
-            Some(ref _value) => dao.set("processing", _value),
-            None => dao.set_null("processing")
+        match self.processing {
+            Some(ref _value) => dao.set(column::processing, _value),
+            None => dao.set_null(column::processing)
         }
-        match self.processed{
-            Some(ref _value) => dao.set("processed", _value),
-            None => dao.set_null("processed")
+        match self.processed {
+            Some(ref _value) => dao.set(column::processed, _value),
+            None => dao.set_null(column::processed)
         }
-        match self.is_confirmed{
-            Some(ref _value) => dao.set("is_confirmed", _value),
-            None => dao.set_null("is_confirmed")
+        match self.is_confirmed {
+            Some(ref _value) => dao.set(column::is_confirmed, _value),
+            None => dao.set_null(column::is_confirmed)
         }
-        match self.is_tax_included{
-            Some(ref _value) => dao.set("is_tax_included", _value),
-            None => dao.set_null("is_tax_included")
+        match self.is_tax_included {
+            Some(ref _value) => dao.set(column::is_tax_included, _value),
+            None => dao.set_null(column::is_tax_included)
         }
-        match self.date_ordered{
-            Some(ref _value) => dao.set("date_ordered", _value),
-            None => dao.set_null("date_ordered")
+        match self.date_ordered {
+            Some(ref _value) => dao.set(column::date_ordered, _value),
+            None => dao.set_null(column::date_ordered)
         }
-        match self.is_invoiced{
-            Some(ref _value) => dao.set("is_invoiced", _value),
-            None => dao.set_null("is_invoiced")
+        match self.is_invoiced {
+            Some(ref _value) => dao.set(column::is_invoiced, _value),
+            None => dao.set_null(column::is_invoiced)
         }
-        match self.date_invoiced{
-            Some(ref _value) => dao.set("date_invoiced", _value),
-            None => dao.set_null("date_invoiced")
+        match self.date_invoiced {
+            Some(ref _value) => dao.set(column::date_invoiced, _value),
+            None => dao.set_null(column::date_invoiced)
         }
-        match self.is_approved{
-            Some(ref _value) => dao.set("is_approved", _value),
-            None => dao.set_null("is_approved")
+        match self.is_approved {
+            Some(ref _value) => dao.set(column::is_approved, _value),
+            None => dao.set_null(column::is_approved)
         }
-        match self.date_approved{
-            Some(ref _value) => dao.set("date_approved", _value),
-            None => dao.set_null("date_approved")
+        match self.date_approved {
+            Some(ref _value) => dao.set(column::date_approved, _value),
+            None => dao.set_null(column::date_approved)
         }
-        match self.amount_tendered{
-            Some(ref _value) => dao.set("amount_tendered", _value),
-            None => dao.set_null("amount_tendered")
+        match self.amount_tendered {
+            Some(ref _value) => dao.set(column::amount_tendered, _value),
+            None => dao.set_null(column::amount_tendered)
         }
-        match self.amount_refunded{
-            Some(ref _value) => dao.set("amount_refunded", _value),
-            None => dao.set_null("amount_refunded")
+        match self.amount_refunded {
+            Some(ref _value) => dao.set(column::amount_refunded, _value),
+            None => dao.set_null(column::amount_refunded)
         }
-        match self.cart_id{
-            Some(ref _value) => dao.set("cart_id", _value),
-            None => dao.set_null("cart_id")
+        match self.cart_id {
+            Some(ref _value) => dao.set(column::cart_id, _value),
+            None => dao.set_null(column::cart_id)
         }
         dao
     }
 }
 
-impl ToJson for Orders{
+impl ToJson for Orders {
 
-    fn to_json(&self)->Json{
+    fn to_json(&self) -> Json {
         self.to_dao().to_json()
     }
 }
 
-impl IsTable for Orders{
+impl Default for Orders {
 
-    fn table()->Table{
-    
-        Table{
-            schema:"bazaar".to_string(),
-            name:"orders".to_string(),
-            parent_table:Some("record".to_string()),
-            sub_table:vec![],
-            comment:None,
-            columns:
-            vec![
-                Column{
-                    name:"organization_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+    fn default() -> Self {
+        Orders{
+            organization_id: Default::default(),
+            client_id: Default::default(),
+            created: UTC::now(),
+            created_by: Default::default(),
+            updated: UTC::now(),
+            updated_by: Default::default(),
+            priority: Default::default(),
+            name: Default::default(),
+            description: Default::default(),
+            help: Default::default(),
+            active: Default::default(),
+            order_id: Default::default(),
+            customer_name: Default::default(),
+            total_items: Default::default(),
+            grand_total_amount: Default::default(),
+            charges_amount: Default::default(),
+            processing: Default::default(),
+            processed: Default::default(),
+            is_confirmed: Default::default(),
+            is_tax_included: Default::default(),
+            date_ordered: Default::default(),
+            is_invoiced: Default::default(),
+            date_invoiced: Default::default(),
+            is_approved: Default::default(),
+            date_approved: Default::default(),
+            amount_tendered: Default::default(),
+            amount_refunded: Default::default(),
+            cart_id: Default::default(),
+            order_line: Default::default(),
+        }
+    }
+}
+
+impl IsTable for Orders {
+
+    fn table() -> Table {
+        Table {
+            schema: schema::bazaar.to_owned(),
+            name: table::orders.to_owned(),
+            parent_table: Some(table::record.to_owned()),
+            sub_table: vec![],
+            comment: None,
+            columns: vec![
+                Column {
+                    name: column::organization_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"client_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::client_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"priority".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::priority.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "double precision".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"name".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::name.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"description".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::description.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"help".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"text".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::help.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "text".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"active".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("true".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::active.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("true".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"order_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:true, is_unique:false, not_null:true, is_inherited:false, 
-                    default:Some("uuid_generate_v4()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::order_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+                    default: Some("uuid_generate_v4()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"customer_name".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:Some("For recognization purposes, this is the name shown to the seller".to_string()),
-                    foreign:None,
+                Column {
+                    name: column::customer_name.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: Some("For recognization purposes, this is the name shown to the seller".to_owned()),
+                    foreign: None,
                 },
-                Column{
-                    name:"total_items".to_string(),
-                    data_type:"i32".to_string(),
-                    db_data_type:"integer".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::total_items.to_owned(),
+                    data_type: "i32".to_owned(),
+                    db_data_type: "integer".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"grand_total_amount".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::grand_total_amount.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "double precision".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"charges_amount".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("0.00".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::charges_amount.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "double precision".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("0.00".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"processing".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("false".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::processing.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("false".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"processed".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("false".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::processed.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("false".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"is_confirmed".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("false".to_string()),
-                    comment:Some("determined whether the order has been confirmed by the person who ordered it".to_string()),
-                    foreign:None,
+                Column {
+                    name: column::is_confirmed.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("false".to_owned()),
+                    comment: Some("determined whether the order has been confirmed by the person who ordered it".to_owned()),
+                    foreign: None,
                 },
-                Column{
-                    name:"is_tax_included".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("true".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::is_tax_included.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("true".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"date_ordered".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::date_ordered.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"is_invoiced".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("false".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::is_invoiced.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("false".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"date_invoiced".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::date_invoiced.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"is_approved".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("false".to_string()),
-                    comment:Some("if the order from the buyer is approved by the seller".to_string()),
-                    foreign:None,
+                Column {
+                    name: column::is_approved.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("false".to_owned()),
+                    comment: Some("if the order from the buyer is approved by the seller".to_owned()),
+                    foreign: None,
                 },
-                Column{
-                    name:"date_approved".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::date_approved.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"amount_tendered".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::amount_tendered.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "double precision".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"amount_refunded".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::amount_refunded.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "double precision".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"cart_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:Some("The cart from which this order was created from".to_string()),
-                    foreign:None,
+                Column {
+                    name: column::cart_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: Some("The cart from which this order was created from".to_owned()),
+                    foreign: None,
                 },
             ],
-            is_view: false
+            is_view: false,
         }
     }
 }

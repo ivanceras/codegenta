@@ -6,6 +6,9 @@ use chrono::offset::utc::UTC;
 use uuid::Uuid;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
+use gen::schema;
+use gen::table;
+use gen::column;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
@@ -70,259 +73,281 @@ pub struct ProductAvailability {
 
 
 
-impl IsDao for ProductAvailability{
-    fn from_dao(dao:&Dao)->Self{
-        ProductAvailability{
-            organization_id: dao.get_opt("organization_id"),
-            client_id: dao.get_opt("client_id"),
-            created: dao.get("created"),
-            created_by: dao.get_opt("created_by"),
-            updated: dao.get("updated"),
-            updated_by: dao.get_opt("updated_by"),
-            priority: dao.get_opt("priority"),
-            product_id: dao.get("product_id"),
-            available: dao.get_opt("available"),
-            always_available: dao.get_opt("always_available"),
-            stocks: dao.get_opt("stocks"),
-            available_from: dao.get_opt("available_from"),
-            available_until: dao.get_opt("available_until"),
-            available_day: dao.get_opt("available_day"),
-            open_time: dao.get_opt("open_time"),
-            close_time: dao.get_opt("close_time"),
+impl IsDao for ProductAvailability {
+    fn from_dao(dao: &Dao) -> Self {
+        ProductAvailability {
+            organization_id: dao.get_opt(column::organization_id),
+            client_id: dao.get_opt(column::client_id),
+            created: dao.get(column::created),
+            created_by: dao.get_opt(column::created_by),
+            updated: dao.get(column::updated),
+            updated_by: dao.get_opt(column::updated_by),
+            priority: dao.get_opt(column::priority),
+            product_id: dao.get(column::product_id),
+            available: dao.get_opt(column::available),
+            always_available: dao.get_opt(column::always_available),
+            stocks: dao.get_opt(column::stocks),
+            available_from: dao.get_opt(column::available_from),
+            available_until: dao.get_opt(column::available_until),
+            available_day: dao.get_opt(column::available_day),
+            open_time: dao.get_opt(column::open_time),
+            close_time: dao.get_opt(column::close_time),
         }
     }
 
-    fn to_dao(&self)->Dao{
+    fn to_dao(&self) -> Dao {
         let mut dao = Dao::new();
-        match self.organization_id{
-            Some(ref _value) => dao.set("organization_id", _value),
-            None => dao.set_null("organization_id")
+        match self.organization_id {
+            Some(ref _value) => dao.set(column::organization_id, _value),
+            None => dao.set_null(column::organization_id)
         }
-        match self.client_id{
-            Some(ref _value) => dao.set("client_id", _value),
-            None => dao.set_null("client_id")
+        match self.client_id {
+            Some(ref _value) => dao.set(column::client_id, _value),
+            None => dao.set_null(column::client_id)
         }
-        dao.set("created", &self.created);
-        match self.created_by{
-            Some(ref _value) => dao.set("created_by", _value),
-            None => dao.set_null("created_by")
+        dao.set(column::created, &self.created);
+        match self.created_by {
+            Some(ref _value) => dao.set(column::created_by, _value),
+            None => dao.set_null(column::created_by)
         }
-        dao.set("updated", &self.updated);
-        match self.updated_by{
-            Some(ref _value) => dao.set("updated_by", _value),
-            None => dao.set_null("updated_by")
+        dao.set(column::updated, &self.updated);
+        match self.updated_by {
+            Some(ref _value) => dao.set(column::updated_by, _value),
+            None => dao.set_null(column::updated_by)
         }
-        match self.priority{
-            Some(ref _value) => dao.set("priority", _value),
-            None => dao.set_null("priority")
+        match self.priority {
+            Some(ref _value) => dao.set(column::priority, _value),
+            None => dao.set_null(column::priority)
         }
-        dao.set("product_id", &self.product_id);
-        match self.available{
-            Some(ref _value) => dao.set("available", _value),
-            None => dao.set_null("available")
+        dao.set(column::product_id, &self.product_id);
+        match self.available {
+            Some(ref _value) => dao.set(column::available, _value),
+            None => dao.set_null(column::available)
         }
-        match self.always_available{
-            Some(ref _value) => dao.set("always_available", _value),
-            None => dao.set_null("always_available")
+        match self.always_available {
+            Some(ref _value) => dao.set(column::always_available, _value),
+            None => dao.set_null(column::always_available)
         }
-        match self.stocks{
-            Some(ref _value) => dao.set("stocks", _value),
-            None => dao.set_null("stocks")
+        match self.stocks {
+            Some(ref _value) => dao.set(column::stocks, _value),
+            None => dao.set_null(column::stocks)
         }
-        match self.available_from{
-            Some(ref _value) => dao.set("available_from", _value),
-            None => dao.set_null("available_from")
+        match self.available_from {
+            Some(ref _value) => dao.set(column::available_from, _value),
+            None => dao.set_null(column::available_from)
         }
-        match self.available_until{
-            Some(ref _value) => dao.set("available_until", _value),
-            None => dao.set_null("available_until")
+        match self.available_until {
+            Some(ref _value) => dao.set(column::available_until, _value),
+            None => dao.set_null(column::available_until)
         }
-        match self.available_day{
-            Some(ref _value) => dao.set("available_day", _value),
-            None => dao.set_null("available_day")
+        match self.available_day {
+            Some(ref _value) => dao.set(column::available_day, _value),
+            None => dao.set_null(column::available_day)
         }
-        match self.open_time{
-            Some(ref _value) => dao.set("open_time", _value),
-            None => dao.set_null("open_time")
+        match self.open_time {
+            Some(ref _value) => dao.set(column::open_time, _value),
+            None => dao.set_null(column::open_time)
         }
-        match self.close_time{
-            Some(ref _value) => dao.set("close_time", _value),
-            None => dao.set_null("close_time")
+        match self.close_time {
+            Some(ref _value) => dao.set(column::close_time, _value),
+            None => dao.set_null(column::close_time)
         }
         dao
     }
 }
 
-impl ToJson for ProductAvailability{
+impl ToJson for ProductAvailability {
 
-    fn to_json(&self)->Json{
+    fn to_json(&self) -> Json {
         self.to_dao().to_json()
     }
 }
 
-impl IsTable for ProductAvailability{
+impl Default for ProductAvailability {
 
-    fn table()->Table{
-    
-        Table{
-            schema:"bazaar".to_string(),
-            name:"product_availability".to_string(),
-            parent_table:Some("base".to_string()),
-            sub_table:vec![],
-            comment:None,
-            columns:
-            vec![
-                Column{
-                    name:"organization_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+    fn default() -> Self {
+        ProductAvailability{
+            organization_id: Default::default(),
+            client_id: Default::default(),
+            created: UTC::now(),
+            created_by: Default::default(),
+            updated: UTC::now(),
+            updated_by: Default::default(),
+            priority: Default::default(),
+            product_id: Default::default(),
+            available: Default::default(),
+            always_available: Default::default(),
+            stocks: Default::default(),
+            available_from: Default::default(),
+            available_until: Default::default(),
+            available_day: Default::default(),
+            open_time: Default::default(),
+            close_time: Default::default(),
+        }
+    }
+}
+
+impl IsTable for ProductAvailability {
+
+    fn table() -> Table {
+        Table {
+            schema: schema::bazaar.to_owned(),
+            name: table::product_availability.to_owned(),
+            parent_table: Some(table::base.to_owned()),
+            sub_table: vec![],
+            comment: None,
+            columns: vec![
+                Column {
+                    name: column::organization_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"client_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::client_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"priority".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::priority.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "numeric".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"product_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:true, is_unique:false, not_null:true, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:Some(
-                        Foreign{
-                            schema:"bazaar".to_string(),
-                            table:"product".to_string(),
-                            column:"product_id".to_string(),
+                Column {
+                    name: column::product_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: Some(
+                        Foreign {
+                            schema: "bazaar".to_owned(),
+                            table: "product".to_owned(),
+                            column: "product_id".to_owned(),
                         }),
                 },
-                Column{
-                    name:"available".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::available.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"always_available".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::always_available.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"stocks".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:Some("1".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::stocks.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "numeric".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: Some("1".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"available_from".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::available_from.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"available_until".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::available_until.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"available_day".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"json".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:Some("{\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\", \"Sat\", \"Sun\"}".to_string()),
-                    foreign:None,
+                Column {
+                    name: column::available_day.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "json".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: Some("{\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\", \"Sat\", \"Sun\"}".to_owned()),
+                    foreign: None,
                 },
-                Column{
-                    name:"open_time".to_string(),
-                    data_type:"NaiveTime".to_string(),
-                    db_data_type:"time with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::open_time.to_owned(),
+                    data_type: "NaiveTime".to_owned(),
+                    db_data_type: "time with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"close_time".to_string(),
-                    data_type:"NaiveTime".to_string(),
-                    db_data_type:"time with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::close_time.to_owned(),
+                    data_type: "NaiveTime".to_owned(),
+                    db_data_type: "time with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
             ],
-            is_view: false
+            is_view: false,
         }
     }
 }

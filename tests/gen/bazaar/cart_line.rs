@@ -6,6 +6,9 @@ use uuid::Uuid;
 use gen::bazaar::Cart;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
+use gen::schema;
+use gen::table;
+use gen::column;
 use rustorm::table::IsTable;
 use rustorm::table::Column;
 use rustorm::table::Table;
@@ -75,243 +78,265 @@ pub struct CartLine {
 
 
 
-impl IsDao for CartLine{
-    fn from_dao(dao:&Dao)->Self{
-        CartLine{
-            organization_id: dao.get_opt("organization_id"),
-            client_id: dao.get_opt("client_id"),
-            created: dao.get("created"),
-            created_by: dao.get_opt("created_by"),
-            updated: dao.get("updated"),
-            updated_by: dao.get_opt("updated_by"),
-            priority: dao.get_opt("priority"),
-            name: dao.get_opt("name"),
-            description: dao.get_opt("description"),
-            help: dao.get_opt("help"),
-            active: dao.get("active"),
-            cart_id: dao.get_opt("cart_id"),
-            cart_line_id: dao.get("cart_line_id"),
-            product_id: dao.get_opt("product_id"),
-            qty: dao.get_opt("qty"),
+impl IsDao for CartLine {
+    fn from_dao(dao: &Dao) -> Self {
+        CartLine {
+            organization_id: dao.get_opt(column::organization_id),
+            client_id: dao.get_opt(column::client_id),
+            created: dao.get(column::created),
+            created_by: dao.get_opt(column::created_by),
+            updated: dao.get(column::updated),
+            updated_by: dao.get_opt(column::updated_by),
+            priority: dao.get_opt(column::priority),
+            name: dao.get_opt(column::name),
+            description: dao.get_opt(column::description),
+            help: dao.get_opt(column::help),
+            active: dao.get(column::active),
+            cart_id: dao.get_opt(column::cart_id),
+            cart_line_id: dao.get(column::cart_line_id),
+            product_id: dao.get_opt(column::product_id),
+            qty: dao.get_opt(column::qty),
             cart: None,
         }
     }
 
-    fn to_dao(&self)->Dao{
+    fn to_dao(&self) -> Dao {
         let mut dao = Dao::new();
-        match self.organization_id{
-            Some(ref _value) => dao.set("organization_id", _value),
-            None => dao.set_null("organization_id")
+        match self.organization_id {
+            Some(ref _value) => dao.set(column::organization_id, _value),
+            None => dao.set_null(column::organization_id)
         }
-        match self.client_id{
-            Some(ref _value) => dao.set("client_id", _value),
-            None => dao.set_null("client_id")
+        match self.client_id {
+            Some(ref _value) => dao.set(column::client_id, _value),
+            None => dao.set_null(column::client_id)
         }
-        dao.set("created", &self.created);
-        match self.created_by{
-            Some(ref _value) => dao.set("created_by", _value),
-            None => dao.set_null("created_by")
+        dao.set(column::created, &self.created);
+        match self.created_by {
+            Some(ref _value) => dao.set(column::created_by, _value),
+            None => dao.set_null(column::created_by)
         }
-        dao.set("updated", &self.updated);
-        match self.updated_by{
-            Some(ref _value) => dao.set("updated_by", _value),
-            None => dao.set_null("updated_by")
+        dao.set(column::updated, &self.updated);
+        match self.updated_by {
+            Some(ref _value) => dao.set(column::updated_by, _value),
+            None => dao.set_null(column::updated_by)
         }
-        match self.priority{
-            Some(ref _value) => dao.set("priority", _value),
-            None => dao.set_null("priority")
+        match self.priority {
+            Some(ref _value) => dao.set(column::priority, _value),
+            None => dao.set_null(column::priority)
         }
-        match self.name{
-            Some(ref _value) => dao.set("name", _value),
-            None => dao.set_null("name")
+        match self.name {
+            Some(ref _value) => dao.set(column::name, _value),
+            None => dao.set_null(column::name)
         }
-        match self.description{
-            Some(ref _value) => dao.set("description", _value),
-            None => dao.set_null("description")
+        match self.description {
+            Some(ref _value) => dao.set(column::description, _value),
+            None => dao.set_null(column::description)
         }
-        match self.help{
-            Some(ref _value) => dao.set("help", _value),
-            None => dao.set_null("help")
+        match self.help {
+            Some(ref _value) => dao.set(column::help, _value),
+            None => dao.set_null(column::help)
         }
-        dao.set("active", &self.active);
-        match self.cart_id{
-            Some(ref _value) => dao.set("cart_id", _value),
-            None => dao.set_null("cart_id")
+        dao.set(column::active, &self.active);
+        match self.cart_id {
+            Some(ref _value) => dao.set(column::cart_id, _value),
+            None => dao.set_null(column::cart_id)
         }
-        dao.set("cart_line_id", &self.cart_line_id);
-        match self.product_id{
-            Some(ref _value) => dao.set("product_id", _value),
-            None => dao.set_null("product_id")
+        dao.set(column::cart_line_id, &self.cart_line_id);
+        match self.product_id {
+            Some(ref _value) => dao.set(column::product_id, _value),
+            None => dao.set_null(column::product_id)
         }
-        match self.qty{
-            Some(ref _value) => dao.set("qty", _value),
-            None => dao.set_null("qty")
+        match self.qty {
+            Some(ref _value) => dao.set(column::qty, _value),
+            None => dao.set_null(column::qty)
         }
         dao
     }
 }
 
-impl ToJson for CartLine{
+impl ToJson for CartLine {
 
-    fn to_json(&self)->Json{
+    fn to_json(&self) -> Json {
         self.to_dao().to_json()
     }
 }
 
-impl IsTable for CartLine{
+impl Default for CartLine {
 
-    fn table()->Table{
-    
-        Table{
-            schema:"bazaar".to_string(),
-            name:"cart_line".to_string(),
-            parent_table:Some("record".to_string()),
-            sub_table:vec![],
-            comment:None,
-            columns:
-            vec![
-                Column{
-                    name:"organization_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+    fn default() -> Self {
+        CartLine{
+            organization_id: Default::default(),
+            client_id: Default::default(),
+            created: UTC::now(),
+            created_by: Default::default(),
+            updated: UTC::now(),
+            updated_by: Default::default(),
+            priority: Default::default(),
+            name: Default::default(),
+            description: Default::default(),
+            help: Default::default(),
+            active: Default::default(),
+            cart_id: Default::default(),
+            cart_line_id: Default::default(),
+            product_id: Default::default(),
+            qty: Default::default(),
+            cart: Default::default(),
+        }
+    }
+}
+
+impl IsTable for CartLine {
+
+    fn table() -> Table {
+        Table {
+            schema: schema::bazaar.to_owned(),
+            name: table::cart_line.to_owned(),
+            parent_table: Some(table::record.to_owned()),
+            sub_table: vec![],
+            comment: None,
+            columns: vec![
+                Column {
+                    name: column::organization_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"client_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::client_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"created_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::created_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated".to_string(),
-                    data_type:"DateTime<UTC>".to_string(),
-                    db_data_type:"timestamp with time zone".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("now()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated.to_owned(),
+                    data_type: "DateTime<UTC>".to_owned(),
+                    db_data_type: "timestamp with time zone".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("now()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"updated_by".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::updated_by.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"priority".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::priority.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "numeric".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"name".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::name.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"description".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"character varying".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::description.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "character varying".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"help".to_string(),
-                    data_type:"String".to_string(),
-                    db_data_type:"text".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:true, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::help.to_owned(),
+                    data_type: "String".to_owned(),
+                    db_data_type: "text".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"active".to_string(),
-                    data_type:"bool".to_string(),
-                    db_data_type:"boolean".to_string(),
-                    is_primary:false, is_unique:false, not_null:true, is_inherited:true, 
-                    default:Some("true".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::active.to_owned(),
+                    data_type: "bool".to_owned(),
+                    db_data_type: "boolean".to_owned(),
+                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+                    default: Some("true".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"cart_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:Some(
-                        Foreign{
-                            schema:"bazaar".to_string(),
-                            table:"cart".to_string(),
-                            column:"cart_id".to_string(),
+                Column {
+                    name: column::cart_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: Some(
+                        Foreign {
+                            schema: "bazaar".to_owned(),
+                            table: "cart".to_owned(),
+                            column: "cart_id".to_owned(),
                         }),
                 },
-                Column{
-                    name:"cart_line_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:true, is_unique:false, not_null:true, is_inherited:false, 
-                    default:Some("uuid_generate_v4()".to_string()),
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::cart_line_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+                    default: Some("uuid_generate_v4()".to_owned()),
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"product_id".to_string(),
-                    data_type:"Uuid".to_string(),
-                    db_data_type:"uuid".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::product_id.to_owned(),
+                    data_type: "Uuid".to_owned(),
+                    db_data_type: "uuid".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
-                Column{
-                    name:"qty".to_string(),
-                    data_type:"f64".to_string(),
-                    db_data_type:"numeric".to_string(),
-                    is_primary:false, is_unique:false, not_null:false, is_inherited:false, 
-                    default:None,
-                    comment:None,
-                    foreign:None,
+                Column {
+                    name: column::qty.to_owned(),
+                    data_type: "f64".to_owned(),
+                    db_data_type: "numeric".to_owned(),
+                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+                    default: None,
+                    comment: None,
+                    foreign: None,
                 },
             ],
-            is_view: false
+            is_view: false,
         }
     }
 }
