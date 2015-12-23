@@ -2,22 +2,23 @@
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
-use uuid::Uuid;
-use gen::bazaar::OrderLine;
-use rustorm::dao::Dao;
-use rustorm::dao::IsDao;
+use gen::column;
 use gen::schema;
 use gen::table;
-use gen::column;
-use rustorm::table::IsTable;
-use rustorm::table::Column;
-use rustorm::table::Table;
-use rustc_serialize::json::ToJson;
 use rustc_serialize::json::Json;
+use rustc_serialize::json::ToJson;
+use rustorm::dao::Dao;
+use rustorm::dao::IsDao;
+use rustorm::dao::Type;
+use rustorm::table::Column;
+use rustorm::table::IsTable;
+use rustorm::table::Table;
+use uuid::Uuid;
+use gen::bazaar::OrderLine;
 
 
 
-#[derive(RustcDecodable, RustcEncodable)]
+
 #[derive(Debug, Clone)]
 pub struct Orders {
     /// primary
@@ -25,15 +26,15 @@ pub struct Orders {
     /// not nullable 
     /// db data type: uuid
     pub order_id: Uuid,
-    /// db data type: numeric
+    /// db data type: double precision
     pub amount_refunded: Option<f64>,
-    /// db data type: numeric
+    /// db data type: double precision
     pub amount_tendered: Option<f64>,
     /// The cart from which this order was created from
     /// db data type: uuid
     pub cart_id: Option<Uuid>,
     /// default: 0.00
-    /// db data type: numeric
+    /// db data type: double precision
     pub charges_amount: Option<f64>,
     /// For recognization purposes, this is the name shown to the seller
     /// db data type: character varying
@@ -45,7 +46,7 @@ pub struct Orders {
     /// default: now()
     /// db data type: timestamp with time zone
     pub date_ordered: Option<DateTime<UTC>>,
-    /// db data type: numeric
+    /// db data type: double precision
     pub grand_total_amount: Option<f64>,
     /// if the order from the buyer is approved by the seller
     /// default: false
@@ -98,7 +99,7 @@ pub struct Orders {
     /// db data type: uuid
     pub organization_id: Option<Uuid>,
     /// --inherited-- 
-    /// db data type: numeric
+    /// db data type: double precision
     pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
@@ -312,7 +313,7 @@ impl IsTable for Orders {
             columns: vec![
                 Column {
                     name: column::organization_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -321,7 +322,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::client_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -330,7 +331,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::created.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -339,7 +340,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::created_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -348,7 +349,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::updated.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -357,7 +358,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::updated_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -366,8 +367,8 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::priority.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
                     comment: None,
@@ -375,7 +376,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::name.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -384,7 +385,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::description.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -393,7 +394,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::help.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "text".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -402,7 +403,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::active.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("true".to_owned()),
@@ -411,7 +412,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::order_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
                     default: Some("uuid_generate_v4()".to_owned()),
@@ -420,7 +421,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::customer_name.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -429,7 +430,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::total_items.to_owned(),
-                    data_type: "i32".to_owned(),
+                    data_type: Type::I32,
                     db_data_type: "integer".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -438,8 +439,8 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::grand_total_amount.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
                     comment: None,
@@ -447,8 +448,8 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::charges_amount.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("0.00".to_owned()),
                     comment: None,
@@ -456,7 +457,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::processing.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -465,7 +466,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::processed.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -474,7 +475,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::is_confirmed.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -483,7 +484,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::is_tax_included.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("true".to_owned()),
@@ -492,7 +493,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::date_ordered.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("now()".to_owned()),
@@ -501,7 +502,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::is_invoiced.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -510,7 +511,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::date_invoiced.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -519,7 +520,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::is_approved.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -528,7 +529,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::date_approved.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -537,8 +538,8 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::amount_tendered.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
                     comment: None,
@@ -546,8 +547,8 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::amount_refunded.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
                     comment: None,
@@ -555,7 +556,7 @@ impl IsTable for Orders {
                 },
                 Column {
                     name: column::cart_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,

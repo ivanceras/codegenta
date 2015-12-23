@@ -6,6 +6,7 @@ use std::io::Write;
 
 use rustorm::table::Table;
 use meta::{MetaCode, StructCode};
+use rustorm::dao::Type;
 
 
 
@@ -325,6 +326,7 @@ fn generate_meta_code(table: &Table) -> (Vec<String>, String) {
     imports.push("rustorm::table::IsTable".to_owned());
     imports.push("rustorm::table::Column".to_owned());
     imports.push("rustorm::table::Table".to_owned());
+    imports.push("rustorm::dao::Type".to_owned());
 
     w.append("impl IsTable for ");
     w.append(&table.struct_name());
@@ -367,7 +369,7 @@ fn generate_impl_default_code(config: &Config, table: &Table, all_tables: &Vec<T
         w.ln_tabs(3);
         w.append(&c.corrected_name());
         w.append(": ");
-        if c.not_null && c.data_type == "DateTime<UTC>".to_owned(){
+        if c.not_null && c.data_type == Type::DateTime{
             w.append("UTC::now()");
         }else{
             w.append("Default::default()");

@@ -9,6 +9,7 @@ use rustc_serialize::json::Json;
 use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
+use rustorm::dao::Type;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -322,7 +323,7 @@ impl IsTable for Product {
             columns: vec![
                 Column {
                     name: column::organization_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -331,7 +332,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::client_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -340,7 +341,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::created.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -349,7 +350,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::created_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -358,7 +359,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::updated.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -367,7 +368,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::updated_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -376,7 +377,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::priority.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -385,7 +386,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::name.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -394,7 +395,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::description.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -403,7 +404,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::help.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "text".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -412,7 +413,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::active.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("true".to_owned()),
@@ -421,7 +422,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::product_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
                     default: Some("uuid_generate_v4()".to_owned()),
@@ -430,7 +431,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::parent_product_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -439,7 +440,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::is_service.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -448,7 +449,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::price.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -457,7 +458,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::use_parent_price.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("false".to_owned()),
@@ -466,7 +467,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::unit.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -475,7 +476,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::tags.to_owned(),
-                    data_type: "Json".to_owned(),
+                    data_type: Type::Json,
                     db_data_type: "json".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -484,7 +485,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::info.to_owned(),
-                    data_type: "Json".to_owned(),
+                    data_type: Type::Json,
                     db_data_type: "json".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -493,7 +494,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::seq_no.to_owned(),
-                    data_type: "i32".to_owned(),
+                    data_type: Type::I32,
                     db_data_type: "integer".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -502,7 +503,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::upfront_fee.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("0.00".to_owned()),
@@ -511,7 +512,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::barcode.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -520,7 +521,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::owner_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -534,7 +535,7 @@ impl IsTable for Product {
                 },
                 Column {
                     name: column::currency_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,

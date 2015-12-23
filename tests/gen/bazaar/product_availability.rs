@@ -3,22 +3,23 @@
 use chrono::datetime::DateTime;
 use chrono::naive::time::NaiveTime;
 use chrono::offset::utc::UTC;
-use uuid::Uuid;
-use rustorm::dao::Dao;
-use rustorm::dao::IsDao;
+use gen::column;
 use gen::schema;
 use gen::table;
-use gen::column;
-use rustorm::table::IsTable;
-use rustorm::table::Column;
-use rustorm::table::Table;
-use rustorm::table::Foreign;
-use rustc_serialize::json::ToJson;
 use rustc_serialize::json::Json;
+use rustc_serialize::json::ToJson;
+use rustorm::dao::Dao;
+use rustorm::dao::IsDao;
+use rustorm::dao::Type;
+use rustorm::table::Column;
+use rustorm::table::Foreign;
+use rustorm::table::IsTable;
+use rustorm::table::Table;
+use uuid::Uuid;
 
 
 
-#[derive(RustcDecodable, RustcEncodable)]
+
 #[derive(Debug, Clone)]
 pub struct ProductAvailability {
     /// primary
@@ -31,7 +32,7 @@ pub struct ProductAvailability {
     pub available: Option<bool>,
     /// {"Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"}
     /// db data type: json
-    pub available_day: Option<String>,
+    pub available_day: Option<Json>,
     /// db data type: timestamp with time zone
     pub available_from: Option<DateTime<UTC>>,
     /// db data type: timestamp with time zone
@@ -41,7 +42,7 @@ pub struct ProductAvailability {
     /// db data type: time with time zone
     pub open_time: Option<NaiveTime>,
     /// default: 1
-    /// db data type: numeric
+    /// db data type: double precision
     pub stocks: Option<f64>,
     /// --inherited-- 
     /// db data type: uuid
@@ -58,7 +59,7 @@ pub struct ProductAvailability {
     /// db data type: uuid
     pub organization_id: Option<Uuid>,
     /// --inherited-- 
-    /// db data type: numeric
+    /// db data type: double precision
     pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
@@ -199,7 +200,7 @@ impl IsTable for ProductAvailability {
             columns: vec![
                 Column {
                     name: column::organization_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -208,7 +209,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::client_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -217,7 +218,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::created.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -226,7 +227,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::created_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -235,7 +236,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::updated.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -244,7 +245,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::updated_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -253,8 +254,8 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::priority.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
                     comment: None,
@@ -262,7 +263,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::product_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
                     default: None,
@@ -276,7 +277,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::available.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -285,7 +286,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::always_available.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -294,8 +295,8 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::stocks.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: Some("1".to_owned()),
                     comment: None,
@@ -303,7 +304,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::available_from.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -312,7 +313,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::available_until.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -321,7 +322,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::available_day.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::Json,
                     db_data_type: "json".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -330,7 +331,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::open_time.to_owned(),
-                    data_type: "NaiveTime".to_owned(),
+                    data_type: Type::NaiveTime,
                     db_data_type: "time with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -339,7 +340,7 @@ impl IsTable for ProductAvailability {
                 },
                 Column {
                     name: column::close_time.to_owned(),
-                    data_type: "NaiveTime".to_owned(),
+                    data_type: Type::NaiveTime,
                     db_data_type: "time with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,

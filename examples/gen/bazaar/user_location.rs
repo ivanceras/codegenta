@@ -9,6 +9,7 @@ use rustc_serialize::json::Json;
 use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
+use rustorm::dao::Type;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -216,7 +217,7 @@ impl IsTable for UserLocation {
             columns: vec![
                 Column {
                     name: column::organization_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -225,7 +226,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::client_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -234,7 +235,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::created.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -243,7 +244,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::created_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -252,7 +253,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::updated.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -261,7 +262,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::updated_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -270,7 +271,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::priority.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -279,7 +280,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::name.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -288,7 +289,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::description.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -297,7 +298,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::help.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "text".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -306,7 +307,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::active.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("true".to_owned()),
@@ -315,7 +316,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::true_latitude.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -324,7 +325,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::true_longitude.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -333,7 +334,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::set_latitude.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -342,7 +343,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::set_longitude.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -351,7 +352,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::accuracy.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -360,7 +361,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::set_accuracy.to_owned(),
-                    data_type: "f64".to_owned(),
+                    data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
@@ -369,7 +370,7 @@ impl IsTable for UserLocation {
                 },
                 Column {
                     name: column::user_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
                     default: None,

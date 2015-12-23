@@ -2,18 +2,19 @@
 
 use chrono::datetime::DateTime;
 use chrono::offset::utc::UTC;
-use uuid::Uuid;
-use gen::bazaar::UserInfo;
-use rustorm::dao::Dao;
-use rustorm::dao::IsDao;
+use gen::column;
 use gen::schema;
 use gen::table;
-use gen::column;
-use rustorm::table::IsTable;
-use rustorm::table::Column;
-use rustorm::table::Table;
-use rustc_serialize::json::ToJson;
 use rustc_serialize::json::Json;
+use rustc_serialize::json::ToJson;
+use rustorm::dao::Dao;
+use rustorm::dao::IsDao;
+use rustorm::dao::Type;
+use rustorm::table::Column;
+use rustorm::table::IsTable;
+use rustorm::table::Table;
+use uuid::Uuid;
+use gen::bazaar::UserInfo;
 
 
 
@@ -21,7 +22,7 @@ use rustc_serialize::json::Json;
 /// @Address
 
 ///
-#[derive(RustcDecodable, RustcEncodable)]
+
 #[derive(Debug, Clone)]
 pub struct Address {
     /// primary
@@ -30,11 +31,11 @@ pub struct Address {
     /// db data type: uuid
     pub address_id: Uuid,
     /// distance is computed on the fly using the formula in sql, this is here to provide a property on the Models to store the value
-    /// db data type: numeric
+    /// db data type: double precision
     pub distance: Option<f64>,
-    /// db data type: numeric
+    /// db data type: double precision
     pub latitude: Option<f64>,
-    /// db data type: numeric
+    /// db data type: double precision
     pub longitude: Option<f64>,
     /// default: true
     /// not nullable 
@@ -65,7 +66,7 @@ pub struct Address {
     /// db data type: uuid
     pub organization_id: Option<Uuid>,
     /// --inherited-- 
-    /// db data type: numeric
+    /// db data type: double precision
     pub priority: Option<f64>,
     /// default: now()
     /// not nullable 
@@ -201,7 +202,7 @@ impl IsTable for Address {
             columns: vec![
                 Column {
                     name: column::organization_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -210,7 +211,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::client_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -219,7 +220,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::created.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -228,7 +229,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::created_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -237,7 +238,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::updated.to_owned(),
-                    data_type: "DateTime<UTC>".to_owned(),
+                    data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("now()".to_owned()),
@@ -246,7 +247,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::updated_by.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -255,8 +256,8 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::priority.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
                     comment: None,
@@ -264,7 +265,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::name.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -273,7 +274,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::description.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "character varying".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -282,7 +283,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::help.to_owned(),
-                    data_type: "String".to_owned(),
+                    data_type: Type::String,
                     db_data_type: "text".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: true,
                     default: None,
@@ -291,7 +292,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::active.to_owned(),
-                    data_type: "bool".to_owned(),
+                    data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
                     default: Some("true".to_owned()),
@@ -300,7 +301,7 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::address_id.to_owned(),
-                    data_type: "Uuid".to_owned(),
+                    data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
                     default: Some("uuid_generate_v4()".to_owned()),
@@ -309,8 +310,8 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::latitude.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
                     comment: None,
@@ -318,8 +319,8 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::longitude.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
                     comment: None,
@@ -327,8 +328,8 @@ impl IsTable for Address {
                 },
                 Column {
                     name: column::distance.to_owned(),
-                    data_type: "f64".to_owned(),
-                    db_data_type: "numeric".to_owned(),
+                    data_type: Type::F64,
+                    db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
                     default: None,
                     comment: Some("distance is computed on the fly using the formula in sql, this is here to provide a property on the Models to store the value".to_owned()),

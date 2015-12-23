@@ -53,7 +53,7 @@ impl MetaCode for Column{
         w.ln();
         w.tabs(5);
         w.append("data_type: ");
-        w.append(&format!("\"{}\".to_owned(),", self.data_type));
+        w.append(&format!("Type::{:?},", self.data_type));
         w.ln();
         w.tabs(5);
         w.append("db_data_type: ");
@@ -380,10 +380,10 @@ impl StructCode for Table{
         w.append(&c.corrected_name());
         w.append(": ");
         if c.not_null {
-            w.append(&c.data_type);
+            w.append(&c.data_type.to_str_repr());
         } else {
             w.append("Option<");
-            w.append(&c.data_type);
+            w.append(&c.data_type.to_str_repr());
             w.append(">");
         }
         w.comma();
