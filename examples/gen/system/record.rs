@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::IsTable;
 use rustorm::table::Table;
@@ -21,11 +23,11 @@ use uuid::Uuid;
 /// All User table should inherit from this one
 
 ///
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct Record {
     /// @Active
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// db data type: boolean
     pub active: bool,
@@ -38,7 +40,7 @@ pub struct Record {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -52,7 +54,7 @@ pub struct Record {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -153,7 +155,7 @@ impl IsTable for Record {
 
     fn table() -> Table {
         Table {
-            schema: schema::system.to_owned(),
+            schema: Some(schema::system.to_owned()),
             name: table::record.to_owned(),
             parent_table: Some(table::base.to_owned()),
             sub_table: vec![table::address.to_owned(),table::api_key.to_owned(),table::cart.to_owned(),table::cart_line.to_owned(),table::category.to_owned(),table::client.to_owned(),table::invoice.to_owned(),table::order_line.to_owned(),table::orders.to_owned(),table::organization.to_owned(),table::photo.to_owned(),table::photo_sizes.to_owned(),table::product.to_owned(),table::review.to_owned(),table::settings.to_owned(),table::user_info.to_owned(),table::user_location.to_owned(),table::user_review.to_owned(),table::users.to_owned(),table::wishlist.to_owned(),table::wishlist_line.to_owned(),table::country.to_owned(),table::currency.to_owned(),table::exchange_rate.to_owned(),],
@@ -182,7 +184,7 @@ impl IsTable for Record {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -200,7 +202,7 @@ impl IsTable for Record {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -254,7 +256,7 @@ impl IsTable for Record {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: Some("@Active".to_owned()),
                     foreign: None,
                 },

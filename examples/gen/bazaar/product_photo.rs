@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -18,7 +20,7 @@ use uuid::Uuid;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct ProductPhoto {
     /// primary
@@ -32,7 +34,7 @@ pub struct ProductPhoto {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -46,7 +48,7 @@ pub struct ProductPhoto {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -132,7 +134,7 @@ impl IsTable for ProductPhoto {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::product_photo.to_owned(),
             parent_table: Some(table::base.to_owned()),
             sub_table: vec![],
@@ -161,7 +163,7 @@ impl IsTable for ProductPhoto {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -179,7 +181,7 @@ impl IsTable for ProductPhoto {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -210,9 +212,9 @@ impl IsTable for ProductPhoto {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "bazaar".to_owned(),
+                            schema: Some("bazaar".to_owned()),
                             table: "product".to_owned(),
-                            column: "product_id".to_owned(),
+                            column: vec!["product_id".to_owned(),],
                         }),
                 },
                 Column {
@@ -224,9 +226,9 @@ impl IsTable for ProductPhoto {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "bazaar".to_owned(),
+                            schema: Some("bazaar".to_owned()),
                             table: "photo".to_owned(),
-                            column: "photo_id".to_owned(),
+                            column: vec!["photo_id".to_owned(),],
                         }),
                 },
             ],

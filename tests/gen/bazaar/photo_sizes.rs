@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -19,7 +21,7 @@ use gen::bazaar::Photo;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct PhotoSizes {
     /// primary
@@ -39,7 +41,7 @@ pub struct PhotoSizes {
     pub url: Option<String>,
     /// db data type: integer
     pub width: Option<i32>,
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -47,7 +49,7 @@ pub struct PhotoSizes {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -70,7 +72,7 @@ pub struct PhotoSizes {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -205,7 +207,7 @@ impl IsTable for PhotoSizes {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::photo_sizes.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -234,7 +236,7 @@ impl IsTable for PhotoSizes {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -252,7 +254,7 @@ impl IsTable for PhotoSizes {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -306,7 +308,7 @@ impl IsTable for PhotoSizes {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -355,9 +357,9 @@ impl IsTable for PhotoSizes {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "bazaar".to_owned(),
+                            schema: Some("bazaar".to_owned()),
                             table: "photo".to_owned(),
-                            column: "photo_id".to_owned(),
+                            column: vec!["photo_id".to_owned(),],
                         }),
                 },
                 Column {

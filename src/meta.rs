@@ -1,6 +1,6 @@
 use writer::Writer;
 use rustorm::database::DatabaseDev;
-
+use rustorm::query::Operand;
 use rustorm::table::{Column, Table, Foreign};
 
 pub trait MetaCode{
@@ -20,7 +20,10 @@ impl MetaCode for Foreign{
         w.ln();
         w.tabs(7);
         w.append("schema: ");
-        w.append(&format!("\"{}\".to_owned(),", self.schema));
+		match &self.schema{
+			&Some(ref schema) => w.append(&format!("Some(\"{}\".to_owned()),", schema)),
+			&None => w.append("None,")
+		};
         w.ln();
         w.tabs(7);
         w.append("table: ");
@@ -28,7 +31,11 @@ impl MetaCode for Foreign{
         w.ln();
         w.tabs(7);
         w.append("column: ");
-        w.append(&format!("\"{}\".to_owned(),", self.column));
+		w.append("vec![");
+		for column in &self.column{
+			w.append(&format!("\"{}\".to_owned(),", column));
+		};
+		w.append("],");
         w.ln();
         w.tabs(6);
         w.append("}");
@@ -71,12 +78,17 @@ impl MetaCode for Column{
         w.ln();
         w.tabs(5);
         w.append("default: ");
-        if self.default.is_some() {
-            w.append(&format!("Some(\"{}\".to_owned()),",
-                              &self.default.clone().unwrap()));
-        } else {
-            w.append("None,");
-        }
+		match &self.default{
+			&Some(ref operand) => match operand{
+				&Operand::Value(ref value) => {
+					w.append(&format!("Some(Operand::Value(Value::String(\"{}\".to_owned()))),",value));
+					imports.push("rustorm::dao::Value".to_owned());
+					imports.push("rustorm::query::Operand".to_owned());
+				},
+				_ => panic!("not processing other operands: {:?}", self.default),
+			},
+			&None => {w.append("None,");},
+		}
         w.ln();
         w.tabs(5);
         w.append("comment: ");
@@ -125,7 +137,10 @@ impl MetaCode for Table{
         w.ln();
         w.tabs(3);
         w.append("schema: ");
-        w.append(&format!("schema::{}.to_owned(),", self.schema));
+		match &self.schema{
+        	&Some(ref schema) => w.append(&format!("Some(schema::{}.to_owned()),", schema)),
+			&None => w.append("None,")
+		};
         w.ln();
         w.tabs(3);
         w.append("name: ");
@@ -238,7 +253,7 @@ impl StructCode for Table{
             w.append("///");
             w.ln();
         }
-//        w.append("#[derive(RustcDecodable, RustcEncodable)]");
+        w.append("#[derive(RustcEncodable)]");
         w.ln();
         w.append("#[derive(Debug, Clone)]");
         w.ln();
@@ -351,15 +366,18 @@ impl StructCode for Table{
                 w.ln();
             }
         }
-        if c.default.is_some() {
-            let default = &c.default.clone().unwrap();
-            for split in default.split("\n") {
-                w.tab();
-                w.append("/// default: ");
-                w.append(split);
-                w.ln();
-            }
-        }
+		match &c.default{
+			&Some(ref default) => match default{
+				&Operand::Value(ref value) => {
+                	w.tab();
+				 	w.append("/// default: ");
+					w.append(&format!("{}",value));
+                	w.ln();
+				},
+				_ => panic!("only expecting value"),
+			},
+			&None => {}
+		}
         if c.not_null {
             w.tab();
             w.append("/// not nullable ");

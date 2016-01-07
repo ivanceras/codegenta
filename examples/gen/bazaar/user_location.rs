@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -18,7 +20,7 @@ use uuid::Uuid;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct UserLocation {
     /// primary
@@ -38,7 +40,7 @@ pub struct UserLocation {
     pub true_latitude: Option<f64>,
     /// db data type: double precision
     pub true_longitude: Option<f64>,
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -46,7 +48,7 @@ pub struct UserLocation {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -69,7 +71,7 @@ pub struct UserLocation {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -209,7 +211,7 @@ impl IsTable for UserLocation {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::user_location.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -238,7 +240,7 @@ impl IsTable for UserLocation {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -256,7 +258,7 @@ impl IsTable for UserLocation {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -310,7 +312,7 @@ impl IsTable for UserLocation {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -377,9 +379,9 @@ impl IsTable for UserLocation {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "bazaar".to_owned(),
+                            schema: Some("bazaar".to_owned()),
                             table: "users".to_owned(),
-                            column: "user_id".to_owned(),
+                            column: vec!["user_id".to_owned(),],
                         }),
                 },
             ],

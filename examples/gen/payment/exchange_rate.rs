@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -19,12 +21,12 @@ use gen::payment::Currency;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct ExchangeRate {
     /// primary
     /// this will be referred when processing payments with different currencies
-    /// default: uuid_generate_v4()
+    /// default: 'uuid_generate_v4()'
     /// not nullable 
     /// db data type: uuid
     pub exchange_rate_id: Uuid,
@@ -34,7 +36,7 @@ pub struct ExchangeRate {
     pub from_currency: Option<Uuid>,
     /// db data type: uuid
     pub to_currency: Option<Uuid>,
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -42,7 +44,7 @@ pub struct ExchangeRate {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -65,7 +67,7 @@ pub struct ExchangeRate {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -195,7 +197,7 @@ impl IsTable for ExchangeRate {
 
     fn table() -> Table {
         Table {
-            schema: schema::payment.to_owned(),
+            schema: Some(schema::payment.to_owned()),
             name: table::exchange_rate.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -224,7 +226,7 @@ impl IsTable for ExchangeRate {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -242,7 +244,7 @@ impl IsTable for ExchangeRate {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -296,7 +298,7 @@ impl IsTable for ExchangeRate {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -305,7 +307,7 @@ impl IsTable for ExchangeRate {
                     data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some("uuid_generate_v4()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
                     comment: Some("this will be referred when processing payments with different currencies".to_owned()),
                     foreign: None,
                 },
@@ -318,9 +320,9 @@ impl IsTable for ExchangeRate {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "payment".to_owned(),
+                            schema: Some("payment".to_owned()),
                             table: "currency".to_owned(),
-                            column: "currency_id".to_owned(),
+                            column: vec!["currency_id".to_owned(),],
                         }),
                 },
                 Column {
@@ -341,9 +343,9 @@ impl IsTable for ExchangeRate {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "payment".to_owned(),
+                            schema: Some("payment".to_owned()),
                             table: "currency".to_owned(),
-                            column: "currency_id".to_owned(),
+                            column: vec!["currency_id".to_owned(),],
                         }),
                 },
             ],

@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::IsTable;
 use rustorm::table::Table;
@@ -18,11 +20,11 @@ use gen::bazaar::OrderLine;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct Orders {
     /// primary
-    /// default: uuid_generate_v4()
+    /// default: 'uuid_generate_v4()'
     /// not nullable 
     /// db data type: uuid
     pub order_id: Uuid,
@@ -33,7 +35,7 @@ pub struct Orders {
     /// The cart from which this order was created from
     /// db data type: uuid
     pub cart_id: Option<Uuid>,
-    /// default: 0.00
+    /// default: '0.00'
     /// db data type: double precision
     pub charges_amount: Option<f64>,
     /// For recognization purposes, this is the name shown to the seller
@@ -43,34 +45,34 @@ pub struct Orders {
     pub date_approved: Option<DateTime<UTC>>,
     /// db data type: timestamp with time zone
     pub date_invoiced: Option<DateTime<UTC>>,
-    /// default: now()
+    /// default: 'now()'
     /// db data type: timestamp with time zone
     pub date_ordered: Option<DateTime<UTC>>,
     /// db data type: double precision
     pub grand_total_amount: Option<f64>,
     /// if the order from the buyer is approved by the seller
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub is_approved: Option<bool>,
     /// determined whether the order has been confirmed by the person who ordered it
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub is_confirmed: Option<bool>,
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub is_invoiced: Option<bool>,
-    /// default: true
+    /// default: 'true'
     /// db data type: boolean
     pub is_tax_included: Option<bool>,
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub processed: Option<bool>,
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub processing: Option<bool>,
     /// db data type: integer
     pub total_items: Option<i32>,
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -78,7 +80,7 @@ pub struct Orders {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -101,7 +103,7 @@ pub struct Orders {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -305,7 +307,7 @@ impl IsTable for Orders {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::orders.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -334,7 +336,7 @@ impl IsTable for Orders {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -352,7 +354,7 @@ impl IsTable for Orders {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -406,7 +408,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -415,7 +417,7 @@ impl IsTable for Orders {
                     data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some("uuid_generate_v4()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -451,7 +453,7 @@ impl IsTable for Orders {
                     data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("0.00".to_owned()),
+                    default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -460,7 +462,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -469,7 +471,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -478,7 +480,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: Some("determined whether the order has been confirmed by the person who ordered it".to_owned()),
                     foreign: None,
                 },
@@ -487,7 +489,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -496,7 +498,7 @@ impl IsTable for Orders {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -505,7 +507,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -523,7 +525,7 @@ impl IsTable for Orders {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: Some("if the order from the buyer is approved by the seller".to_owned()),
                     foreign: None,
                 },

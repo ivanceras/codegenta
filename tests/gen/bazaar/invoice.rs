@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::IsTable;
 use rustorm::table::Table;
@@ -17,17 +19,17 @@ use uuid::Uuid;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct Invoice {
-    /// default: uuid_generate_v4()
+    /// default: 'uuid_generate_v4()'
     /// db data type: uuid
     pub invoice_id: Option<Uuid>,
     /// db data type: boolean
     pub is_paid: Option<bool>,
     /// db data type: uuid
     pub order_id: Option<Uuid>,
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -35,7 +37,7 @@ pub struct Invoice {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -58,7 +60,7 @@ pub struct Invoice {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -177,7 +179,7 @@ impl IsTable for Invoice {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::invoice.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -206,7 +208,7 @@ impl IsTable for Invoice {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -224,7 +226,7 @@ impl IsTable for Invoice {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -278,7 +280,7 @@ impl IsTable for Invoice {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -287,7 +289,7 @@ impl IsTable for Invoice {
                     data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("uuid_generate_v4()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },

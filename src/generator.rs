@@ -49,11 +49,17 @@ impl Config{
         format!("{}::{}", parent, table.struct_name())
     }
 
-    fn module_dir(&self, schema: &str) -> String {
+    fn module_dir(&self, schema: &Option<String>) -> String {
         let base_module = self.base_module.clone();
         match base_module {
-            Some(x) => format!("{}/{}/{}", self.base_dir, x, schema),
-            None => format!("{}/{}", self.base_dir, schema),
+            Some(base_module) => match schema{
+				&Some(ref schema) => format!("{}/{}/{}", self.base_dir, base_module, schema),
+				&None =>  format!("{}/{}", self.base_dir, base_module), 
+			},
+            None => match schema{
+				&Some(ref schema) => format!("{}/{}", self.base_dir, schema),
+				&None => format!("{}",self.base_dir),
+			}
         }
     }
     fn module_base_dir(&self) -> String {
@@ -64,11 +70,16 @@ impl Config{
         }
     }
 
-    fn module(&self, schema: &str) -> String {
-        let base_module = self.base_module.clone();
-        match base_module {
-            Some(x) => format!("{}::{}", x, schema),
-            None => format!("{}", schema),
+    fn module(&self, schema: &Option<String>) -> String {
+        match &self.base_module {
+            &Some(ref base_module) => match schema{
+				&Some(ref schema) => format!("{}::{}", base_module, schema),
+				&None => format!("{}",base_module)
+			},
+            &None => match schema{
+				&Some(ref schema) => format!("{}", schema),
+				&None => "".to_owned()
+			}
         }
     }
 
@@ -93,9 +104,14 @@ pub fn get_all_tables(db_dev: &DatabaseDev) -> Vec<Table> {
 pub fn get_schemas(all_table: &Vec<Table>) -> Vec<String> {
     let mut schema_names = Vec::new();
     for t in all_table {
-        if !schema_names.contains(&t.schema) {
-            schema_names.push(t.schema.clone());
-        }
+		match &t.schema{
+			&Some(ref tschema) => {
+				if !schema_names.contains(tschema) {
+					schema_names.push(tschema.to_owned());
+				}
+			},
+			&None => ()
+		}
     }
     schema_names.sort_by(|a, b| a.cmp(b));
     schema_names
@@ -105,9 +121,12 @@ pub fn get_schemas(all_table: &Vec<Table>) -> Vec<String> {
 pub fn get_tables_in_schema<'a>(schema: &str, all_table: &'a Vec<Table>) -> Vec<&'a Table> {
     let mut tables = Vec::new();
     for t in all_table {
-        if &t.schema == schema {
-            tables.push(t);//cloned the table here
-        }
+		match &t.schema{
+			&Some(ref tschema) => if tschema == schema {
+            	tables.push(t);//cloned the table here
+        	},
+			&None => {}
+		}
     }
     tables.sort_by(|a, b| a.name.cmp(&b.name));
     tables
@@ -177,15 +196,6 @@ fn generate_table(db_dev: &DatabaseDev, config: &Config, table: &Table, all_tabl
             w.appendln(&format!("use {};", config.table_module(it)));
         }
     }
-//    for i in dao_imports {
-//        w.appendln(&format!("use {};", i));
-//    }
-//    for i in meta_imports {
-//        w.appendln(&format!("use {};", i));
-//    }
-//    for i in json_imports {
-//        w.appendln(&format!("use {};", i));
-//    }
     w.ln();
     w.ln();
     w.appendln(&struct_src);
@@ -216,7 +226,7 @@ fn generate_mod_per_schema(config: &Config, all_tables: &Vec<Table>) {
     let schemas = get_schemas(all_tables);
     for schema in schemas {
         let mut w = Writer::new();
-        let module_dir = config.module_dir(&schema);
+        let module_dir = config.module_dir(&Some(schema.to_owned()));
         let tables = get_tables_in_schema(&schema, all_tables);
         for table in &tables {
             w.appendln(&format!("pub mod {};", table.name));
@@ -499,6 +509,7 @@ fn generate_dao_conversion_code(config: &Config,
     w.append("}");
     w.ln();
     w.ln_tab();
+	// TODO: set_null is unnecessary
     w.append("fn to_dao(&self) -> Dao {");
     w.ln_tabs(2);
     w.append("let mut dao = Dao::new();");

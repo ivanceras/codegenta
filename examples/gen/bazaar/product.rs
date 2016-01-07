@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::Foreign;
 use rustorm::table::IsTable;
@@ -28,11 +30,11 @@ use gen::payment::Currency;
 /// This will be exposed as an @Api, including @Table(users, category, product_availability, photo)
 
 ///
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct Product {
     /// primary
-    /// default: uuid_generate_v4()
+    /// default: 'uuid_generate_v4()'
     /// not nullable 
     /// db data type: uuid
     pub product_id: Uuid,
@@ -49,7 +51,7 @@ pub struct Product {
     /// }
     /// db data type: json
     pub info: Option<Json>,
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub is_service: Option<bool>,
     /// Whom this product belongs, since created_by can be someone else create the product list in behalf of the owner of the product
@@ -67,14 +69,14 @@ pub struct Product {
     /// db data type: character varying
     pub unit: Option<String>,
     /// Applicable to services, usually services has an upfront fee
-    /// default: 0.00
+    /// default: '0.00'
     /// db data type: double precision
     pub upfront_fee: Option<f64>,
-    /// default: false
+    /// default: 'false'
     /// db data type: boolean
     pub use_parent_price: Option<bool>,
     /// @Active
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -83,7 +85,7 @@ pub struct Product {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -114,7 +116,7 @@ pub struct Product {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -315,7 +317,7 @@ impl IsTable for Product {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::product.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -344,7 +346,7 @@ impl IsTable for Product {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -362,7 +364,7 @@ impl IsTable for Product {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -416,7 +418,7 @@ impl IsTable for Product {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: Some("@Active".to_owned()),
                     foreign: None,
                 },
@@ -425,7 +427,7 @@ impl IsTable for Product {
                     data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some("uuid_generate_v4()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -443,7 +445,7 @@ impl IsTable for Product {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -461,7 +463,7 @@ impl IsTable for Product {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("false".to_owned()),
+                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -506,7 +508,7 @@ impl IsTable for Product {
                     data_type: Type::F64,
                     db_data_type: "double precision".to_owned(),
                     is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some("0.00".to_owned()),
+                    default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
                     comment: Some("Applicable to services, usually services has an upfront fee".to_owned()),
                     foreign: None,
                 },
@@ -528,9 +530,9 @@ impl IsTable for Product {
                     comment: Some("Whom this product belongs, since created_by can be someone else create the product list in behalf of the owner of the product".to_owned()),
                     foreign: Some(
                         Foreign {
-                            schema: "bazaar".to_owned(),
+                            schema: Some("bazaar".to_owned()),
                             table: "users".to_owned(),
-                            column: "user_id".to_owned(),
+                            column: vec!["user_id".to_owned(),],
                         }),
                 },
                 Column {
@@ -542,9 +544,9 @@ impl IsTable for Product {
                     comment: None,
                     foreign: Some(
                         Foreign {
-                            schema: "payment".to_owned(),
+                            schema: Some("payment".to_owned()),
                             table: "currency".to_owned(),
-                            column: "currency_id".to_owned(),
+                            column: vec!["currency_id".to_owned(),],
                         }),
                 },
             ],

@@ -10,6 +10,8 @@ use rustc_serialize::json::ToJson;
 use rustorm::dao::Dao;
 use rustorm::dao::IsDao;
 use rustorm::dao::Type;
+use rustorm::dao::Value;
+use rustorm::query::Operand;
 use rustorm::table::Column;
 use rustorm::table::IsTable;
 use rustorm::table::Table;
@@ -20,11 +22,11 @@ use gen::bazaar::UserInfo;
 
 
 
-
+#[derive(RustcEncodable)]
 #[derive(Debug, Clone)]
 pub struct Photo {
     /// primary
-    /// default: uuid_generate_v4()
+    /// default: 'uuid_generate_v4()'
     /// not nullable 
     /// db data type: uuid
     pub photo_id: Uuid,
@@ -36,7 +38,7 @@ pub struct Photo {
     /// The online version of the photo, could be hosted in cdn somewhere else, to avoid payloads in the system. The online photo can be cached by creating a base64 encoding, then storing it in the local db
     /// db data type: character varying
     pub url: Option<String>,
-    /// default: true
+    /// default: 'true'
     /// not nullable 
     /// --inherited-- 
     /// db data type: boolean
@@ -44,7 +46,7 @@ pub struct Photo {
     /// --inherited-- 
     /// db data type: uuid
     pub client_id: Option<Uuid>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -67,7 +69,7 @@ pub struct Photo {
     /// --inherited-- 
     /// db data type: double precision
     pub priority: Option<f64>,
-    /// default: now()
+    /// default: 'now()'
     /// not nullable 
     /// --inherited-- 
     /// db data type: timestamp with time zone
@@ -201,7 +203,7 @@ impl IsTable for Photo {
 
     fn table() -> Table {
         Table {
-            schema: schema::bazaar.to_owned(),
+            schema: Some(schema::bazaar.to_owned()),
             name: table::photo.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
@@ -230,7 +232,7 @@ impl IsTable for Photo {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -248,7 +250,7 @@ impl IsTable for Photo {
                     data_type: Type::DateTime,
                     db_data_type: "timestamp with time zone".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("now()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -302,7 +304,7 @@ impl IsTable for Photo {
                     data_type: Type::Bool,
                     db_data_type: "boolean".to_owned(),
                     is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some("true".to_owned()),
+                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
@@ -311,7 +313,7 @@ impl IsTable for Photo {
                     data_type: Type::Uuid,
                     db_data_type: "uuid".to_owned(),
                     is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some("uuid_generate_v4()".to_owned()),
+                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
                     comment: None,
                     foreign: None,
                 },
