@@ -308,7 +308,7 @@ impl IsTable for CartLine {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "cart".to_owned(),
-                            column: vec!["cart_id".to_owned(),],
+                            column: "cart_id".to_owned(),
                         }),
                 },
                 Column {

@@ -290,7 +290,7 @@ impl IsTable for UserReview {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "users".to_owned(),
-                            column: vec!["user_id".to_owned(),],
+                            column: "user_id".to_owned(),
                         }),
                 },
                 Column {
@@ -304,7 +304,7 @@ impl IsTable for UserReview {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "review".to_owned(),
-                            column: vec!["review_id".to_owned(),],
+                            column: "review_id".to_owned(),
                         }),
                 },
             ],

@@ -381,7 +381,7 @@ impl IsTable for UserLocation {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "users".to_owned(),
-                            column: vec!["user_id".to_owned(),],
+                            column: "user_id".to_owned(),
                         }),
                 },
             ],

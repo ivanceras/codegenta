@@ -532,7 +532,7 @@ impl IsTable for Product {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "users".to_owned(),
-                            column: vec!["user_id".to_owned(),],
+                            column: "user_id".to_owned(),
                         }),
                 },
                 Column {
@@ -546,7 +546,7 @@ impl IsTable for Product {
                         Foreign {
                             schema: Some("payment".to_owned()),
                             table: "currency".to_owned(),
-                            column: vec!["currency_id".to_owned(),],
+                            column: "currency_id".to_owned(),
                         }),
                 },
             ],

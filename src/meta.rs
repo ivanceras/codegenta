@@ -31,11 +31,7 @@ impl MetaCode for Foreign{
         w.ln();
         w.tabs(7);
         w.append("column: ");
-		w.append("vec![");
-		for column in &self.column{
-			w.append(&format!("\"{}\".to_owned(),", column));
-		};
-		w.append("],");
+		w.append(&format!("\"{}\".to_owned(),", self.column));
         w.ln();
         w.tabs(6);
         w.append("}");

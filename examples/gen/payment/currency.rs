@@ -328,7 +328,7 @@ impl IsTable for Currency {
                         Foreign {
                             schema: Some("payment".to_owned()),
                             table: "country".to_owned(),
-                            column: vec!["country_id".to_owned(),],
+                            column: "country_id".to_owned(),
                         }),
                 },
                 Column {

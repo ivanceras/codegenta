@@ -332,7 +332,7 @@ impl IsTable for OrderLine {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "orders".to_owned(),
-                            column: vec!["order_id".to_owned(),],
+                            column: "order_id".to_owned(),
                         }),
                 },
                 Column {

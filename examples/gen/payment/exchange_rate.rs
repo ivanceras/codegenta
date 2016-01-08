@@ -322,7 +322,7 @@ impl IsTable for ExchangeRate {
                         Foreign {
                             schema: Some("payment".to_owned()),
                             table: "currency".to_owned(),
-                            column: vec!["currency_id".to_owned(),],
+                            column: "currency_id".to_owned(),
                         }),
                 },
                 Column {
@@ -345,7 +345,7 @@ impl IsTable for ExchangeRate {
                         Foreign {
                             schema: Some("payment".to_owned()),
                             table: "currency".to_owned(),
-                            column: vec!["currency_id".to_owned(),],
+                            column: "currency_id".to_owned(),
                         }),
                 },
             ],

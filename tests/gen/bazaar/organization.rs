@@ -303,7 +303,7 @@ impl IsTable for Organization {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "organization".to_owned(),
-                            column: vec!["organization_id".to_owned(),],
+                            column: "organization_id".to_owned(),
                         }),
                 },
                 Column {

@@ -320,7 +320,7 @@ impl IsTable for UserInfo {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "users".to_owned(),
-                            column: vec!["user_id".to_owned(),],
+                            column: "user_id".to_owned(),
                         }),
                 },
                 Column {
@@ -334,7 +334,7 @@ impl IsTable for UserInfo {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "address".to_owned(),
-                            column: vec!["address_id".to_owned(),],
+                            column: "address_id".to_owned(),
                         }),
                 },
                 Column {
@@ -366,7 +366,7 @@ impl IsTable for UserInfo {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "photo".to_owned(),
-                            column: vec!["photo_id".to_owned(),],
+                            column: "photo_id".to_owned(),
                         }),
                 },
             ],

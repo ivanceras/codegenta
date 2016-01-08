@@ -214,7 +214,7 @@ impl IsTable for ProductPhoto {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "product".to_owned(),
-                            column: vec!["product_id".to_owned(),],
+                            column: "product_id".to_owned(),
                         }),
                 },
                 Column {
@@ -228,7 +228,7 @@ impl IsTable for ProductPhoto {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "photo".to_owned(),
-                            column: vec!["photo_id".to_owned(),],
+                            column: "photo_id".to_owned(),
                         }),
                 },
             ],

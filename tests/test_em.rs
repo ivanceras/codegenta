@@ -14,7 +14,7 @@ mod gen;
 
 #[test]
 fn test_em(){
-    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1).unwrap();
+    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v8",1).unwrap();
     let db = pool.connect().unwrap();
     
     let em = EntityManager::new(db.as_ref());
@@ -28,7 +28,7 @@ fn test_em(){
 
 #[test]
 fn test_em_insert(){
-    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1).unwrap();
+    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v8",1).unwrap();
     let db = pool.connect().unwrap();
     
     let em = EntityManager::new(db.as_ref());

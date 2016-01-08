@@ -3,12 +3,14 @@
 
 use rustorm::table::{Table,Column,Foreign};
 use rustorm::dao::{Value,Type};
-use rustc_serialize::json::Json;
+use rustc_serialize::json::{self,Json};
 use std::error::Error;
 use std::fmt;
 use rustorm::platform::postgres::Postgres;
 use rustorm::database::DatabaseDev;
 use rustorm::query::Operand;
+use std::collections::BTreeMap;
+use rustc_serialize::json::ToJson;
 
 trait TableJson{
 	
@@ -17,6 +19,8 @@ trait TableJson{
 	fn extract_column(json_column: &Json)->Result<Column, ParseError>;
 
 	fn to_json(&self)->String;
+
+	fn column_to_btree(column: &Column)->Json;
 }
 
 #[derive(Debug)]
@@ -61,7 +65,7 @@ impl TableJson for Table{
 				let table_name = match btree.get("table"){
 					Some(json_table) => {
 						match json_table{
-							&Json::String(ref json_table) => json_table.to_owned(),
+							&Json::String(ref json_table) => json_table,
 							_ => return Err(ParseError::new("Expecting a string on table name")),
 						}
 					},
@@ -94,14 +98,11 @@ impl TableJson for Table{
 					},
 					None => println!("no columns!"),
 				};
-
-				Ok(Table{
-					name: table_name,
-					parent_table: inherits,
-					columns: columns,
-					comment: table_comment,
-					..Default::default()
-				})
+				let mut table = Table::with_name(table_name);
+				table.parent_table = inherits;
+				table.columns = columns;
+				table.comment = table_comment;
+				Ok(table)
 			},
 			_ => return Err(ParseError::new("expecting an object")),
 		}
@@ -166,11 +167,24 @@ impl TableJson for Table{
 				};
 				let foreign = match json_column.get("foreign"){
 					Some(foreign) => match foreign{
-						&Json::String(ref foreign) => {
-							let foreign = Foreign::from_str(foreign);
-							Some(foreign)
+						&Json::Object(ref foreign) => {
+							let foreign_table = match foreign.get("table"){
+								Some(foreign_table) => match foreign_table{ 
+									&Json::String(ref foreign_table) => foreign_table,
+									_ => return Err(ParseError::new("Expecting String value on foreign.table"))
+								},
+								None => return Err(ParseError::new("Expecting a table in foreign"))
+							};
+							let foreign_column = match foreign.get("column"){
+								Some(foreign_column) => match foreign_column{
+									&Json::String(ref foreign_column) => foreign_column,
+									_ => return Err(ParseError::new("Expecting a String value on column"))
+								},
+								None => return Err(ParseError::new("Expecting a column in foreign"))
+							};
+							Some(Foreign::from_str(foreign_table, foreign_column))
 						},
-						_ => return Err(ParseError::new("Expecting String value on foreign"))
+						_ => return Err(ParseError::new("Expecting Object value on foreign"))
 					},
 					None => None
 				};
@@ -194,8 +208,68 @@ impl TableJson for Table{
 	}
 
 	fn to_json(&self)->String{
-		panic!("soon");	
+		let mut map: BTreeMap<String, Json> = BTreeMap::new();
+		map.insert("table".to_owned(),Json::String(self.complete_name()));
+		match &self.parent_table{
+			&Some(ref parent_table) => {
+				map.insert("inherits".to_owned(), Json::String(parent_table.to_owned()));
+			},
+			&None => {}
+		};
+		match &self.comment{
+			&Some(ref comment) => {
+				map.insert("comment".to_owned(), Json::String(comment.to_owned()));
+			},
+			&None => {}
+		};
+		if !self.columns.is_empty(){
+			let mut json_columns = vec![];
+			for column in &self.columns{
+				let json_column = Self::column_to_btree(&column);
+				json_columns.push(json_column);
+			}
+			map.insert("columns".to_owned(), Json::Array(json_columns));
+		}
+		let json_object = Json::Object(map);
+		format!("{}",json_object.pretty())
 	}
+
+	fn column_to_btree(column: &Column)->Json{
+		let mut btree: BTreeMap<String, Json> = BTreeMap::new();
+		btree.insert("column".to_owned(),Json::String(column.name.to_owned()));
+		// use the db_data_type
+		btree.insert("data_type".to_owned(),Json::String(column.db_data_type.to_owned()));
+		btree.insert("primary".to_owned(), Json::Boolean(column.is_primary));
+		btree.insert("unique".to_owned(), Json::Boolean(column.is_unique));
+		btree.insert("nullable".to_owned(), Json::Boolean(column.nullable()));
+		match &column.comment{
+			&Some(ref comment) => { 
+				btree.insert("comment".to_owned(), Json::String(comment.to_owned()));
+			},
+			&None => {}
+		};
+		match &column.default{
+			&Some(ref operand) => match operand{
+				&Operand::Value(ref value) => {
+					btree.insert("default".to_owned(), value.to_json());
+				},
+				_ => panic!("only expecting Operand::Value for now {:?}", column.default)
+			},
+			&None => {}
+		};
+		match &column.foreign{
+			&Some(ref foreign) => {
+				let foreign_table = foreign.complete_table_name();
+				let mut foreign_map: BTreeMap<String, Json> = BTreeMap::new();		
+				foreign_map.insert("table".to_owned(), Json::String(foreign_table));
+				foreign_map.insert("column".to_owned(), Json::String(foreign.column.to_owned()));
+				btree.insert("foreign".to_owned(), Json::Object(foreign_map));
+			},
+			&None => {}
+		}
+		Json::Object(btree)
+	}
+
 }
 
 
@@ -205,6 +279,7 @@ fn test1(){
 {
   "table": "bazaar.product",
   "inherits": "system.record",
+  "comment": "Store all products and services",
   "columns": [
     {
       "column": "product_id",
@@ -247,23 +322,33 @@ fn test1(){
     {
       "column": "upfront_fee",
       "data_type": "double precision",
-      "default": 0.0
+      "default": 0
     },
     {
       "column": "owner_id",
       "data_type": "uuid",
-      "foreign": "bazaar.user",
+      "foreign": {
+        "table": "bazaar.user",
+        "column": "user_id"
+      },
       "comment": "The owner of this product"
     },
     {
       "column": "currency_id",
       "data_type": "uuid",
-      "foreign": "payment.currency"
+      "foreign": {
+        "table": "payment.currency",
+        "column": "currency_id"
+      }
     }
   ]
-}
+}	
 	"#;
-	let table = Table::from_str(json);
+
+	let table = Table::from_str(json).unwrap();
 	println!("parsed table {:#?}", table);
-	assert_eq!(json, table.unwrap().to_json());
+	let table_json = table.to_json();
+	println!("table_json: {}", table_json);
+	assert_eq!(table.schema, Some("bazaar".to_owned()));
+	assert_eq!(table.name, "product".to_owned());
 }

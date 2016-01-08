@@ -359,7 +359,7 @@ impl IsTable for PhotoSizes {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "photo".to_owned(),
-                            column: vec!["photo_id".to_owned(),],
+                            column: "photo_id".to_owned(),
                         }),
                 },
                 Column {

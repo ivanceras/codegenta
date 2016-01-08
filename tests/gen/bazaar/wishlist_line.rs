@@ -316,7 +316,7 @@ impl IsTable for WishlistLine {
                         Foreign {
                             schema: Some("bazaar".to_owned()),
                             table: "wishlist".to_owned(),
-                            column: vec!["wishlist_id".to_owned(),],
+                            column: "wishlist_id".to_owned(),
                         }),
                 },
                 Column {
