@@ -14,7 +14,7 @@ mod gen;
 
 /// run using  cargo run --release --example test_em_product
 fn main(){
-    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v6",1).unwrap();
+    let pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v8",1).unwrap();
     let db = pool.connect().unwrap();
     
     let em = EntityManager::new(db.as_ref());
