@@ -12,7 +12,7 @@ use rustorm::query::Operand;
 use std::collections::BTreeMap;
 use rustc_serialize::json::ToJson;
 
-trait TableJson{
+pub trait TableJson{
 	
 	fn from_str(s: &str)->Result<Self, ParseError>;
 
@@ -24,7 +24,7 @@ trait TableJson{
 }
 
 #[derive(Debug)]
-struct ParseError{
+pub struct ParseError{
 	description: String,
 }
 
@@ -239,9 +239,16 @@ impl TableJson for Table{
 		btree.insert("column".to_owned(),Json::String(column.name.to_owned()));
 		// use the db_data_type
 		btree.insert("data_type".to_owned(),Json::String(column.db_data_type.to_owned()));
-		btree.insert("primary".to_owned(), Json::Boolean(column.is_primary));
-		btree.insert("unique".to_owned(), Json::Boolean(column.is_unique));
-		btree.insert("nullable".to_owned(), Json::Boolean(column.nullable()));
+		if column.is_primary{
+			btree.insert("primary".to_owned(), Json::Boolean(column.is_primary));
+		}
+		if column.is_unique{
+			btree.insert("unique".to_owned(), Json::Boolean(column.is_unique));
+		}
+		// don't include default values
+		if !column.nullable(){
+			btree.insert("nullable".to_owned(), Json::Boolean(column.nullable()));
+		}
 		match &column.comment{
 			&Some(ref comment) => { 
 				btree.insert("comment".to_owned(), Json::String(comment.to_owned()));
