@@ -213,7 +213,7 @@ SELECT *
  ORDER BY product.name ASC, product.created DESC".to_string();
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());
-    assert!(frag.sql.trim() == expected.trim());
+    assert_eq!(frag.sql.trim(), expected.trim());
 }
 
 
@@ -326,7 +326,7 @@ fn test_flex_query(){
     let db = pool.connect().unwrap();
     
     let prod: Product = Query::select_all()
-            .from_table("bazaar.product")
+            .from(&"bazaar.product")
             .filter("name", Equality::EQ, &"GTX660 Ti videocard")
             .collect_one(db.as_ref()).unwrap();
 

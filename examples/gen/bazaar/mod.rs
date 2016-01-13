@@ -36,6 +36,7 @@ pub use self::organization::Organization;
 pub use self::photo::Photo;
 pub use self::photo_sizes::PhotoSizes;
 pub use self::product::Product;
+pub use self::product::product;
 pub use self::product_availability::ProductAvailability;
 pub use self::product_category::ProductCategory;
 pub use self::product_photo::ProductPhoto;

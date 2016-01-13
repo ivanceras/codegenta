@@ -225,8 +225,10 @@ impl TableJson for Table{
 		if !self.columns.is_empty(){
 			let mut json_columns = vec![];
 			for column in &self.columns{
-				let json_column = Self::column_to_btree(&column);
-				json_columns.push(json_column);
+				if !column.is_inherited{ // do not include inherited columns
+					let json_column = Self::column_to_btree(&column);
+					json_columns.push(json_column);
+				}
 			}
 			map.insert("columns".to_owned(), Json::Array(json_columns));
 		}

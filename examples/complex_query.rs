@@ -32,7 +32,7 @@ fn main(){
     
     let mut query = Query::select_all();
     
-    query.from(&Product::table())
+    query.from(&gen::bazaar::product)
         .left_join(&ProductCategory::table(),
             product_category::product_id, product::product_id)
          .left_join(&Category::table(),

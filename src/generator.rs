@@ -571,7 +571,7 @@ fn generate_fn_get_all_tables(tables: &Vec<Table>) -> String {
 
 
 
-fn save_to_file(filename: &str, content: &str) {
+pub fn save_to_file(filename: &str, content: &str) {
     match File::create(filename) {
         Err(_) => panic!("couldn't create file {}", filename),
         Ok(mut file) => {
