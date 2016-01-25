@@ -234,143 +234,23 @@ impl IsTable for Users {
             name: table::users.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
-            comment: Some("This are @Users, will be used for @Login".to_owned()),
+            comment: Some(r#"This are @Users, will be used for @Login"#.to_owned()),
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::description.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::help.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "text".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::active.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: Some("@Active".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::user_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::username.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("@Username\n@DisplayLength(20)\n@Length(2-100)".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::password.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("The users' @Password will be check against the value, while you can also specify hashing alogrithm used of the value @Hash(SHA256), or just @SHA256.\n\nSHA512, CLEAR_TEXT, MD5 can also be used.\n@Length(8-50)\n@DisplayLength(20)".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::email.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("@Email".to_owned()),
-                    foreign: None,
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                name(),
+                description(),
+                help(),
+                active(),
+                user_id(),
+                username(),
+                password(),
+                email(),
             ],
             is_view: false,
         }
@@ -378,62 +258,203 @@ impl IsTable for Users {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static organization_id: &'static str = "users.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static client_id: &'static str = "users.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created: &'static str = "users.created";
+pub fn created()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created_by: &'static str = "users.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated: &'static str = "users.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated_by: &'static str = "users.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static priority: &'static str = "users.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static name: &'static str = "users.name";
+pub fn name()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static description: &'static str = "users.description";
+pub fn description()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::description.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static help: &'static str = "users.help";
+pub fn help()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::help.to_owned(),
+        data_type: Type::String,
+        db_data_type: "text".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static active: &'static str = "users.active";
+pub fn active()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::active.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: Some(r#"@Active"#.to_owned()),
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static user_id: &'static str = "users.user_id";
+pub fn user_id()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::user_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static username: &'static str = "users.username";
+pub fn username()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::username.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"@Username
+@DisplayLength(20)
+@Length(2-100)"#.to_owned()),
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static password: &'static str = "users.password";
+pub fn password()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::password.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"The users' @Password will be check against the value, while you can also specify hashing alogrithm used of the value @Hash(SHA256), or just @SHA256.
 
-#[allow(non_upper_case_globals)]
+SHA512, CLEAR_TEXT, MD5 can also be used.
+@Length(8-50)
+@DisplayLength(20)"#.to_owned()),
+        foreign: None,
+    }}
+
 #[allow(dead_code)]
-pub static email: &'static str = "users.email";
+pub fn email()->Column{
+    Column {
+        table: Some("users".to_owned()),
+        name: column::email.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"@Email"#.to_owned()),
+        foreign: None,
+    }}

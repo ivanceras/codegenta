@@ -7,7 +7,6 @@ extern crate rustc_serialize;
 use rustorm::platform::postgres::Postgres;
 use rustorm::pool::ManagedPool;
 
-use rustorm::em::EntityManager;
 use rustorm::table::IsTable;
 use rustorm::dao::{IsDao,Value};
 use rustorm::query::Query;
@@ -34,21 +33,21 @@ fn test_select_filter(){
     let mut pg = Postgres::new();
     let product_table = Product::table();
     let mut query = Query::new();
-    query.from(&product_table);
+    query.FROM(&product_table);
     for c in &product_table.columns{
         query.column(&c.name);
     }
     
-    query.left_join(&ProductAvailability::table(), 
-        product::product_id, product_availability::product_id);
+    query.LEFT_JOIN(&ProductAvailability::table(), 
+        &product::product_id, &product_availability::product_id);
     query.filter(product::name, Equality::LIKE, &"iphone%");
     
     query.add_filter(
         Filter::new(product::description, Equality::LIKE, &"%Iphone%")
         );
     
-    query.desc(product::created);
-    query.asc(product::product_id);
+    query.DESC(product::created);
+    query.ASC(product::product_id);
     
     let frag = query.build(&pg);
     let expected = "
@@ -84,9 +83,9 @@ fn test_select_filter(){
 #[test]
 fn test_update_query(){
     let mut pg = Postgres::new();
-    let mut query = Query::update();
+    let mut query = Query::UPDATE();
     query.column(product::name);
-    query.from(&Product::table());
+    query.FROM(&Product::table());
     query.return_all();
     query.value(&"iphone");
     query.filter(product::name, Equality::LIKE, &"aphone");
@@ -122,8 +121,8 @@ RETURNING * ".to_string();
 #[test]
 fn test_query_delete_category(){
     let pg = Postgres::new();
-    let mut query = Query::delete();
-    query.from(&Category::table());
+    let mut query = Query::DELETE();
+    query.FROM(&Category::table());
     query.filter(category::name, Equality::LIKE, &"test%");
     let frag = query.build(&pg);
     let expected = "DELETE FROM bazaar.category
@@ -147,11 +146,11 @@ fn test_join(){
     let mut query = Query::new();
     let product_table = Product::table();
     let mut query = Query::new();
-    query.from(&product_table);
+    query.FROM(&product_table);
     for c in &product_table.columns{
         query.column(&c.name);
     }
-    query.left_join(&ProductAvailability::table(), 
+    query.LEFT_JOIN(&ProductAvailability::table(), 
         product::product_id, product_availability::product_id);
     
     let frag = query.build(&pg);
@@ -175,24 +174,24 @@ fn test_join(){
 #[test]
 fn test_complex(){
     let pg = Postgres::new();
-    let mut query = Query::select();
+    let mut query = Query::SELECT();
     let mut filters = Filter::new(product::name, Equality::EQ, &"GTX660 Ti videocard");
     filters.and(category::name, Equality::EQ, &"Electronic");
-    query.all()
-        .from(&Product::table())
-        .left_join(&ProductCategory::table(),
-           product_category::product_id, product::product_id)
-        .left_join(&Category::table(),
-            category::category_id, product_category::category_id)
-        .left_join(&ProductPhoto::table(),
-            product::product_id, product_photo::product_id)
-        .left_join(&Photo::table(), 
-            product_photo::photo_id, photo::photo_id)
+    query.ALL()
+        .FROM(&Product::table())
+        .LEFT_JOIN(&ProductCategory::table(),
+           &product_category::product_id, &product::product_id)
+        .LEFT_JOIN(&Category::table(),
+            &category::category_id, &product_category::category_id)
+        .LEFT_JOIN(&ProductPhoto::table(),
+            &product::product_id, &product_photo::product_id)
+        .LEFT_JOIN(&Photo::table(), 
+            &product_photo::photo_id, &photo::photo_id)
         .add_filter(filters)
-        .asc(product::name)
-        .desc(product::created)
-        .group_by(vec![category::name])
-        .having("count(*)", Equality::GT, &1)
+        .ASC(product::name)
+        .DESC(product::created)
+        .GROUP_BY(&[category::name])
+        .HAVING("count(*)", Equality::GT, &1)
         ;
     let frag = query.build(&pg);
     
@@ -220,28 +219,28 @@ SELECT *
 #[test]
 fn test_multiple_filters(){
     let pg = Postgres::new();
-    let mut query = Query::select();
+    let mut query = Query::SELECT();
     
     let product_table = Product::table();
     let mut query = Query::new();
     for c in &product_table.columns{
         query.column(&c.name);
     }
-    query.from(&product_table)
-        .left_join(&ProductCategory::table(),
-            product_category::product_id, product::product_id)
-         .left_join(&Category::table(),
-            category::category_id, product_category::category_id)
-        .left_join(&ProductPhoto::table(),
-            product::product_id, product_photo::product_id)
-        .left_join(&Photo::table(), 
-            product_photo::photo_id, photo::photo_id)
+    query.FROM(&product_table)
+        .LEFT_JOIN(&ProductCategory::table(),
+            &product_category::product_id, &product::product_id)
+         .LEFT_JOIN(&Category::table(),
+            &category::category_id, &product_category::category_id)
+        .LEFT_JOIN(&ProductPhoto::table(),
+            &product::product_id, &product_photo::product_id)
+        .LEFT_JOIN(&Photo::table(), 
+            &product_photo::photo_id, &photo::photo_id)
         .filter(product::name, Equality::EQ, &"GTX660 Ti videocard")
         .filter(category::name, Equality::EQ, &"Electronic")
-        .group_by(vec![category::name])
-        .having("count(*)", Equality::GT, &1)
-        .asc(product::name)
-        .desc(product::created)
+        .GROUP_BY(&[category::name])
+        .HAVING("count(*)", Equality::GT, &1)
+        .ASC(product::name)
+        .DESC(product::created)
         ;
     let frag = query.build(&pg);
     
@@ -276,23 +275,23 @@ SELECT organization_id, client_id, created,
 #[test]
 fn test_complex_select_all(){
     let pg = Postgres::new();
-    let mut query = Query::select_all();
+    let mut query = Query::SELECT_ALL();
        
-       query.from(&Product::table())
-        .left_join(&ProductCategory::table(),
-            product_category::product_id, product::product_id)
-         .left_join(&Category::table(),
-            category::category_id, product_category::category_id)
-        .left_join(&ProductPhoto::table(),
-            product::product_id, product_photo::product_id)
-        .left_join(&Photo::table(), 
-            product_photo::photo_id, photo::photo_id)
+       query.FROM(&Product::table())
+        .LEFT_JOIN(&ProductCategory::table(),
+            &product_category::product_id, &product::product_id)
+         .LEFT_JOIN(&Category::table(),
+            &category::category_id, &product_category::category_id)
+        .LEFT_JOIN(&ProductPhoto::table(),
+            &product::product_id, &product_photo::product_id)
+        .LEFT_JOIN(&Photo::table(), 
+            &product_photo::photo_id, &photo::photo_id)
         .filter(product::name, Equality::EQ, &"GTX660 Ti videocard")
         .filter(category::name, Equality::EQ, &"Electronic")
-        .group_by(vec![category::name])
-        .having("count(*)", Equality::GT, &1)
-        .asc(product::name)
-        .desc(product::created)
+        .GROUP_BY(&[category::name])
+        .HAVING("count(*)", Equality::GT, &1)
+        .ASC(product::name)
+        .DESC(product::created)
         ;
     let frag = query.build(&pg);
     
@@ -325,8 +324,8 @@ fn test_flex_query(){
     let pool = ManagedPool::init(&url, 5).unwrap();
     let db = pool.connect().unwrap();
     
-    let prod: Product = Query::select_all()
-            .from(&"bazaar.product")
+    let prod: Product = Query::SELECT_ALL()
+            .FROM(&"bazaar.product")
             .filter("name", Equality::EQ, &"GTX660 Ti videocard")
             .collect_one(db.as_ref()).unwrap();
 

@@ -32,21 +32,21 @@ fn main(){
     
     let mut query = Query::enumerate_all();
     
-    query.from(&Product::table())
-        .left_join(&ProductCategory::table(),
+    query.FROM(&Product::table())
+        .LEFT_JOIN(&ProductCategory::table(),
             product_category::product_id, product::product_id)
-         .left_join(&Category::table(),
+         .LEFT_JOIN(&Category::table(),
             category::category_id, product_category::category_id)
-        .left_join(&ProductPhoto::table(),
+        .LEFT_JOIN(&ProductPhoto::table(),
             product::product_id, product_photo::product_id)
-        .left_join(&Photo::table(), 
+        .LEFT_JOIN(&Photo::table(), 
             product_photo::photo_id, photo::photo_id)
-        .filter(product::name, Equality::EQ, &"GTX660 Ti videocard")
-        .filter(category::name, Equality::EQ, &"Electronic")
-        .group_by(vec![category::name])
-        .having("count(*)", Equality::GT, &1)
-        .asc(product::name)
-        .desc(product::created)
+        .add_filter(product::name.EQ(&"GTX660 Ti videocard"))
+        .add_filter(category::name.EQ(&"Electronic"))
+        .GROUP_BY(&[category::name])
+        .HAVING("count(*)", Equality::GT, &1)
+        .ASC(product::name)
+        .DESC(product::created)
         ;
     let frag = query.build(db.as_ref());
     

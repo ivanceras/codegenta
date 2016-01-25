@@ -121,71 +121,15 @@ impl IsTable for Base {
             name: table::base.to_owned(),
             parent_table: None,
             sub_table: vec![table::record.to_owned(),table::product_availability.to_owned(),table::product_category.to_owned(),table::product_photo.to_owned(),table::product_review.to_owned(),],
-            comment: Some("Base table contains the creation and modification status of a record".to_owned()),
+            comment: Some(r#"Base table contains the creation and modification status of a record"#.to_owned()),
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("priority of saving data and eviction".to_owned()),
-                    foreign: None,
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
             ],
             is_view: false,
         }
@@ -193,30 +137,93 @@ impl IsTable for Base {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "base.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "base.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "base.created";
+pub fn created()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "base.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "base.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "base.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "base.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some(table::base.to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"priority of saving data and eviction"#.to_owned()),
+        foreign: None,
+    }
+}

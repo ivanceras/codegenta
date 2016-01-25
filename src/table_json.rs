@@ -191,6 +191,7 @@ impl TableJson for Table{
 				let pg = Postgres::new();
 				let (_, rtype) = pg.dbtype_to_rust_type(&data_type);
 				Ok(Column{
+					table: None,
 					name: column_name,
 					data_type: rtype,
 					db_data_type: format!("{}",data_type),

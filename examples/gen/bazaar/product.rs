@@ -25,244 +25,6 @@ use gen::bazaar::Users;
 use gen::payment::Currency;
 
 
-pub fn product() -> Table {
-	Table {
-		schema: Some(schema::bazaar.to_owned()),
-		name: table::product.to_owned(),
-		parent_table: Some(table::record.to_owned()),
-		sub_table: vec![],
-		comment: Some("This will be exposed as an @Api, including @Table(users, category, product_availability, photo)".to_owned()),
-		columns: vec![
-			Column {
-				name: column::organization_id.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: Some("@Value(users.user_id) , which means the value will be set with the users.user_id value\n\n@Where(users.active=true)".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::client_id.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: Some("@Value(users.client_id) The client_id of the user creating this records".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::created.to_owned(),
-				data_type: Type::DateTime,
-				db_data_type: "timestamp with time zone".to_owned(),
-				is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-				default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::created_by.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: Some("@Value(users.user_id)".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::updated.to_owned(),
-				data_type: Type::DateTime,
-				db_data_type: "timestamp with time zone".to_owned(),
-				is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-				default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::updated_by.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: Some("@Value(users.user_id)".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::priority.to_owned(),
-				data_type: Type::F64,
-				db_data_type: "double precision".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::name.to_owned(),
-				data_type: Type::String,
-				db_data_type: "character varying".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: Some("This is @Required it has @DisplayLength(50) - 50 character in display length a @MinLength(1) and @MaxLength(100) - Do not go over 100 characters or else the system will throw a ValueTooLong exception\ncan also be express with @Length(1-100)".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::description.to_owned(),
-				data_type: Type::String,
-				db_data_type: "character varying".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: Some("@DisplayLength(100) When building a UI for this field\n@MaxLength(200) Do not go over 200 character on this one".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::help.to_owned(),
-				data_type: Type::String,
-				db_data_type: "text".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-				default: None,
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::active.to_owned(),
-				data_type: Type::Bool,
-				db_data_type: "boolean".to_owned(),
-				is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-				default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-				comment: Some("@Active".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::product_id.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-				default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::parent_product_id.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::is_service.to_owned(),
-				data_type: Type::Bool,
-				db_data_type: "boolean".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::price.to_owned(),
-				data_type: Type::F64,
-				db_data_type: "double precision".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::use_parent_price.to_owned(),
-				data_type: Type::Bool,
-				db_data_type: "boolean".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::unit.to_owned(),
-				data_type: Type::String,
-				db_data_type: "character varying".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::tags.to_owned(),
-				data_type: Type::Json,
-				db_data_type: "json".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: None,
-				foreign: None,
-			},
-			Column {
-				name: column::info.to_owned(),
-				data_type: Type::Json,
-				db_data_type: "json".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: Some("{color:\"red\",\ndimension:\"10x20x30\",\ndimensionUnit:\"mm\",\nweight:\"4\",\nweightUnit:\"kg\"\n}".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::seq_no.to_owned(),
-				data_type: Type::I32,
-				db_data_type: "integer".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: Some("@Sequence can be used to do alternate ordering of the values, when alphetical or time can not be used".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::upfront_fee.to_owned(),
-				data_type: Type::F64,
-				db_data_type: "double precision".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
-				comment: Some("Applicable to services, usually services has an upfront fee".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::barcode.to_owned(),
-				data_type: Type::String,
-				db_data_type: "character varying".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: Some("barcode if scanning the product, conflict can happen, expect to return matching list of products using the barcode".to_owned()),
-				foreign: None,
-			},
-			Column {
-				name: column::owner_id.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: Some("Whom this product belongs, since created_by can be someone else create the product list in behalf of the owner of the product".to_owned()),
-				foreign: Some(
-					Foreign {
-						schema: Some("bazaar".to_owned()),
-						table: "users".to_owned(),
-						column: "user_id".to_owned(),
-					}),
-			},
-			Column {
-				name: column::currency_id.to_owned(),
-				data_type: Type::Uuid,
-				db_data_type: "uuid".to_owned(),
-				is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-				default: None,
-				comment: None,
-				foreign: Some(
-					Foreign {
-						schema: Some("payment".to_owned()),
-						table: "currency".to_owned(),
-						column: "currency_id".to_owned(),
-					}),
-			},
-		],
-		is_view: false,
-	}
-}
 
 ///
 /// This will be exposed as an @Api, including @Table(users, category, product_availability, photo)
@@ -559,234 +321,32 @@ impl IsTable for Product {
             name: table::product.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
-            comment: Some("This will be exposed as an @Api, including @Table(users, category, product_availability, photo)".to_owned()),
+            comment: Some(r#"This will be exposed as an @Api, including @Table(users, category, product_availability, photo)"#.to_owned()),
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: Some("@Value(users.user_id) , which means the value will be set with the users.user_id value\n\n@Where(users.active=true)".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: Some("@Value(users.client_id) The client_id of the user creating this records".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: Some("@Value(users.user_id)".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: Some("@Value(users.user_id)".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: Some("This is @Required it has @DisplayLength(50) - 50 character in display length a @MinLength(1) and @MaxLength(100) - Do not go over 100 characters or else the system will throw a ValueTooLong exception\ncan also be express with @Length(1-100)".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::description.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: Some("@DisplayLength(100) When building a UI for this field\n@MaxLength(200) Do not go over 200 character on this one".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::help.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "text".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::active.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: Some("@Active".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::product_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::parent_product_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::is_service.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::price.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::use_parent_price.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::unit.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::tags.to_owned(),
-                    data_type: Type::Json,
-                    db_data_type: "json".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::info.to_owned(),
-                    data_type: Type::Json,
-                    db_data_type: "json".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("{color:\"red\",\ndimension:\"10x20x30\",\ndimensionUnit:\"mm\",\nweight:\"4\",\nweightUnit:\"kg\"\n}".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::seq_no.to_owned(),
-                    data_type: Type::I32,
-                    db_data_type: "integer".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("@Sequence can be used to do alternate ordering of the values, when alphetical or time can not be used".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::upfront_fee.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
-                    comment: Some("Applicable to services, usually services has an upfront fee".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::barcode.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("barcode if scanning the product, conflict can happen, expect to return matching list of products using the barcode".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::owner_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("Whom this product belongs, since created_by can be someone else create the product list in behalf of the owner of the product".to_owned()),
-                    foreign: Some(
-                        Foreign {
-                            schema: Some("bazaar".to_owned()),
-                            table: "users".to_owned(),
-                            column: "user_id".to_owned(),
-                        }),
-                },
-                Column {
-                    name: column::currency_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: Some(
-                        Foreign {
-                            schema: Some("payment".to_owned()),
-                            table: "currency".to_owned(),
-                            column: "currency_id".to_owned(),
-                        }),
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                name(),
+                description(),
+                help(),
+                active(),
+                product_id(),
+                parent_product_id(),
+                is_service(),
+                price(),
+                use_parent_price(),
+                unit(),
+                tags(),
+                info(),
+                seq_no(),
+                upfront_fee(),
+                barcode(),
+                owner_id(),
+                currency_id(),
             ],
             is_view: false,
         }
@@ -794,98 +354,333 @@ impl IsTable for Product {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "product.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: Some(r#"@Value(users.user_id) , which means the value will be set with the users.user_id value
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "product.client_id";
+@Where(users.active=true)"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "product.created";
+pub fn client_id()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: Some(r#"@Value(users.client_id) The client_id of the user creating this records"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "product.created_by";
+pub fn created()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "product.updated";
+pub fn created_by()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: Some(r#"@Value(users.user_id)"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "product.updated_by";
+pub fn updated()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "product.priority";
+pub fn updated_by()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: Some(r#"@Value(users.user_id)"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "product.name";
+pub fn priority()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "product.description";
+pub fn name()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: Some(r#"This is @Required it has @DisplayLength(50) - 50 character in display length a @MinLength(1) and @MaxLength(100) - Do not go over 100 characters or else the system will throw a ValueTooLong exception
+can also be express with @Length(1-100)"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "product.help";
+pub fn description()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::description.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: Some(r#"@DisplayLength(100) When building a UI for this field
+@MaxLength(200) Do not go over 200 character on this one"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "product.active";
+pub fn help()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::help.to_owned(),
+        data_type: Type::String,
+        db_data_type: "text".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static product_id: &'static str = "product.product_id";
+pub fn active()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::active.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: Some(r#"@Active"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static parent_product_id: &'static str = "product.parent_product_id";
+pub fn product_id()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::product_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_service: &'static str = "product.is_service";
+pub fn parent_product_id()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::parent_product_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static price: &'static str = "product.price";
+pub fn is_service()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::is_service.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static use_parent_price: &'static str = "product.use_parent_price";
+pub fn price()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::price.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static unit: &'static str = "product.unit";
+pub fn use_parent_price()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::use_parent_price.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static tags: &'static str = "product.tags";
+pub fn unit()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::unit.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static info: &'static str = "product.info";
+pub fn tags()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::tags.to_owned(),
+        data_type: Type::Json,
+        db_data_type: "json".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static seq_no: &'static str = "product.seq_no";
+pub fn info()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::info.to_owned(),
+        data_type: Type::Json,
+        db_data_type: "json".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"{color:"red",
+dimension:"10x20x30",
+dimensionUnit:"mm",
+weight:"4",
+weightUnit:"kg"
+}"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static upfront_fee: &'static str = "product.upfront_fee";
+pub fn seq_no()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::seq_no.to_owned(),
+        data_type: Type::I32,
+        db_data_type: "integer".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"@Sequence can be used to do alternate ordering of the values, when alphetical or time can not be used"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static barcode: &'static str = "product.barcode";
+pub fn upfront_fee()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::upfront_fee.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
+        comment: Some(r#"Applicable to services, usually services has an upfront fee"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static owner_id: &'static str = "product.owner_id";
+pub fn barcode()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::barcode.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"barcode if scanning the product, conflict can happen, expect to return matching list of products using the barcode"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static currency_id: &'static str = "product.currency_id";
+pub fn owner_id()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::owner_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"Whom this product belongs, since created_by can be someone else create the product list in behalf of the owner of the product"#.to_owned()),
+        foreign: Some(
+                        Foreign {
+                            schema: Some("bazaar".to_owned()),
+                            table: "users".to_owned(),
+                            column: "user_id".to_owned(),
+                        }),
+    }
+}
+
+pub fn currency_id()->Column{
+    Column {
+        table: Some(table::product.to_owned()),
+        name: column::currency_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: Some(
+                        Foreign {
+                            schema: Some("payment".to_owned()),
+                            table: "currency".to_owned(),
+                            column: "currency_id".to_owned(),
+                        }),
+    }
+}

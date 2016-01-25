@@ -209,141 +209,21 @@ impl IsTable for Photo {
             sub_table: vec![],
             comment: None,
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::description.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::help.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "text".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::active.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::photo_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::url.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("The online version of the photo, could be hosted in cdn somewhere else, to avoid payloads in the system. The online photo can be cached by creating a base64 encoding, then storing it in the local db".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::data.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("The base64 encoding of the image, which can be stored in the database".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::seq_no.to_owned(),
-                    data_type: Type::I32,
-                    db_data_type: "integer".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                name(),
+                description(),
+                help(),
+                active(),
+                photo_id(),
+                url(),
+                data(),
+                seq_no(),
             ],
             is_view: false,
         }
@@ -351,62 +231,197 @@ impl IsTable for Photo {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static organization_id: &'static str = "photo.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static client_id: &'static str = "photo.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created: &'static str = "photo.created";
+pub fn created()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created_by: &'static str = "photo.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated: &'static str = "photo.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated_by: &'static str = "photo.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static priority: &'static str = "photo.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static name: &'static str = "photo.name";
+pub fn name()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static description: &'static str = "photo.description";
+pub fn description()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::description.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static help: &'static str = "photo.help";
+pub fn help()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::help.to_owned(),
+        data_type: Type::String,
+        db_data_type: "text".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static active: &'static str = "photo.active";
+pub fn active()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::active.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static photo_id: &'static str = "photo.photo_id";
+pub fn photo_id()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::photo_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static url: &'static str = "photo.url";
+pub fn url()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::url.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"The online version of the photo, could be hosted in cdn somewhere else, to avoid payloads in the system. The online photo can be cached by creating a base64 encoding, then storing it in the local db"#.to_owned()),
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static data: &'static str = "photo.data";
+pub fn data()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::data.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"The base64 encoding of the image, which can be stored in the database"#.to_owned()),
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static seq_no: &'static str = "photo.seq_no";
+pub fn seq_no()->Column{
+    Column {
+        table: Some("photo".to_owned()),
+        name: column::seq_no.to_owned(),
+        data_type: Type::I32,
+        db_data_type: "integer".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}

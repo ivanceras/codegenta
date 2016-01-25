@@ -47,22 +47,32 @@ impl MetaCode for Column{
         let mut imports = vec![];
         let mut w = Writer::new();
         w.ln();
-        w.tabs(4);
+        w.tabs(1);
         w.append("Column {");
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
+		match self.table{
+        	Some(ref table) => {
+				w.append(&format!("table: Some(table::{}.to_owned()),",table));
+			}
+			None => {
+				w.append("table: None,");
+			}
+		};
+        w.ln();
+        w.tabs(2);
         w.append("name: ");
         w.append(&format!("column::{}.to_owned(),", self.corrected_name()));
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
         w.append("data_type: ");
         w.append(&format!("Type::{:?},", self.data_type));
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
         w.append("db_data_type: ");
         w.append(&format!("\"{}\".to_owned(),", self.db_data_type));
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
         w.append("is_primary: ");
         w.append(&format!("{}, ", self.is_primary));
         w.append("is_unique: ");
@@ -72,7 +82,7 @@ impl MetaCode for Column{
         w.append("is_inherited: ");
         w.append(&format!("{},", self.is_inherited));
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
         w.append("default: ");
 		match &self.default{
 			&Some(ref operand) => match operand{
@@ -86,20 +96,18 @@ impl MetaCode for Column{
 			&None => {w.append("None,");},
 		}
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
         w.append("comment: ");
-        if self.comment.is_some() {
-            w.append(&format!("Some(\"{}\".to_owned()),",
-                              &self.comment
-                                   .clone()
-                                   .unwrap()
-                                   .replace("\"", "\\\"")
-                                   .replace("\n", "\\n")));
-        } else {
-            w.append("None,");
-        }
+        match self.comment{
+			Some(ref comment) => {
+				w.append(&format!("Some(r#\"{}\"#.to_owned()),",comment));
+			}
+        	None => {
+            	w.append("None,");
+        	}
+		};
         w.ln();
-        w.tabs(5);
+        w.tabs(2);
         w.append("foreign: ");
         if self.foreign.is_some() {
             let (foreign_imports, foreign_src) = self.foreign.as_ref().unwrap().meta_code();
@@ -111,7 +119,7 @@ impl MetaCode for Column{
             w.append("None,");
         }
         w.ln();
-        w.tabs(4);
+        w.tabs(1);
         w.append("}");
         imports.sort_by(|a, b| a.cmp(&b));
         imports.dedup();
@@ -166,27 +174,26 @@ impl MetaCode for Table{
         w.ln();
         w.tabs(3);
         w.append("comment: ");
-        if self.comment.is_some() {
-            // TODO: use r# for raw formatting
-            w.append(&format!("Some(\"{}\".to_owned()),",
-                              &self.comment
-                                   .clone()
-                                   .unwrap()
-                                   .replace("\"", "\\\"")
-                                   .replace("\n", "\\n")));
-        } else {
-            w.append("None,");
-        }
+        match self.comment {
+          	Some(ref comment) => {
+				w.append(&format!("Some(r#\"{}\"#.to_owned()),", comment));
+			}
+          	None =>  {w.append("None,");}
+        };
         w.ln();
         w.tabs(3);
         w.append("columns: vec![");
         for c in &self.columns {
-            let (column_imports, column_src) = c.meta_code();
+			w.ln_tabs(4);
+			w.append(&format!("{}(),",c.corrected_name()));
+			 let (column_imports, column_src) = c.meta_code();
             for imp in column_imports {
                 imports.push(imp);
             }
-            w.append(&column_src);
+           
+			/* w.append(&column_src);
             w.append(",");
+			*/
         }
         w.ln();
         w.tabs(3);

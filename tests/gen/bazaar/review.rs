@@ -222,161 +222,25 @@ impl IsTable for Review {
             name: table::review.to_owned(),
             parent_table: Some(table::record.to_owned()),
             sub_table: vec![],
-            comment: Some("Reviews of buyers from the sellers and the sellers' products".to_owned()),
+            comment: Some(r#"Reviews of buyers from the sellers and the sellers' products"#.to_owned()),
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::description.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::help.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "text".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::active.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::rating.to_owned(),
-                    data_type: Type::I32,
-                    db_data_type: "integer".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("rating 1 to 5, 5 is the highest".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::comment.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("The statement of the review".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::review_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::user_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::approved.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::approvedby.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("the user id who approves the review".to_owned()),
-                    foreign: None,
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                name(),
+                description(),
+                help(),
+                active(),
+                rating(),
+                comment(),
+                review_id(),
+                user_id(),
+                approved(),
+                approvedby(),
             ],
             is_view: false,
         }
@@ -384,70 +248,223 @@ impl IsTable for Review {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static organization_id: &'static str = "review.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static client_id: &'static str = "review.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created: &'static str = "review.created";
+pub fn created()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static created_by: &'static str = "review.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated: &'static str = "review.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static updated_by: &'static str = "review.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static priority: &'static str = "review.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static name: &'static str = "review.name";
+pub fn name()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static description: &'static str = "review.description";
+pub fn description()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::description.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static help: &'static str = "review.help";
+pub fn help()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::help.to_owned(),
+        data_type: Type::String,
+        db_data_type: "text".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static active: &'static str = "review.active";
+pub fn active()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::active.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static rating: &'static str = "review.rating";
+pub fn rating()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::rating.to_owned(),
+        data_type: Type::I32,
+        db_data_type: "integer".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"rating 1 to 5, 5 is the highest"#.to_owned()),
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static comment: &'static str = "review.comment";
+pub fn comment()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::comment.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"The statement of the review"#.to_owned()),
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static review_id: &'static str = "review.review_id";
+pub fn review_id()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::review_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static user_id: &'static str = "review.user_id";
+pub fn user_id()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::user_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static approved: &'static str = "review.approved";
+pub fn approved()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::approved.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }}
 
-#[allow(non_upper_case_globals)]
 #[allow(dead_code)]
-pub static approvedby: &'static str = "review.approvedby";
+pub fn approvedby()->Column{
+    Column {
+        table: Some("review".to_owned()),
+        name: column::approvedby.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"the user id who approves the review"#.to_owned()),
+        foreign: None,
+    }}

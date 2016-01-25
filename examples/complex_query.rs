@@ -21,8 +21,18 @@ use gen::bazaar::ProductPhoto;
 use gen::bazaar::ProductAvailability;
 use gen::bazaar::product_availability;
 
+use gen::bazaar;
+
 use rustorm::table::IsTable;
 use rustorm::pool::ManagedPool;
+use rustorm::query::HasEquality;
+use rustorm::query::QueryBuilder;
+use rustorm::query::ToTableName;
+use rustorm::query::function::COUNT;
+use rustorm::query::order::HasDirection;
+use rustorm::query::join::ToJoin;
+use rustorm::query::operand::ToOperand;
+use rustorm::query::builder::SELECT_ALL;
 
 mod gen;
 
@@ -30,26 +40,30 @@ fn main(){
     let mut pool = ManagedPool::init("postgres://postgres:p0stgr3s@localhost/bazaar_v8",1).unwrap();
     let db = pool.connect().unwrap();
     
-    let mut query = Query::select_all();
-    
-    query.from(&gen::bazaar::product)
-        .left_join(&ProductCategory::table(),
-            product_category::product_id, product::product_id)
-         .left_join(&Category::table(),
-            category::category_id, product_category::category_id)
-        .left_join(&ProductPhoto::table(),
-            product::product_id, product_photo::product_id)
-        .left_join(&Photo::table(), 
-            product_photo::photo_id, photo::photo_id)
-        .filter(product::name, Equality::EQ, &"GTX660 Ti videocard")
-        .filter(category::name, Equality::EQ, &"Electronic")
-        .group_by(vec![category::name])
-        .having("count(*)", Equality::GT, &1)
-        .asc(product::name)
-        .desc(product::created)
-        ;
-    let frag = query.build(db.as_ref());
-    
+    let frag = SELECT_ALL().FROM(&bazaar::product)
+        .LEFT_JOIN(bazaar::product_category
+            .ON(
+				 	product_category::product_id.EQ(&product::product_id)
+            	.AND(product_category::product_id.EQ(&product::product_id))
+				)
+			)
+         .LEFT_JOIN(bazaar::category
+            .ON(category::category_id.EQ(&product_category::category_id)))
+        .LEFT_JOIN(bazaar::product_photo
+            .ON(product::product_id.EQ(&product_photo::product_id)))
+        .LEFT_JOIN(bazaar::photo 
+            .ON(product_photo::photo_id.EQ(&photo::photo_id)))
+        .WHERE(
+		 	product::name.EQ(&"GTX660 Ti videocard")
+			.AND(category::name.EQ(&"Electronic"))
+		)
+        .GROUP_BY(&[category::name])
+        .HAVING(COUNT(&"*").GT(&1))
+        .HAVING(COUNT(&product::product_id).GT(&1))
+        .ORDER_BY(&[product::name.ASC(), product::created.DESC()])
+    	.build(db.as_ref());
+   
+
     let expected = "
    SELECT *
      FROM bazaar.product

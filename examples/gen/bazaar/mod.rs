@@ -36,7 +36,6 @@ pub use self::organization::Organization;
 pub use self::photo::Photo;
 pub use self::photo_sizes::PhotoSizes;
 pub use self::product::Product;
-pub use self::product::product;
 pub use self::product_availability::ProductAvailability;
 pub use self::product_category::ProductCategory;
 pub use self::product_photo::ProductPhoto;
@@ -49,3 +48,106 @@ pub use self::user_review::UserReview;
 pub use self::users::Users;
 pub use self::wishlist::Wishlist;
 pub use self::wishlist_line::WishlistLine;
+use rustorm::table::Table;
+use rustorm::table::IsTable;
+
+
+pub fn address()->Table{
+    Address::table()
+}
+
+pub fn api_key()->Table{
+    ApiKey::table()
+}
+
+pub fn cart()->Table{
+    Cart::table()
+}
+
+pub fn cart_line()->Table{
+    CartLine::table()
+}
+
+pub fn category()->Table{
+    Category::table()
+}
+
+pub fn client()->Table{
+    Client::table()
+}
+
+pub fn invoice()->Table{
+    Invoice::table()
+}
+
+pub fn order_line()->Table{
+    OrderLine::table()
+}
+
+pub fn orders()->Table{
+    Orders::table()
+}
+
+pub fn organization()->Table{
+    Organization::table()
+}
+
+pub fn photo()->Table{
+    Photo::table()
+}
+
+pub fn photo_sizes()->Table{
+    PhotoSizes::table()
+}
+
+pub fn product()->Table{
+    Product::table()
+}
+
+pub fn product_availability()->Table{
+    ProductAvailability::table()
+}
+
+pub fn product_category()->Table{
+    ProductCategory::table()
+}
+
+pub fn product_photo()->Table{
+    ProductPhoto::table()
+}
+
+pub fn product_review()->Table{
+    ProductReview::table()
+}
+
+pub fn review()->Table{
+    Review::table()
+}
+
+pub fn settings()->Table{
+    Settings::table()
+}
+
+pub fn user_info()->Table{
+    UserInfo::table()
+}
+
+pub fn user_location()->Table{
+    UserLocation::table()
+}
+
+pub fn user_review()->Table{
+    UserReview::table()
+}
+
+pub fn users()->Table{
+    Users::table()
+}
+
+pub fn wishlist()->Table{
+    Wishlist::table()
+}
+
+pub fn wishlist_line()->Table{
+    WishlistLine::table()
+}
