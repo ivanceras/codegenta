@@ -73,7 +73,7 @@ SELECT *
           LEFT JOIN bazaar.photo
           ON photo_id = photo.photo_id 
     WHERE ( product.name = $1  AND category.name = $2   )
- GROUP BY (category.name) 
+ GROUP BY category.name 
    HAVING  COUNT(*) > $3  
  ORDER BY product.name ASC, product.created DESC
  ".to_string();
