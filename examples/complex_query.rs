@@ -54,8 +54,8 @@ fn main(){
         .LEFT_JOIN(bazaar::photo 
             .ON(product_photo::photo_id.EQ(&photo::photo_id)))
         .WHERE(
-		 	product::name.EQ(&"GTX660 Ti videocard")
-			.AND(category::name.EQ(&"Electronic"))
+		 	product::name.EQ(&"GTX660 Ti videocard".to_owned())
+			.AND(category::name.EQ(&"Electronic".to_owned()))
 		)
         .GROUP_BY(&[category::name])
         .HAVING(COUNT(&"*").GT(&1))
@@ -65,21 +65,21 @@ fn main(){
    
 
     let expected = "
-   SELECT *
+SELECT *
      FROM bazaar.product
-          LEFT JOIN bazaar.product_category 
-          ON product_category.product_id = product.product_id 
-          LEFT JOIN bazaar.category 
+          LEFT JOIN bazaar.product_category
+          ON ( product_category.product_id = product.product_id AND product_category.product_id = product.product_id  )
+          LEFT JOIN bazaar.category
           ON category.category_id = product_category.category_id 
-          LEFT JOIN bazaar.product_photo 
+          LEFT JOIN bazaar.product_photo
           ON product.product_id = product_photo.product_id 
-          LEFT JOIN bazaar.photo 
+          LEFT JOIN bazaar.photo
           ON product_photo.photo_id = photo.photo_id 
-    WHERE product.name = $1 
-      AND category.name = $2 
+    WHERE ( product.name = $1  AND category.name = $2   )
  GROUP BY category.name 
-   HAVING count(*) > $3 
+   HAVING  COUNT(*) > $3  ,  COUNT(product.product_id) > $4  
  ORDER BY product.name ASC, product.created DESC
+
     ".to_string();
     println!("actual:   {{{}}} [{}]", frag.sql, frag.sql.len());
     println!("expected: {{{}}} [{}]", expected, expected.len());

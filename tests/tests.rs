@@ -34,6 +34,7 @@ use rustorm::query::HasEquality;
 use rustorm::query::order::HasDirection;
 use rustorm::query::join::ToJoin;
 use rustorm::query::builder::SELECT;
+use rustorm::query::operand::ToOperand;
 
 
 mod gen;
@@ -53,8 +54,8 @@ fn test_complex(){
         .LEFT_JOIN(bazaar::photo 
             .ON(product_photo::photo_id.EQ(&photo::photo_id)))
         .WHERE(
-				product::name.EQ_VALUE(&"GTX660 Ti videocard")
-			.AND(category::name.EQ_VALUE(&"Electronic"))
+				product::name.EQ(&"GTX660 Ti videocard".to_owned())
+			.AND(category::name.EQ(&"Electronic".to_owned()))
 		)
         .ORDER_BY(&[product::name.ASC(), product::created.DESC()])
         .GROUP_BY(&[category::name])
@@ -65,13 +66,13 @@ fn test_complex(){
 SELECT *
      FROM bazaar.product
           LEFT JOIN bazaar.product_category
-          ON product_id = product.product_id 
+          ON product_category.product_id = product.product_id 
           LEFT JOIN bazaar.category
-          ON category_id = product_category.category_id 
+          ON category.category_id = product_category.category_id 
           LEFT JOIN bazaar.product_photo
-          ON product_id = product_photo.product_id 
+          ON product.product_id = product_photo.product_id 
           LEFT JOIN bazaar.photo
-          ON photo_id = photo.photo_id 
+          ON product_photo.photo_id = photo.photo_id 
     WHERE ( product.name = $1  AND category.name = $2   )
  GROUP BY category.name 
    HAVING  COUNT(*) > $3  
