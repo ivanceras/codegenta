@@ -14,7 +14,7 @@ use rustc_serialize::json::ToJson;
 
 pub trait TableJson{
 	
-	fn from_str(s: &str)->Result<Self, ParseError>;
+	fn from_str(s: &str)->Result<Table, ParseError>;
 
 	fn extract_column(json_column: &Json)->Result<Column, ParseError>;
 
@@ -56,7 +56,7 @@ impl fmt::Display for ParseError{
 
 impl TableJson for Table{
 
-	fn from_str(s: &str)->Result<Self, ParseError>{
+	fn from_str(s: &str)->Result<Table, ParseError>{
 		println!("json: {:?}",s);
 		let json: Json = Json::from_str(s).unwrap();
 		println!("Json: {:#?}", json);

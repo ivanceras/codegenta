@@ -1,6 +1,6 @@
 [package]
 name = "codegenta"
-version = "0.0.7"
+version = "0.0.8"
 authors = [ "Jovansonlee Cesar <ivanceras@gmail.com>" ]
 license = "MIT"
 description = "A model code generator from database table using rustorm ORM"
@@ -26,6 +26,6 @@ time = "0.1.34"
 
 
 [dependencies.rustorm]
-version = "0.4.2"
+version = "^0.5"
 path = "../rustorm"
 
