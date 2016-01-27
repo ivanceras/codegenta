@@ -9,7 +9,7 @@ use meta::{MetaCode, StructCode};
 use rustorm::dao::Type;
 
 
-
+/// TODO: convert this to macro instead of string concatenation
 /// configuration for generating code
 
 pub struct Config {
