@@ -217,173 +217,24 @@ impl IsTable for UserLocation {
             sub_table: vec![],
             comment: None,
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::description.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::help.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "text".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::active.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::true_latitude.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::true_longitude.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::set_latitude.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::set_longitude.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::accuracy.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::set_accuracy.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("user can anonymize their location by setting loose accuracy".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::user_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: Some(
-                        Foreign {
-                            schema: Some("bazaar".to_owned()),
-                            table: "users".to_owned(),
-                            column: "user_id".to_owned(),
-                        }),
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                name(),
+                description(),
+                help(),
+                active(),
+                true_latitude(),
+                true_longitude(),
+                set_latitude(),
+                set_longitude(),
+                accuracy(),
+                set_accuracy(),
+                user_id(),
             ],
             is_view: false,
         }
@@ -391,74 +242,241 @@ impl IsTable for UserLocation {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "user_location.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "user_location.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "user_location.created";
+pub fn created()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "user_location.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "user_location.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "user_location.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "user_location.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "user_location.name";
+pub fn name()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "user_location.description";
+pub fn description()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::description.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "user_location.help";
+pub fn help()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::help.to_owned(),
+        data_type: Type::String,
+        db_data_type: "text".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "user_location.active";
+pub fn active()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::active.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static true_latitude: &'static str = "user_location.true_latitude";
+pub fn true_latitude()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::true_latitude.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static true_longitude: &'static str = "user_location.true_longitude";
+pub fn true_longitude()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::true_longitude.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static set_latitude: &'static str = "user_location.set_latitude";
+pub fn set_latitude()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::set_latitude.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static set_longitude: &'static str = "user_location.set_longitude";
+pub fn set_longitude()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::set_longitude.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static accuracy: &'static str = "user_location.accuracy";
+pub fn accuracy()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::accuracy.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static set_accuracy: &'static str = "user_location.set_accuracy";
+pub fn set_accuracy()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::set_accuracy.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"user can anonymize their location by setting loose accuracy"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static user_id: &'static str = "user_location.user_id";
+pub fn user_id()->Column{
+    Column {
+        table: Some(table::user_location.to_owned()),
+        name: column::user_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: Some(
+                        Foreign {
+                            schema: Some("bazaar".to_owned()),
+                            table: "users".to_owned(),
+                            column: "user_id".to_owned(),
+                        }),
+    }
+}

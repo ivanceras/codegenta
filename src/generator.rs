@@ -9,7 +9,7 @@ use meta::{MetaCode, StructCode};
 use rustorm::dao::Type;
 
 
-
+/// TODO: convert this to macro instead of string concatenation
 /// configuration for generating code
 
 pub struct Config {
@@ -237,6 +237,21 @@ fn generate_mod_per_schema(config: &Config, all_tables: &Vec<Table>) {
                                 table.name,
                                 table.struct_name()));
         }
+        w.appendln("use rustorm::table::Table;");
+        w.appendln("use rustorm::table::IsTable;");
+        w.ln();
+        // generate the table functions that returns the table
+        for table in &tables {
+            w.ln();
+            w.append(&format!("pub fn {}()->Table", table.name));
+            w.append("{");
+            w.ln();
+            w.tab();
+            w.append(&format!("{}::table()",table.struct_name()));
+            w.ln();
+            w.append("}");
+            w.ln();
+        }
         let mod_file = format!("{}/mod.rs", module_dir);
         save_to_file(&mod_file, &w.src);
     }
@@ -329,7 +344,7 @@ fn generate_mod_rs(config: &Config, all_tables: &Vec<Table>) {
 }
 
 
-
+/// generate impl for IsTable
 fn generate_meta_code(table: &Table) -> (Vec<String>, String) {
     let mut w = Writer::new();
     let mut imports = Vec::new();
@@ -435,13 +450,12 @@ fn generate_static_column_names(table: &Table) -> String {
     for column in &table.columns {
         w.ln();
         w.ln();
-        w.appendln("#[allow(non_upper_case_globals)]");
-        w.appendln("#[allow(dead_code)]");
-        w.append("pub static ");
-        w.append(&column.corrected_name());
-        w.append(": &'static str = ");
-        w.append(&format!("\"{}.{}\"", table.name, column.name));
-        w.append(";");
+        w.append(&format!("pub fn {}()->Column",&column.corrected_name()));
+        w.append("{");
+        let (imports, column_code) = column.meta_code();
+        w.append(&column_code);
+		w.ln();
+        w.append("}");
     }
     w.src
 }
@@ -547,6 +561,7 @@ fn generate_dao_conversion_code(config: &Config,
     (imports, w.src)
 }
 
+/// generate get_all_tables() function in gen/mod.rs
 fn generate_fn_get_all_tables(tables: &Vec<Table>) -> String {
     let mut w = Writer::new();
     w.ln();
@@ -571,7 +586,7 @@ fn generate_fn_get_all_tables(tables: &Vec<Table>) -> String {
 
 
 
-fn save_to_file(filename: &str, content: &str) {
+pub fn save_to_file(filename: &str, content: &str) {
     match File::create(filename) {
         Err(_) => panic!("couldn't create file {}", filename),
         Ok(mut file) => {

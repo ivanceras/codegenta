@@ -313,258 +313,34 @@ impl IsTable for Orders {
             sub_table: vec![],
             comment: None,
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::description.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::help.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "text".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::active.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::order_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::customer_name.to_owned(),
-                    data_type: Type::String,
-                    db_data_type: "character varying".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("For recognization purposes, this is the name shown to the seller".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::total_items.to_owned(),
-                    data_type: Type::I32,
-                    db_data_type: "integer".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::grand_total_amount.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::charges_amount.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::processing.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::processed.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::is_confirmed.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: Some("determined whether the order has been confirmed by the person who ordered it".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::is_tax_included.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'true'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::date_ordered.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::is_invoiced.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::date_invoiced.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::is_approved.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'false'".to_owned()))),
-                    comment: Some("if the order from the buyer is approved by the seller".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::date_approved.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::amount_tendered.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::amount_refunded.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::cart_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("The cart from which this order was created from".to_owned()),
-                    foreign: None,
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                name(),
+                description(),
+                help(),
+                active(),
+                order_id(),
+                customer_name(),
+                total_items(),
+                grand_total_amount(),
+                charges_amount(),
+                processing(),
+                processed(),
+                is_confirmed(),
+                is_tax_included(),
+                date_ordered(),
+                is_invoiced(),
+                date_invoiced(),
+                is_approved(),
+                date_approved(),
+                amount_tendered(),
+                amount_refunded(),
+                cart_id(),
             ],
             is_view: false,
         }
@@ -572,114 +348,366 @@ impl IsTable for Orders {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "orders.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "orders.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "orders.created";
+pub fn created()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "orders.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "orders.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "orders.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "orders.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static name: &'static str = "orders.name";
+pub fn name()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static description: &'static str = "orders.description";
+pub fn description()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::description.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static help: &'static str = "orders.help";
+pub fn help()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::help.to_owned(),
+        data_type: Type::String,
+        db_data_type: "text".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static active: &'static str = "orders.active";
+pub fn active()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::active.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static order_id: &'static str = "orders.order_id";
+pub fn order_id()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::order_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'uuid_generate_v4()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static customer_name: &'static str = "orders.customer_name";
+pub fn customer_name()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::customer_name.to_owned(),
+        data_type: Type::String,
+        db_data_type: "character varying".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"For recognization purposes, this is the name shown to the seller"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static total_items: &'static str = "orders.total_items";
+pub fn total_items()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::total_items.to_owned(),
+        data_type: Type::I32,
+        db_data_type: "integer".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static grand_total_amount: &'static str = "orders.grand_total_amount";
+pub fn grand_total_amount()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::grand_total_amount.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static charges_amount: &'static str = "orders.charges_amount";
+pub fn charges_amount()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::charges_amount.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'0.00'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static processing: &'static str = "orders.processing";
+pub fn processing()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::processing.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static processed: &'static str = "orders.processed";
+pub fn processed()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::processed.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_confirmed: &'static str = "orders.is_confirmed";
+pub fn is_confirmed()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::is_confirmed.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: Some(r#"determined whether the order has been confirmed by the person who ordered it"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_tax_included: &'static str = "orders.is_tax_included";
+pub fn is_tax_included()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::is_tax_included.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'true'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static date_ordered: &'static str = "orders.date_ordered";
+pub fn date_ordered()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::date_ordered.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_invoiced: &'static str = "orders.is_invoiced";
+pub fn is_invoiced()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::is_invoiced.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static date_invoiced: &'static str = "orders.date_invoiced";
+pub fn date_invoiced()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::date_invoiced.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static is_approved: &'static str = "orders.is_approved";
+pub fn is_approved()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::is_approved.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'false'".to_owned()))),
+        comment: Some(r#"if the order from the buyer is approved by the seller"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static date_approved: &'static str = "orders.date_approved";
+pub fn date_approved()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::date_approved.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static amount_tendered: &'static str = "orders.amount_tendered";
+pub fn amount_tendered()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::amount_tendered.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static amount_refunded: &'static str = "orders.amount_refunded";
+pub fn amount_refunded()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::amount_refunded.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static cart_id: &'static str = "orders.cart_id";
+pub fn cart_id()->Column{
+    Column {
+        table: Some(table::orders.to_owned()),
+        name: column::cart_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"The cart from which this order was created from"#.to_owned()),
+        foreign: None,
+    }
+}

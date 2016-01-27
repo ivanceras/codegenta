@@ -26,6 +26,5 @@ time = "0.1.34"
 
 
 [dependencies.rustorm]
-version = "0.4.3"
-#path = "../rustorm"
-
+version = "^0.5"
+path = "../rustorm"

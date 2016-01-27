@@ -14,7 +14,7 @@ use rustc_serialize::json::ToJson;
 
 pub trait TableJson{
 	
-	fn from_str(s: &str)->Result<Self, ParseError>;
+	fn from_str(s: &str)->Result<Table, ParseError>;
 
 	fn extract_column(json_column: &Json)->Result<Column, ParseError>;
 
@@ -56,7 +56,7 @@ impl fmt::Display for ParseError{
 
 impl TableJson for Table{
 
-	fn from_str(s: &str)->Result<Self, ParseError>{
+	fn from_str(s: &str)->Result<Table, ParseError>{
 		println!("json: {:?}",s);
 		let json: Json = Json::from_str(s).unwrap();
 		println!("Json: {:#?}", json);
@@ -191,6 +191,7 @@ impl TableJson for Table{
 				let pg = Postgres::new();
 				let (_, rtype) = pg.dbtype_to_rust_type(&data_type);
 				Ok(Column{
+					table: None,
 					name: column_name,
 					data_type: rtype,
 					db_data_type: format!("{}",data_type),
@@ -225,8 +226,10 @@ impl TableJson for Table{
 		if !self.columns.is_empty(){
 			let mut json_columns = vec![];
 			for column in &self.columns{
-				let json_column = Self::column_to_btree(&column);
-				json_columns.push(json_column);
+				if !column.is_inherited{ // do not include inherited columns
+					let json_column = Self::column_to_btree(&column);
+					json_columns.push(json_column);
+				}
 			}
 			map.insert("columns".to_owned(), Json::Array(json_columns));
 		}

@@ -200,155 +200,22 @@ impl IsTable for ProductAvailability {
             sub_table: vec![],
             comment: None,
             columns: vec![
-                Column {
-                    name: column::organization_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::client_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::created_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: true, is_inherited: true,
-                    default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::updated_by.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::priority.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: true,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::product_id.to_owned(),
-                    data_type: Type::Uuid,
-                    db_data_type: "uuid".to_owned(),
-                    is_primary: true, is_unique: false, not_null: true, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: Some(
-                        Foreign {
-                            schema: Some("bazaar".to_owned()),
-                            table: "product".to_owned(),
-                            column: "product_id".to_owned(),
-                        }),
-                },
-                Column {
-                    name: column::available.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::always_available.to_owned(),
-                    data_type: Type::Bool,
-                    db_data_type: "boolean".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::stocks.to_owned(),
-                    data_type: Type::F64,
-                    db_data_type: "double precision".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: Some(Operand::Value(Value::String("'1'".to_owned()))),
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::available_from.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::available_until.to_owned(),
-                    data_type: Type::DateTime,
-                    db_data_type: "timestamp with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::available_day.to_owned(),
-                    data_type: Type::Json,
-                    db_data_type: "json".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: Some("{\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\", \"Sat\", \"Sun\"}".to_owned()),
-                    foreign: None,
-                },
-                Column {
-                    name: column::open_time.to_owned(),
-                    data_type: Type::NaiveTime,
-                    db_data_type: "time with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
-                Column {
-                    name: column::close_time.to_owned(),
-                    data_type: Type::NaiveTime,
-                    db_data_type: "time with time zone".to_owned(),
-                    is_primary: false, is_unique: false, not_null: false, is_inherited: false,
-                    default: None,
-                    comment: None,
-                    foreign: None,
-                },
+                organization_id(),
+                client_id(),
+                created(),
+                created_by(),
+                updated(),
+                updated_by(),
+                priority(),
+                product_id(),
+                available(),
+                always_available(),
+                stocks(),
+                available_from(),
+                available_until(),
+                available_day(),
+                open_time(),
+                close_time(),
             ],
             is_view: false,
         }
@@ -356,66 +223,215 @@ impl IsTable for ProductAvailability {
 }
 // Generated columns for easier development of dynamic queries without sacrificing wrong spelling of column names
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static organization_id: &'static str = "product_availability.organization_id";
+pub fn organization_id()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::organization_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static client_id: &'static str = "product_availability.client_id";
+pub fn client_id()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::client_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created: &'static str = "product_availability.created";
+pub fn created()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::created.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static created_by: &'static str = "product_availability.created_by";
+pub fn created_by()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::created_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated: &'static str = "product_availability.updated";
+pub fn updated()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::updated.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: true, is_inherited: true,
+        default: Some(Operand::Value(Value::String("'now()'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static updated_by: &'static str = "product_availability.updated_by";
+pub fn updated_by()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::updated_by.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static priority: &'static str = "product_availability.priority";
+pub fn priority()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::priority.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: true,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static product_id: &'static str = "product_availability.product_id";
+pub fn product_id()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::product_id.to_owned(),
+        data_type: Type::Uuid,
+        db_data_type: "uuid".to_owned(),
+        is_primary: true, is_unique: false, not_null: true, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: Some(
+                        Foreign {
+                            schema: Some("bazaar".to_owned()),
+                            table: "product".to_owned(),
+                            column: "product_id".to_owned(),
+                        }),
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available: &'static str = "product_availability.available";
+pub fn available()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::available.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static always_available: &'static str = "product_availability.always_available";
+pub fn always_available()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::always_available.to_owned(),
+        data_type: Type::Bool,
+        db_data_type: "boolean".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static stocks: &'static str = "product_availability.stocks";
+pub fn stocks()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::stocks.to_owned(),
+        data_type: Type::F64,
+        db_data_type: "double precision".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: Some(Operand::Value(Value::String("'1'".to_owned()))),
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available_from: &'static str = "product_availability.available_from";
+pub fn available_from()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::available_from.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available_until: &'static str = "product_availability.available_until";
+pub fn available_until()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::available_until.to_owned(),
+        data_type: Type::DateTime,
+        db_data_type: "timestamp with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static available_day: &'static str = "product_availability.available_day";
+pub fn available_day()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::available_day.to_owned(),
+        data_type: Type::Json,
+        db_data_type: "json".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: Some(r#"{"Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"}"#.to_owned()),
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static open_time: &'static str = "product_availability.open_time";
+pub fn open_time()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::open_time.to_owned(),
+        data_type: Type::NaiveTime,
+        db_data_type: "time with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
 
-#[allow(non_upper_case_globals)]
-#[allow(dead_code)]
-pub static close_time: &'static str = "product_availability.close_time";
+pub fn close_time()->Column{
+    Column {
+        table: Some(table::product_availability.to_owned()),
+        name: column::close_time.to_owned(),
+        data_type: Type::NaiveTime,
+        db_data_type: "time with time zone".to_owned(),
+        is_primary: false, is_unique: false, not_null: false, is_inherited: false,
+        default: None,
+        comment: None,
+        foreign: None,
+    }
+}
