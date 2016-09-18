@@ -3,14 +3,13 @@ use rustorm::database::DatabaseDev;
 use rustorm::query::Operand;
 use rustorm::table::{Column, Table, Foreign};
 
-pub trait MetaCode{
+pub trait MetaCode {
     /// meta code describes the meta table and produce a Table instance definition
     fn meta_code(&self) -> (Vec<String>, String);
 }
 
 
-impl MetaCode for Foreign{
-
+impl MetaCode for Foreign {
     fn meta_code(&self) -> (Vec<String>, String) {
 
         let mut w = Writer::new();
@@ -20,10 +19,10 @@ impl MetaCode for Foreign{
         w.ln();
         w.tabs(7);
         w.append("schema: ");
-		match &self.schema{
-			&Some(ref schema) => w.append(&format!("Some(\"{}\".to_owned()),", schema)),
-			&None => w.append("None,")
-		};
+        match &self.schema {
+            &Some(ref schema) => w.append(&format!("Some(\"{}\".to_owned()),", schema)),
+            &None => w.append("None,"),
+        };
         w.ln();
         w.tabs(7);
         w.append("table: ");
@@ -31,18 +30,16 @@ impl MetaCode for Foreign{
         w.ln();
         w.tabs(7);
         w.append("column: ");
-		w.append(&format!("\"{}\".to_owned(),", self.column));
+        w.append(&format!("\"{}\".to_owned(),", self.column));
         w.ln();
         w.tabs(6);
         w.append("}");
         (vec!["rustorm::table::Foreign".to_owned()], w.src)
 
     }
-
 }
 
-impl MetaCode for Column{
-
+impl MetaCode for Column {
     fn meta_code(&self) -> (Vec<String>, String) {
         let mut imports = vec![];
         let mut w = Writer::new();
@@ -51,14 +48,14 @@ impl MetaCode for Column{
         w.append("Column {");
         w.ln();
         w.tabs(2);
-		match self.table{
-        	Some(ref table) => {
-				w.append(&format!("table: Some(table::{}.to_owned()),",table));
-			}
-			None => {
-				w.append("table: None,");
-			}
-		};
+        match self.table {
+            Some(ref table) => {
+                w.append(&format!("table: Some(table::{}.to_owned()),", table));
+            }
+            None => {
+                w.append("table: None,");
+            }
+        };
         w.ln();
         w.tabs(2);
         w.append("name: ");
@@ -84,28 +81,34 @@ impl MetaCode for Column{
         w.ln();
         w.tabs(2);
         w.append("default: ");
-		match &self.default{
-			&Some(ref operand) => match operand{
-				&Operand::Value(ref value) => {
-					w.append(&format!("Some(Operand::Value(Value::String(\"{}\".to_owned()))),",value));
-					imports.push("rustorm::dao::Value".to_owned());
-					imports.push("rustorm::query::Operand".to_owned());
-				},
-				_ => panic!("not processing other operands: {:?}", self.default),
-			},
-			&None => {w.append("None,");},
-		}
+        match &self.default {
+            &Some(ref operand) => {
+                match operand {
+                    &Operand::Value(ref value) => {
+                        w.append(&format!("Some(Operand::Value(Value::String(\"{}\".\
+                                           to_owned()))),",
+                                          value));
+                        imports.push("rustorm::dao::Value".to_owned());
+                        imports.push("rustorm::query::Operand".to_owned());
+                    }
+                    _ => panic!("not processing other operands: {:?}", self.default),
+                }
+            }
+            &None => {
+                w.append("None,");
+            }
+        }
         w.ln();
         w.tabs(2);
         w.append("comment: ");
-        match self.comment{
-			Some(ref comment) => {
-				w.append(&format!("Some(r#\"{}\"#.to_owned()),",comment));
-			}
-        	None => {
-            	w.append("None,");
-        	}
-		};
+        match self.comment {
+            Some(ref comment) => {
+                w.append(&format!("Some(r#\"{}\"#.to_owned()),", comment));
+            }
+            None => {
+                w.append("None,");
+            }
+        };
         w.ln();
         w.tabs(2);
         w.append("foreign: ");
@@ -125,11 +128,9 @@ impl MetaCode for Column{
         imports.dedup();
         (imports, w.src)
     }
-
 }
 
-impl MetaCode for Table{
-
+impl MetaCode for Table {
     /// build a source code which express it self as a table object
     /// which is a meta definition of the struct itself
     fn meta_code(&self) -> (Vec<String>, String) {
@@ -141,10 +142,10 @@ impl MetaCode for Table{
         w.ln();
         w.tabs(3);
         w.append("schema: ");
-		match &self.schema{
-        	&Some(ref schema) => w.append(&format!("Some(schema::{}.to_owned()),", schema)),
-			&None => w.append("None,")
-		};
+        match &self.schema {
+            &Some(ref schema) => w.append(&format!("Some(schema::{}.to_owned()),", schema)),
+            &None => w.append("None,"),
+        };
         w.ln();
         w.tabs(3);
         w.append("name: ");
@@ -175,25 +176,27 @@ impl MetaCode for Table{
         w.tabs(3);
         w.append("comment: ");
         match self.comment {
-          	Some(ref comment) => {
-				w.append(&format!("Some(r#\"{}\"#.to_owned()),", comment));
-			}
-          	None =>  {w.append("None,");}
+            Some(ref comment) => {
+                w.append(&format!("Some(r#\"{}\"#.to_owned()),", comment));
+            }
+            None => {
+                w.append("None,");
+            }
         };
         w.ln();
         w.tabs(3);
         w.append("columns: vec![");
         for c in &self.columns {
-			w.ln_tabs(4);
-			w.append(&format!("{}(),",c.corrected_name()));
-			 let (column_imports, column_src) = c.meta_code();
+            w.ln_tabs(4);
+            w.append(&format!("{}(),", c.corrected_name()));
+            let (column_imports, column_src) = c.meta_code();
             for imp in column_imports {
                 imports.push(imp);
             }
-           
-			/* w.append(&column_src);
-            w.append(",");
-			*/
+
+            // w.append(&column_src);
+            // w.append(",");
+            //
         }
         w.ln();
         w.tabs(3);
@@ -208,11 +211,10 @@ impl MetaCode for Table{
         imports.dedup();
         (imports, w.src)
     }
-
 }
 
 
-pub trait StructCode{
+pub trait StructCode {
     /// the struct code/module code of the table, which can easily be used as struct of the project
     fn struct_code<'a>(&'a self,
                        db: &DatabaseDev,
@@ -222,17 +224,17 @@ pub trait StructCode{
     fn write_column(w: &mut Writer, c: &Column);
 }
 
-impl StructCode for Table{
+impl StructCode for Table {
     /// build a source code for the struct defined by this table
-    ///(imports, imported_tables, source code)
+    /// (imports, imported_tables, source code)
     fn struct_code<'a>(&'a self,
                        db: &DatabaseDev,
                        all_tables: &'a Vec<Table>)
                        -> (Vec<String>, Vec<&'a Table>, String) {
         let mut w = Writer::new();
-        //imported tables needed since we are partitioning the tables in schemas
+        // imported tables needed since we are partitioning the tables in schemas
         let mut imported_tables = Vec::new();
-        //imports
+        // imports
         let mut imports: Vec<String> = Vec::new();
         for c in &self.columns {
             let (package, _) = db.dbtype_to_rust_type(&c.db_data_type);
@@ -245,7 +247,7 @@ impl StructCode for Table{
         imports.sort_by(|a, b| a.cmp(b));
         imports.dedup();
 
-        //struct
+        // struct
         let struct_name = self.struct_name();
         w.ln();
         if self.comment.is_some() {
@@ -263,7 +265,7 @@ impl StructCode for Table{
         w.append("pub struct ").append(&struct_name).appendln(" {");
 
         let mut included_columns = Vec::new();
-        //primary columns
+        // primary columns
         for p in self.primary_columns() {
             if !included_columns.contains(&p.name) {
                 w.tab();
@@ -273,7 +275,7 @@ impl StructCode for Table{
                 included_columns.push(p.name.clone());
             }
         }
-        //unique columns
+        // unique columns
         for u in self.unique_columns() {
             if !included_columns.contains(&u.name) {
                 w.tab();
@@ -369,18 +371,20 @@ impl StructCode for Table{
                 w.ln();
             }
         }
-		match &c.default{
-			&Some(ref default) => match default{
-				&Operand::Value(ref value) => {
-                	w.tab();
-				 	w.append("/// default: ");
-					w.append(&format!("{}",value));
-                	w.ln();
-				},
-				_ => panic!("only expecting value"),
-			},
-			&None => {}
-		}
+        match &c.default {
+            &Some(ref default) => {
+                match default {
+                    &Operand::Value(ref value) => {
+                        w.tab();
+                        w.append("/// default: ");
+                        w.append(&format!("{}", value));
+                        w.ln();
+                    }
+                    _ => panic!("only expecting value"),
+                }
+            }
+            &None => {}
+        }
         if c.not_null {
             w.tab();
             w.append("/// not nullable ");
@@ -410,5 +414,4 @@ impl StructCode for Table{
         w.comma();
         w.ln();
     }
-
 }

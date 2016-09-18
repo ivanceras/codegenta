@@ -18,10 +18,10 @@ pub struct Config {
     pub base_module: Option<String>,
     /// include the has_one, has_many, extension Models
     pub include_table_references: bool,
-    ///use the condense name of the has_many else, use the table name referred
+    /// use the condense name of the has_many else, use the table name referred
     pub use_condensed_name: bool,
 
-    ///generate the is table definition for each table
+    /// generate the is table definition for each table
     pub generate_table_meta: bool,
 
     /// base directory for the generated content
@@ -31,8 +31,7 @@ pub struct Config {
     pub include_views: bool,
 }
 
-impl Config{
-
+impl Config {
     pub fn default() -> Self {
         Config {
             base_module: Some("gen".to_owned()),
@@ -52,14 +51,18 @@ impl Config{
     fn module_dir(&self, schema: &Option<String>) -> String {
         let base_module = self.base_module.clone();
         match base_module {
-            Some(base_module) => match schema{
-				&Some(ref schema) => format!("{}/{}/{}", self.base_dir, base_module, schema),
-				&None =>  format!("{}/{}", self.base_dir, base_module), 
-			},
-            None => match schema{
-				&Some(ref schema) => format!("{}/{}", self.base_dir, schema),
-				&None => format!("{}",self.base_dir),
-			}
+            Some(base_module) => {
+                match schema {
+                    &Some(ref schema) => format!("{}/{}/{}", self.base_dir, base_module, schema),
+                    &None => format!("{}/{}", self.base_dir, base_module), 
+                }
+            }
+            None => {
+                match schema {
+                    &Some(ref schema) => format!("{}/{}", self.base_dir, schema),
+                    &None => format!("{}", self.base_dir),
+                }
+            }
         }
     }
     fn module_base_dir(&self) -> String {
@@ -72,17 +75,20 @@ impl Config{
 
     fn module(&self, schema: &Option<String>) -> String {
         match &self.base_module {
-            &Some(ref base_module) => match schema{
-				&Some(ref schema) => format!("{}::{}", base_module, schema),
-				&None => format!("{}",base_module)
-			},
-            &None => match schema{
-				&Some(ref schema) => format!("{}", schema),
-				&None => "".to_owned()
-			}
+            &Some(ref base_module) => {
+                match schema {
+                    &Some(ref schema) => format!("{}::{}", base_module, schema),
+                    &None => format!("{}", base_module),
+                }
+            }
+            &None => {
+                match schema {
+                    &Some(ref schema) => format!("{}", schema),
+                    &None => "".to_owned(),
+                }
+            }
         }
     }
-
 }
 
 ///
@@ -104,14 +110,14 @@ pub fn get_all_tables(db_dev: &DatabaseDev) -> Vec<Table> {
 pub fn get_schemas(all_table: &Vec<Table>) -> Vec<String> {
     let mut schema_names = Vec::new();
     for t in all_table {
-		match &t.schema{
-			&Some(ref tschema) => {
-				if !schema_names.contains(tschema) {
-					schema_names.push(tschema.to_owned());
-				}
-			},
-			&None => ()
-		}
+        match &t.schema {
+            &Some(ref tschema) => {
+                if !schema_names.contains(tschema) {
+                    schema_names.push(tschema.to_owned());
+                }
+            }
+            &None => (),
+        }
     }
     schema_names.sort_by(|a, b| a.cmp(b));
     schema_names
@@ -121,12 +127,14 @@ pub fn get_schemas(all_table: &Vec<Table>) -> Vec<String> {
 pub fn get_tables_in_schema<'a>(schema: &str, all_table: &'a Vec<Table>) -> Vec<&'a Table> {
     let mut tables = Vec::new();
     for t in all_table {
-		match &t.schema{
-			&Some(ref tschema) => if tschema == schema {
-            	tables.push(t);//cloned the table here
-        	},
-			&None => {}
-		}
+        match &t.schema {
+            &Some(ref tschema) => {
+                if tschema == schema {
+                    tables.push(t);//cloned the table here
+                }
+            }
+            &None => {}
+        }
     }
     tables.sort_by(|a, b| a.name.cmp(&b.name));
     tables
@@ -186,7 +194,7 @@ fn generate_table(db_dev: &DatabaseDev, config: &Config, table: &Table, all_tabl
     all_imports.append(&mut json_imports);
     all_imports.sort();
     all_imports.dedup();
-    
+
     for i in all_imports {
         w.appendln(&format!("use {};", i));
     }
@@ -206,7 +214,7 @@ fn generate_table(db_dev: &DatabaseDev, config: &Config, table: &Table, all_tabl
     w.ln();
     w.appendln(&default_src);
     w.ln();
-    
+
     w.append(&meta_src);
     w.ln();
     w.appendln(&static_columns);
@@ -232,10 +240,8 @@ fn generate_mod_per_schema(config: &Config, all_tables: &Vec<Table>) {
             w.appendln(&format!("pub mod {};", table.name));
         }
         for table in &tables {
-            //re-export structs
-            w.appendln(&format!("pub use self::{}::{};",
-                                table.name,
-                                table.struct_name()));
+            // re-export structs
+            w.appendln(&format!("pub use self::{}::{};", table.name, table.struct_name()));
         }
         w.appendln("use rustorm::table::Table;");
         w.appendln("use rustorm::table::IsTable;");
@@ -247,7 +253,7 @@ fn generate_mod_per_schema(config: &Config, all_tables: &Vec<Table>) {
             w.append("{");
             w.ln();
             w.tab();
-            w.append(&format!("{}::table()",table.struct_name()));
+            w.append(&format!("{}::table()", table.struct_name()));
             w.ln();
             w.append("}");
             w.ln();
@@ -373,7 +379,10 @@ fn generate_meta_code(table: &Table) -> (Vec<String>, String) {
     (imports, w.src)
 }
 
-fn generate_impl_default_code(config: &Config, table: &Table, all_tables: &Vec<Table>) -> (Vec<String>, String) {
+fn generate_impl_default_code(config: &Config,
+                              table: &Table,
+                              all_tables: &Vec<Table>)
+                              -> (Vec<String>, String) {
     let mut w = Writer::new();
     let mut imports = Vec::new();
     imports.push("rustorm::table::IsTable".to_owned());
@@ -394,9 +403,9 @@ fn generate_impl_default_code(config: &Config, table: &Table, all_tables: &Vec<T
         w.ln_tabs(3);
         w.append(&c.corrected_name());
         w.append(": ");
-        if c.not_null && c.data_type == Type::DateTime{
+        if c.not_null && c.data_type == Type::DateTime {
             w.append("UTC::now()");
-        }else{
+        } else {
             w.append("Default::default()");
         }
         w.comma();
@@ -450,11 +459,11 @@ fn generate_static_column_names(table: &Table) -> String {
     for column in &table.columns {
         w.ln();
         w.ln();
-        w.append(&format!("pub fn {}()->Column",&column.corrected_name()));
+        w.append(&format!("pub fn {}()->Column", &column.corrected_name()));
         w.append("{");
         let (imports, column_code) = column.meta_code();
         w.append(&column_code);
-		w.ln();
+        w.ln();
         w.append("}");
     }
     w.src
@@ -462,8 +471,8 @@ fn generate_static_column_names(table: &Table) -> String {
 
 /// TODO: if column names begins with the tablename_, then put this value to the column name hash map
 /// example: product_name, value will be copied to name
-/// test if product_name is not a column, split with `_`, then check if first splinter is the tablename, then the check if the 2nd splinter if 
-/// a column of this table, then set that column with the value of the original name 
+/// test if product_name is not a column, split with `_`, then check if first splinter is the tablename, then the check if the 2nd splinter if
+/// a column of this table, then set that column with the value of the original name
 fn generate_dao_conversion_code(config: &Config,
                                 table: &Table,
                                 all_tables: &Vec<Table>)
@@ -523,7 +532,7 @@ fn generate_dao_conversion_code(config: &Config,
     w.append("}");
     w.ln();
     w.ln_tab();
-	// TODO: set_null is unnecessary
+    // TODO: set_null is unnecessary
     w.append("fn to_dao(&self) -> Dao {");
     w.ln_tabs(2);
     w.append("let mut dao = Dao::new();");
@@ -594,9 +603,7 @@ pub fn save_to_file(filename: &str, content: &str) {
                 Ok(_) => {
                     println!("Saved to {}", filename);
                 }
-                Err(_) => {
-                    println!("There was error saving to file: {}", filename)
-                }
+                Err(_) => println!("There was error saving to file: {}", filename),
             };
         }
     };

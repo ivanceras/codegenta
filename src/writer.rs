@@ -5,8 +5,7 @@ pub struct Writer {
     pub src: String,
 }
 
-impl Writer{
-
+impl Writer {
     #[inline]
     pub fn new() -> Self {
         Writer { src: String::new() }
